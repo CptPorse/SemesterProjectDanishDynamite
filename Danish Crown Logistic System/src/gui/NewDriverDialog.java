@@ -17,6 +17,7 @@ import javax.swing.border.EmptyBorder;
 
 import service.Service;
 
+//Author: Jens Nyberg Porse
 public class NewDriverDialog extends JDialog {
 
 	public NewDriverDialog(JFrame owner) {

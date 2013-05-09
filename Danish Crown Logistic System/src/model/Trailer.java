@@ -19,8 +19,9 @@ public class Trailer {
 	private Driver driver;
 	private ArrayList<ProductType> productTypes = new ArrayList<ProductType>();
 
-	public Trailer(String trailerID, double weightMax) {
+	public Trailer(String trailerID, double weightMax, Date timeOfArrival) {
 		super();
+		this.timeOfArrival = timeOfArrival;
 		this.trailerID = trailerID;
 		this.weightMax = weightMax;
 	}

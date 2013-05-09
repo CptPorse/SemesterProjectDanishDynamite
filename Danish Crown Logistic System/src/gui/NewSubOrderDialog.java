@@ -23,6 +23,7 @@ import model.Trailer;
 import service.Service;
 import dao.Dao;
 
+//Author: Jens Nyberg Porse
 public class NewSubOrderDialog extends JDialog {
 
 	private Controller controller;
@@ -43,10 +44,8 @@ public class NewSubOrderDialog extends JDialog {
 	private JPanel contentPanel;
 	private JPanel buttonPane;
 	private JButton btnCreate, btnCancel;
-	private JLabel lblNewOrder, lblProductType, lblTrailer, lblSubWeight,
-			lblLoadingTime;
+	private JLabel lblNewOrder, lblProductType, lblTrailer, lblSubWeight;
 	private JTextField txfWeight;
-	private JTextField txfLoadingTime;
 	private JComboBox<ProductType> cmbProductType;
 	private JComboBox<Trailer> cmbTrailer;
 
@@ -56,7 +55,7 @@ public class NewSubOrderDialog extends JDialog {
 
 		contentPanel = new JPanel();
 		contentPanel.setBackground(Color.LIGHT_GRAY);
-		setBounds(100, 100, 240, 333);
+		setBounds(100, 100, 240, 273);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
@@ -69,21 +68,21 @@ public class NewSubOrderDialog extends JDialog {
 
 		lblTrailer = new JLabel("Trailer:");
 		lblTrailer.setFont(new Font("Tahoma", Font.BOLD, 11));
-		lblTrailer.setBounds(20, 194, 152, 14);
+		lblTrailer.setBounds(20, 146, 152, 14);
 		contentPanel.add(lblTrailer);
 
 		cmbTrailer = new JComboBox<Trailer>();
-		cmbTrailer.setBounds(20, 213, 191, 20);
+		cmbTrailer.setBounds(20, 165, 191, 20);
 		contentPanel.add(cmbTrailer);
 		cmbTrailer.addActionListener(controller);
 
 		lblProductType = new JLabel("Product Type");
 		lblProductType.setFont(new Font("Tahoma", Font.BOLD, 11));
-		lblProductType.setBounds(20, 144, 152, 14);
+		lblProductType.setBounds(20, 96, 152, 14);
 		contentPanel.add(lblProductType);
 
 		cmbProductType = new JComboBox<ProductType>();
-		cmbProductType.setBounds(20, 163, 191, 20);
+		cmbProductType.setBounds(20, 115, 191, 20);
 		contentPanel.add(cmbProductType);
 		cmbProductType.addActionListener(controller);
 
@@ -92,28 +91,14 @@ public class NewSubOrderDialog extends JDialog {
 		lblSubWeight.setBounds(20, 47, 150, 14);
 		contentPanel.add(lblSubWeight);
 
-		txfWeight = new JTextField();
+		txfWeight = new JTextField("0");
 		txfWeight.setColumns(10);
 		txfWeight.setBounds(20, 65, 75, 20);
 		contentPanel.add(txfWeight);
 
-		lblLoadingTime = new JLabel("Estimated Loading Time");
-		lblLoadingTime.setFont(new Font("Tahoma", Font.BOLD, 11));
-		lblLoadingTime.setBounds(20, 96, 150, 14);
-		contentPanel.add(lblLoadingTime);
-
-		txfLoadingTime = new JTextField();
-		txfLoadingTime.setColumns(10);
-		txfLoadingTime.setBounds(20, 114, 75, 20);
-		contentPanel.add(txfLoadingTime);
-
 		JLabel lblTons = new JLabel("Tons");
 		lblTons.setBounds(97, 68, 46, 14);
 		contentPanel.add(lblTons);
-
-		JLabel lblMinuts = new JLabel("Minuts");
-		lblMinuts.setBounds(97, 117, 46, 14);
-		contentPanel.add(lblMinuts);
 
 		buttonPane = new JPanel();
 		buttonPane.setBackground(Color.GRAY);
@@ -140,6 +125,7 @@ public class NewSubOrderDialog extends JDialog {
 			DefaultComboBoxModel<ProductType> cmbProductTypeModel = new DefaultComboBoxModel<ProductType>(
 					Dao.getProductTypes().toArray(new ProductType[0]));
 			cmbProductType.setModel(cmbProductTypeModel);
+			cmbProductType.setSelectedItem(null);
 		}
 
 		private void fillCmbTrailer() {
@@ -170,10 +156,13 @@ public class NewSubOrderDialog extends JDialog {
 				Trailer t1 = cmbTrailer
 						.getItemAt(cmbTrailer.getSelectedIndex());
 
-				SubOrder s1 = Service.createSubOrder(Double
-						.parseDouble(txfWeight.getText()), Integer
-						.parseInt(txfLoadingTime.getText()), t1, cmbProductType
-						.getItemAt(cmbProductType.getSelectedIndex()));
+				ProductType p1 = cmbProductType.getItemAt(cmbProductType
+						.getSelectedIndex());
+
+				double weight = Double.parseDouble(txfWeight.getText());
+
+				SubOrder s1 = Service.createSubOrder(weight,
+						(int) (weight * p1.getminuteToKiloRatio()), t1, p1);
 
 				t1.setWeightCurrent(t1.getWeightCurrent()
 						+ (Double.parseDouble(txfWeight.getText())));
@@ -187,8 +176,10 @@ public class NewSubOrderDialog extends JDialog {
 			}
 
 			if (e.getSource() == cmbProductType) {
-				fillCmbTrailer();
-				System.out.println("Clicked the combobox");
+				if (!txfWeight.getText().equals("0")) {
+					fillCmbTrailer();
+					System.out.println("Clicked the combobox");
+				}
 			}
 
 		}

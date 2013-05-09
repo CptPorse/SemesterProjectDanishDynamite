@@ -7,6 +7,7 @@ import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.swing.DefaultComboBoxModel;
@@ -27,6 +28,7 @@ import model.Trailer;
 import service.Service;
 import dao.Dao;
 
+//Author: Jens Nyberg Porse
 public class NewTrailerDialog extends JDialog {
 
 	private JPanel contentPanel;
@@ -36,12 +38,17 @@ public class NewTrailerDialog extends JDialog {
 	private JLabel lblNewTrailer;
 	private JLabel lblTrailerID;
 	private JLabel lblDriver;
-	private JLabel lblTons;
+	private JLabel lblKilo;
 	private JLabel lblMaxWeight;
 	private JLabel lblProduct;
+	private JLabel lblArrivalTime;
+	private JLabel lblAt;
+	private JLabel lblHourMinuts;
 	private JTextField txfTrailerID;
 	private JTextField txfMaxLoad;
-	private JComboBox<Driver> cbbDriver;
+	private JComboBox<Driver> cmbDriver;
+	private JComboBox cmbMonth;
+	private JComboBox cmbDate;
 
 	private Controller controller;
 
@@ -49,6 +56,12 @@ public class NewTrailerDialog extends JDialog {
 	private DefaultListModel lstProductTypeModel;
 	private List<ProductType> products;
 	private ArrayList<Driver> drivers;
+	private JTextField txfHour;
+	private JTextField txfMinuts;
+	String[] months = { "January", "February", "March", "April", "May", "June",
+			"July", "August", "September", "October", "November", "December" };
+	Integer[] dates = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16,
+			17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31 };
 
 	public NewTrailerDialog(JFrame owner) {
 		super(owner);
@@ -66,7 +79,7 @@ public class NewTrailerDialog extends JDialog {
 
 		contentPanel = new JPanel();
 		contentPanel.setBackground(Color.LIGHT_GRAY);
-		setBounds(100, 100, 385, 270);
+		setBounds(100, 100, 385, 318);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
@@ -102,15 +115,15 @@ public class NewTrailerDialog extends JDialog {
 		lblDriver.setBounds(20, 146, 150, 14);
 		contentPanel.add(lblDriver);
 
-		lblTons = new JLabel("Tons");
-		lblTons.setFont(new Font("Tahoma", Font.BOLD, 11));
-		lblTons.setBounds(70, 118, 46, 14);
-		contentPanel.add(lblTons);
+		lblKilo = new JLabel("Kilo");
+		lblKilo.setFont(new Font("Tahoma", Font.BOLD, 11));
+		lblKilo.setBounds(70, 118, 46, 14);
+		contentPanel.add(lblKilo);
 
-		cbbDriver = new JComboBox<Driver>();
-		cbbDriver.setBounds(20, 165, 152, 20);
-		contentPanel.add(cbbDriver);
-		cbbDriver.addActionListener(controller);
+		cmbDriver = new JComboBox<Driver>();
+		cmbDriver.setBounds(20, 165, 152, 20);
+		contentPanel.add(cmbDriver);
+		cmbDriver.addActionListener(controller);
 
 		lblProduct = new JLabel("Product Types:");
 		lblProduct.setFont(new Font("Tahoma", Font.BOLD, 11));
@@ -121,6 +134,38 @@ public class NewTrailerDialog extends JDialog {
 		lstProductType = new JList<ProductType>(lstProductTypeModel);
 		lstProductType.setBounds(204, 65, 150, 120);
 		contentPanel.add(lstProductType);
+
+		lblArrivalTime = new JLabel("Scheduled Arrival Time:");
+		lblArrivalTime.setFont(new Font("Tahoma", Font.BOLD, 11));
+		lblArrivalTime.setBounds(20, 196, 169, 14);
+		contentPanel.add(lblArrivalTime);
+
+		cmbMonth = new JComboBox(months);
+		cmbMonth.setBounds(20, 216, 96, 20);
+		contentPanel.add(cmbMonth);
+
+		cmbDate = new JComboBox(dates);
+		cmbDate.setBounds(126, 216, 44, 20);
+		contentPanel.add(cmbDate);
+
+		txfHour = new JTextField();
+		txfHour.setBounds(204, 216, 32, 20);
+		contentPanel.add(txfHour);
+		txfHour.setColumns(10);
+
+		lblAt = new JLabel("at:");
+		lblAt.setBounds(180, 219, 46, 14);
+		contentPanel.add(lblAt);
+
+		txfMinuts = new JTextField();
+		txfMinuts.setBounds(246, 216, 32, 20);
+		contentPanel.add(txfMinuts);
+		txfMinuts.setColumns(10);
+
+		lblHourMinuts = new JLabel(":");
+		lblHourMinuts.setFont(new Font("Tahoma", Font.BOLD, 11));
+		lblHourMinuts.setBounds(239, 219, 5, 14);
+		contentPanel.add(lblHourMinuts);
 
 		buttonPane = new JPanel();
 		buttonPane.setBackground(Color.GRAY);
@@ -158,16 +203,21 @@ public class NewTrailerDialog extends JDialog {
 			}
 			DefaultComboBoxModel<Driver> cmbDriverModel = new DefaultComboBoxModel<Driver>(
 					drivers.toArray(new Driver[0]));
-			cbbDriver.setModel(cmbDriverModel);
+			cmbDriver.setModel(cmbDriverModel);
 		}
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if (e.getSource() == btnRegister) {
 
+				@SuppressWarnings("deprecation")
+				Date date1 = new Date(113, cmbMonth.getSelectedIndex(),
+						cmbDate.getSelectedIndex() + 1,
+						Integer.parseInt(txfHour.getText()),
+						Integer.parseInt(txfMinuts.getText()));
 				Trailer t1 = Service.createTrailer(txfTrailerID.getText(),
-						Integer.parseInt(txfMaxLoad.getText()));
-				Driver d1 = (Driver) cbbDriver.getSelectedItem();
+						Integer.parseInt(txfMaxLoad.getText()), date1);
+				Driver d1 = (Driver) cmbDriver.getSelectedItem();
 				products = lstProductType.getSelectedValuesList();
 				for (int i = 0; i < products.size(); i++) {
 					t1.addProductType(products.get(i));

@@ -21,9 +21,9 @@ import javax.swing.border.EmptyBorder;
 import model.Order;
 import model.SubOrder;
 import service.Service;
-import dao.Dao;
 import dateutil.DU;
 
+//Author: Jens Nyberg Porse
 public class NewOrderDialog extends JDialog {
 
 	private static NewOrderDialog orderFrame;
@@ -120,7 +120,8 @@ public class NewOrderDialog extends JDialog {
 		lblLoadingDate.setBounds(20, 145, 150, 14);
 		contentPanel.add(lblLoadingDate);
 
-		txfLoadingDate = new JTextField("YYYY-MM-DD");
+		txfLoadingDate = new JTextField("2013-01-01");
+		txfLoadingDate.setEditable(false);
 		txfLoadingDate.setColumns(10);
 		txfLoadingDate.setBounds(20, 165, 150, 20);
 		contentPanel.add(txfLoadingDate);
@@ -182,7 +183,6 @@ public class NewOrderDialog extends JDialog {
 					o.addSubOrder(subOrder);
 				}
 
-				Dao.addOrder(o);
 				mainFrame.updateLstOrder();
 				System.out.println("I send this Update");
 				NewOrderDialog.this.setVisible(false);

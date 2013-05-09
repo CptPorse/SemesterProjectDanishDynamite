@@ -19,14 +19,17 @@ public class Service {
 		return driver;
 	}
 
-	public static Trailer createTrailer(String trailerID, double weightMax) {
-		Trailer trailer = new Trailer(trailerID, weightMax);
+	public static Trailer createTrailer(String trailerID, double weightMax,
+			Date timeOfArrival) {
+		Trailer trailer = new Trailer(trailerID, weightMax, timeOfArrival);
 		Dao.addTrailer(trailer);
 		return trailer;
 	}
 
-	public static ProductType createProductType(String description) {
-		ProductType productType = new ProductType(description);
+	public static ProductType createProductType(String description,
+			double minuteToKiloRatio) {
+		ProductType productType = new ProductType(description,
+				minuteToKiloRatio);
 		Dao.addProductType(productType);
 		return productType;
 	}
@@ -60,14 +63,19 @@ public class Service {
 		Driver d6 = Service.createDriver("Jens Skærbæk", "22 18 74 67",
 				"KE 92 465");
 
-		Trailer t1 = Service.createTrailer("1", 25000);
-		Trailer t2 = Service.createTrailer("2", 25000);
-		Trailer t3 = Service.createTrailer("3", 25000);
-		Trailer t4 = Service.createTrailer("4", 25000);
+		Date date1 = new Date(113, 0, 1, 9, 0);
+		Date date2 = new Date(113, 0, 1, 10, 0);
+		Date date3 = new Date(113, 0, 1, 11, 0);
+		Date date4 = new Date(113, 0, 1, 12, 0);
 
-		ProductType p1 = Service.createProductType("Christmas Trees");
-		ProductType p2 = Service.createProductType("Pallets");
-		ProductType p3 = Service.createProductType("Barrels");
+		Trailer t1 = Service.createTrailer("1", 25000, date1);
+		Trailer t2 = Service.createTrailer("2", 25000, date2);
+		Trailer t3 = Service.createTrailer("3", 25000, date3);
+		Trailer t4 = Service.createTrailer("4", 25000, date4);
+
+		ProductType p1 = Service.createProductType("Christmas Trees", 0.0031);
+		ProductType p2 = Service.createProductType("Pallets", 0.0028);
+		ProductType p3 = Service.createProductType("Barrels", 0.0035);
 
 		t1.addProductType(p1);
 		t2.addProductType(p1);
@@ -85,10 +93,10 @@ public class Service {
 		d3.setTrailer(t3);
 		d4.setTrailer(t4);
 
-		SubOrder so1 = Service.createSubOrder(20000, 45, t1, p1);
-		SubOrder so2 = Service.createSubOrder(19000, 48, t2, p2);
+		SubOrder so1 = Service.createSubOrder(20000, 62, t1, p1);
+		SubOrder so2 = Service.createSubOrder(19000, 53, t2, p2);
 
-		Order o1 = Service.createOrder(1, 150, DU.createDate("2013-02-02"));
+		Order o1 = Service.createOrder(1, 150, DU.createDate("2013-01-01"));
 
 		o1.addSubOrder(so1);
 		o1.addSubOrder(so2);

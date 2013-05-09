@@ -9,11 +9,21 @@ import org.eclipse.jdt.annotation.Nullable;
 public class ProductType {
 
 	private String description;
+	private double minuteToKiloRatio;
 	private ArrayList<Trailer> trailers = new ArrayList<Trailer>();
 
-	public ProductType(String description) {
+	public ProductType(String description, double minuteToKiloRatio) {
 		super();
 		this.description = description;
+		this.minuteToKiloRatio = minuteToKiloRatio;
+	}
+
+	public double getminuteToKiloRatio() {
+		return minuteToKiloRatio;
+	}
+
+	public void setminuteToKiloRatio(double minuteToKiloRatio) {
+		this.minuteToKiloRatio = minuteToKiloRatio;
 	}
 
 	public String getDescription() {

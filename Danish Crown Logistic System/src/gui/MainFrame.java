@@ -25,8 +25,8 @@ import org.eclipse.jdt.annotation.NonNullByDefault;
 
 import service.Service;
 import dao.Dao;
-import dateutil.DU;
 
+//Author: Jens Nyberg Porse
 public class MainFrame extends JFrame {
 
 	private static MainFrame frame;
@@ -65,14 +65,14 @@ public class MainFrame extends JFrame {
 	private JTabbedPane tabbedPane;
 	private JTextField txfOrderID;
 	private JTextField txfWeightMargin;
-	private JTextField txfOrderRecieved;
+	private JTextField txfSubOrderArrival;
 	private JTextField txfSubProduct;
 	private JTextField txfSubWeight;
 	private JTextField txfSubTrailer;
 	private JTextField txfLoadingTime;
-	private JLabel lblOrderList, lblOrderId, lblWeightMargin, lblLoadingDate,
-			lblSuborders, lblSubProduct, lblSubWeight, lblSubTrailer,
-			lblLoadingTime;
+	private JLabel lblOrderList, lblOrderId, lblWeightMargin,
+			lblSubOrderArrival, lblSuborders, lblSubProduct, lblSubWeight,
+			lblSubTrailer, lblLoadingTime;
 	private JList<Order> lstOrders;
 	private JList<SubOrder> lstSubOrders;
 	private DefaultListModel<SubOrder> lstSubOrderModel;
@@ -159,16 +159,16 @@ public class MainFrame extends JFrame {
 		panelExternalSystem.add(txfWeightMargin);
 		txfWeightMargin.setColumns(10);
 
-		lblLoadingDate = new JLabel("Loading Date:");
-		lblLoadingDate.setFont(new Font("Tahoma", Font.BOLD, 11));
-		lblLoadingDate.setBounds(220, 100, 146, 14);
-		panelExternalSystem.add(lblLoadingDate);
+		lblSubOrderArrival = new JLabel("Sub-Order ET Arrival:");
+		lblSubOrderArrival.setFont(new Font("Tahoma", Font.BOLD, 11));
+		lblSubOrderArrival.setBounds(220, 100, 146, 14);
+		panelExternalSystem.add(lblSubOrderArrival);
 
-		txfOrderRecieved = new JTextField();
-		txfOrderRecieved.setEditable(false);
-		txfOrderRecieved.setBounds(220, 120, 146, 20);
-		panelExternalSystem.add(txfOrderRecieved);
-		txfOrderRecieved.setColumns(10);
+		txfSubOrderArrival = new JTextField();
+		txfSubOrderArrival.setEditable(false);
+		txfSubOrderArrival.setBounds(220, 120, 146, 20);
+		panelExternalSystem.add(txfSubOrderArrival);
+		txfSubOrderArrival.setColumns(10);
 
 		lstSubOrderModel = new DefaultListModel<SubOrder>();
 		lstSubOrders = new JList<SubOrder>(lstSubOrderModel);
@@ -262,8 +262,8 @@ public class MainFrame extends JFrame {
 
 	public void updateOrderView(Order order) {
 		txfOrderID.setText("" + order.getOrderNumber());
-		txfOrderRecieved.setText("" + DU.dateToString(order.getLoadingDate()));
 		txfWeightMargin.setText("" + order.getWeightMargin());
+		txfSubOrderArrival.setText("");
 		txfLoadingTime.setText("");
 		txfSubTrailer.setText("");
 		txfSubWeight.setText("");
@@ -273,6 +273,8 @@ public class MainFrame extends JFrame {
 	}
 
 	public void updateSubOrderView(SubOrder subOrder) {
+		txfSubOrderArrival.setText(""
+				+ subOrder.getTrailer().getTimeOfArrival().toLocaleString());
 		txfLoadingTime.setText("" + subOrder.getEstimatedLoadingTime());
 		txfSubTrailer.setText("" + subOrder.getTrailer());
 		txfSubWeight.setText("" + subOrder.getEstimatedWeight());
