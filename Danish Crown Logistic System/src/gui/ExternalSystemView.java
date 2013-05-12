@@ -1,7 +1,6 @@
 package gui;
 
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -12,9 +11,9 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
-import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
+import javax.swing.border.EmptyBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
@@ -23,82 +22,59 @@ import model.SubOrder;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
 
-import service.Service;
 import dao.Dao;
 
 //Author: Jens Nyberg Porse
-public class MainFrame extends JFrame {
+public class ExternalSystemView extends JFrame {
 
-	private static MainFrame frame;
-	private Controller controller;
+	private static ExternalSystemView frame;
 
-	public static void main(String[] args) {
+	public ExternalSystemView() {
 
-		frame = new MainFrame();
-		frame.pack();
-		frame.setVisible(true);
-	}
-
-	public MainFrame() {
-		this.setResizable(true);
-		this.setTitle("Logistic System");
+		frame = this;
+		this.setResizable(false);
+		this.setTitle("External System");
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		this.setBounds(100, 100, 569, 347);
-		this.getContentPane().getSize();
-		this.controller = new Controller();
-		Service.startUpData();
+		this.setBounds(400, 100, 569, 347);
+		this.setVisible(true);
+		InitContent();
 		InitContent();
 		System.out.println(Dao.getProductTypes());
 		System.out.println(Dao.getTrailer());
 		System.out.println(Dao.getDrivers());
 		System.out.println(Dao.getOrders());
-
 	}
 
-	public static MainFrame getInstance() {
+	public static ExternalSystemView getInstance() {
 		return frame;
 	}
 
-	private JPanel contentPane;
 	private JPanel panelExternalSystem;
-	private JPanel panelDanishCrown;
-	private JTabbedPane tabbedPane;
-	private JTextField txfOrderID;
-	private JTextField txfWeightMargin;
-	private JTextField txfSubOrderArrival;
-	private JTextField txfSubProduct;
-	private JTextField txfSubWeight;
-	private JTextField txfSubTrailer;
-	private JTextField txfLoadingTime;
+	private JTextField txfOrderID, txfWeightMargin, txfSubOrderArrival,
+			txfSubProduct, txfSubWeight, txfSubTrailer, txfLoadingTime;
 	private JLabel lblOrderList, lblOrderId, lblWeightMargin,
 			lblSubOrderArrival, lblSuborders, lblSubProduct, lblSubWeight,
-			lblSubTrailer, lblLoadingTime;
+			lblSubTrailer, lblLoadingTime, lblWeighKilo, lblMinuts,
+			lblMarginKilo;
+	private JButton btnNewTrailer, btnNewDriver, btnNewOrder;
+
+	private Controller controller;
+
 	private JList<Order> lstOrders;
 	private JList<SubOrder> lstSubOrders;
 	private DefaultListModel<SubOrder> lstSubOrderModel;
 	private DefaultListModel<Order> lstOrderModel;
-	private JButton btnNewTrailer, btnNewDriver, btnNewOrder;
-	private JLabel lblWeighKilo;
-	private JLabel lblMinuts;
-	private JLabel lblMarginKilo;
 
 	private void InitContent() {
 
+		controller = new Controller();
 		lstOrders = new JList<Order>();
 		lstSubOrders = new JList<SubOrder>();
 
-		contentPane = new JPanel();
-		contentPane.setPreferredSize(new Dimension(555, 322));
-		setContentPane(contentPane);
-		contentPane.setLayout(null);
-
-		tabbedPane = new JTabbedPane(JTabbedPane.TOP);
-		tabbedPane.setBounds(0, 0, 555, 322);
-		contentPane.add(tabbedPane);
-
 		panelExternalSystem = new JPanel();
 		panelExternalSystem.setBackground(Color.LIGHT_GRAY);
-		tabbedPane.addTab("External System", null, panelExternalSystem, null);
+		panelExternalSystem.setBorder(new EmptyBorder(5, 5, 5, 5));
+		setContentPane(panelExternalSystem);
 		panelExternalSystem.setLayout(null);
 
 		btnNewTrailer = new JButton("New Trailer");
@@ -248,11 +224,11 @@ public class MainFrame extends JFrame {
 		lblMarginKilo.setBounds(317, 78, 25, 14);
 		panelExternalSystem.add(lblMarginKilo);
 
-		panelDanishCrown = new JPanel();
-		tabbedPane.addTab("Danish Crown", null, panelDanishCrown, null);
-		panelDanishCrown.setLayout(null);
-
 		controller.fillLstOrders();
+	}
+
+	public void testing() {
+		System.out.println("I came through");
 	}
 
 	public void updateLstOrder() {
@@ -299,7 +275,7 @@ public class MainFrame extends JFrame {
 		public void actionPerformed(ActionEvent e) {
 			if (e.getSource() == btnNewOrder) {
 				NewOrderDialog createOrderDialog = new NewOrderDialog(
-						MainFrame.getInstance());
+						ExternalSystemView.getInstance());
 				createOrderDialog.setVisible(true);
 
 				// waiting for dialog NewOrderDialog to close
@@ -308,7 +284,7 @@ public class MainFrame extends JFrame {
 
 			if (e.getSource() == btnNewTrailer) {
 				NewTrailerDialog createTrailerDialog = new NewTrailerDialog(
-						MainFrame.getInstance());
+						ExternalSystemView.getInstance());
 				createTrailerDialog.setVisible(true);
 
 				// waiting for dialog NewOrderDialog to close
@@ -317,7 +293,7 @@ public class MainFrame extends JFrame {
 
 			if (e.getSource() == btnNewDriver) {
 				NewDriverDialog createDriverDialog = new NewDriverDialog(
-						MainFrame.getInstance());
+						ExternalSystemView.getInstance());
 				createDriverDialog.setVisible(true);
 
 				// waiting for dialog NewOrderDialog to close

@@ -31,6 +31,15 @@ import dao.Dao;
 //Author: Jens Nyberg Porse
 public class NewTrailerDialog extends JDialog {
 
+	public NewTrailerDialog(JFrame owner) {
+		super(owner);
+		System.out.println("Created new Window");
+		setTitle("Create New Trailer");
+		this.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+		this.setVisible(true);
+		InitContent();
+	}
+
 	private JPanel contentPanel;
 	private JPanel buttonPane;
 	private JButton btnRegister;
@@ -62,15 +71,6 @@ public class NewTrailerDialog extends JDialog {
 			"July", "August", "September", "October", "November", "December" };
 	Integer[] dates = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16,
 			17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31 };
-
-	public NewTrailerDialog(JFrame owner) {
-		super(owner);
-		System.out.println("Created new Window");
-		setTitle("Create New Trailer");
-		this.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-		this.setVisible(true);
-		InitContent();
-	}
 
 	private void InitContent() {
 		products = new ArrayList<ProductType>();

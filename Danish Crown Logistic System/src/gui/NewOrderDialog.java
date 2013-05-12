@@ -27,10 +27,10 @@ import dateutil.DU;
 public class NewOrderDialog extends JDialog {
 
 	private static NewOrderDialog orderFrame;
-	private MainFrame mainFrame;
+	private ExternalSystemView externalSystemView;
 
-	public NewOrderDialog(MainFrame owner) {
-		this.mainFrame = owner;
+	public NewOrderDialog(ExternalSystemView owner) {
+		this.externalSystemView = owner;
 		System.out.println("Created new Window");
 		setTitle("Create Order");
 		this.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
@@ -172,6 +172,7 @@ public class NewOrderDialog extends JDialog {
 			}
 
 			if (e.getSource() == btnCreate) {
+
 				Date loadingDate = DU.createDate(txfLoadingDate.getText());
 				Order o = Service.createOrder(
 						Integer.parseInt(txfOrderID.getText()),
@@ -183,7 +184,7 @@ public class NewOrderDialog extends JDialog {
 					o.addSubOrder(subOrder);
 				}
 
-				mainFrame.updateLstOrder();
+				externalSystemView.updateLstOrder();
 				System.out.println("I send this Update");
 				NewOrderDialog.this.setVisible(false);
 			}

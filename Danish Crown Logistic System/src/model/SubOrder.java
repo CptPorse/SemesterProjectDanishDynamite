@@ -59,8 +59,7 @@ public class SubOrder {
 
 	@Override
 	public String toString() {
-		return "Weight: " + estimatedWeight + ", Loading Time: "
-				+ estimatedLoadingTime + ", Product Type: " + productType;
+		return estimatedWeight + " kg " + productType;
 	}
 
 }
