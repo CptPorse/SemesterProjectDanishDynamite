@@ -13,6 +13,7 @@ public class Trailer {
 	private Date timeOfArrival;
 	private Date timeOfDeparture;
 	private boolean isLoaded = false;
+	private boolean hasArrived = false;
 	private double weightCurrent;
 	private double weightMax;
 
@@ -56,6 +57,14 @@ public class Trailer {
 
 	public void setLoaded(boolean isLoaded) {
 		this.isLoaded = isLoaded;
+	}
+
+	public boolean hasArrived() {
+		return hasArrived;
+	}
+
+	public void setHasArrived(boolean hasArrived) {
+		this.hasArrived = hasArrived;
 	}
 
 	public double getWeightCurrent() {
