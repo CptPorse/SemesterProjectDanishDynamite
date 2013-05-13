@@ -3,6 +3,8 @@ package dao;
 import java.util.ArrayList;
 
 import model.Driver;
+import model.LoadingBay;
+import model.LoadingInfo;
 import model.Order;
 import model.ProductType;
 import model.SubOrder;
@@ -15,6 +17,8 @@ public class Dao {
 	private static final ArrayList<Trailer> trailers = new ArrayList<Trailer>();
 	private static final ArrayList<Order> orders = new ArrayList<Order>();
 	private static final ArrayList<SubOrder> subOrders = new ArrayList<SubOrder>();
+	private static final ArrayList<LoadingInfo> loadingInfos = new ArrayList<LoadingInfo>();
+	private static final ArrayList<LoadingBay> loadingBays = new ArrayList<LoadingBay>();
 
 	/**
 	 * Returns a list of all productTypes in the database.
@@ -66,7 +70,7 @@ public class Dao {
 	}
 
 	/**
-	 * Adds the trailer to this in the database.
+	 * Adds the trailer to this database.
 	 */
 	public static void addTrailer(Trailer trailer) {
 		trailers.add(trailer);
@@ -80,45 +84,87 @@ public class Dao {
 	}
 
 	/**
-	 * Returns a list of sub-orders in this Order.
+	 * Returns a list of sub-orders in the database.
 	 */
 	public static ArrayList<Order> getOrders() {
 		return new ArrayList<Order>(orders);
 	}
 
 	/**
-	 * Adds the sub-order to this Order.
+	 * Adds the sub-order to this database.
 	 */
 	public static void addOrder(Order order) {
 		orders.add(order);
 	}
 
 	/**
-	 * Removes the sub-order from this Order.
+	 * Removes the sub-order from this database.
 	 */
 	public static void removeOrder(Order order) {
 		orders.remove(order);
 	}
 
 	/**
-	 * Returns a list of sub-orders in this Order.
+	 * Returns a list of sub-orders in the database.
 	 */
 	public static ArrayList<SubOrder> getSubOrders() {
 		return new ArrayList<SubOrder>(subOrders);
 	}
 
 	/**
-	 * Adds the sub-order to this Order.
+	 * Adds the sub-order to this database.
 	 */
 	public static void addSubOrder(SubOrder subOrder) {
 		subOrders.add(subOrder);
 	}
 
 	/**
-	 * Removes the sub-order from this Order.
+	 * Removes the sub-order from this database.
 	 */
 	public static void removeSubOrder(SubOrder subOrder) {
 		subOrders.remove(subOrder);
+	}
+
+	/**
+	 * Returns a list of LoadingInfo in the database.
+	 */
+	public static ArrayList<LoadingInfo> getLoadingInfos() {
+		return new ArrayList<LoadingInfo>(loadingInfos);
+	}
+
+	/**
+	 * Adds the LoadingInfo to this database.
+	 */
+	public static void addLoadingInfo(LoadingInfo loadingInfo) {
+		loadingInfos.add(loadingInfo);
+	}
+
+	/**
+	 * Removes the LoadingInfo from this database.
+	 */
+	public static void removeLoadingInfo(LoadingInfo loadingInfo) {
+		loadingInfos.remove(loadingInfo);
+	}
+
+	/**
+	 * Returns a list of LoadingBay in the database.
+	 */
+	public static ArrayList<LoadingBay> getLoadingBays() {
+		return new ArrayList<LoadingBay>(loadingBays);
+	}
+
+	/**
+	 * Adds the LoadingInfo to this database.
+	 */
+	public static void addLoadingBay(LoadingBay loadingBay) {
+		loadingBays.add(loadingBay);
+	}
+
+	/**
+	 * Removes the LoadingBay from this database.
+	 */
+	public static void removeLoadingBay(LoadingBay loadingBay) {
+		loadingBays.remove(loadingBay);
 	}
 
 }

@@ -3,6 +3,8 @@ package service;
 import java.util.Date;
 
 import model.Driver;
+import model.LoadingBay;
+import model.LoadingInfo;
 import model.Order;
 import model.ProductType;
 import model.SubOrder;
@@ -46,6 +48,20 @@ public class Service {
 		SubOrder subOrder = new SubOrder(estimatedWeight, estimatedLoadingTime,
 				trailer, productType);
 		return subOrder;
+	}
+
+	public static LoadingBay createLoadingBay(int loadingBayNumber,
+			ProductType productType) {
+		LoadingBay loadingBay = new LoadingBay(loadingBayNumber, productType);
+		Dao.addLoadingBay(loadingBay);
+		return loadingBay;
+	}
+
+	public static LoadingInfo createLoadingInfo(SubOrder subOrder,
+			LoadingBay loadingBay) {
+		LoadingInfo loadingInfo = new LoadingInfo(subOrder, loadingBay);
+		Dao.addLoadingInfo(loadingInfo);
+		return loadingInfo;
 	}
 
 	public static void startUpData() {
@@ -100,5 +116,13 @@ public class Service {
 
 		o1.addSubOrder(so1);
 		o1.addSubOrder(so2);
+
+		// Test trailer for TrailerView
+		Date dateTest = new Date(113, 0, 1, 8, 0);
+		Trailer testTrailer = Service.createTrailer("TestTrailer", 25000,
+				dateTest);
+		testTrailer.setHasArrived(true);
+		testTrailer.setLoaded(true);
+
 	}
 }

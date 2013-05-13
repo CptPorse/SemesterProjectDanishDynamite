@@ -16,8 +16,8 @@ public class LoadingBayView extends JFrame {
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setBounds(600, 500, 569, 347);
 		this.setTitle("Loading Bay View");
-		this.setVisible(true);
 		InitContent();
+		this.setVisible(true);
 	}
 
 	private JPanel contentPane;
