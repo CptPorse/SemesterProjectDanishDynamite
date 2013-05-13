@@ -15,6 +15,7 @@ import javax.swing.ListSelectionModel;
 import javax.swing.border.EmptyBorder;
 
 import model.Trailer;
+import model.TrailerState;
 import dao.Dao;
 import dateutil.DU;
 
@@ -113,25 +114,26 @@ public class TrailerView extends JFrame
 				if (lstArrivingTrailers.isSelectionEmpty() == true) {
 					System.out
 							.println("Tag dig sammen, du mangler at vælge et object fra listen");
-
 				} else {
+					//Changes the state from being outside the gate to being inside
 					(lstArrivingTrailers.getSelectedValue())
-							.setHasArrived(true);
-
+							.setTrailerState(TrailerState.ARRIVED);
+					//refreshes the list
 					controller.fillArrivingLst();
-
 				}
 			}
 			if (e.getSource() == btnCheckDeparture) {
 				if (lstDeparturingTrailers.isSelectionEmpty() == true) {
-
 					System.out
 							.println("Tag dig sammen, du mangler at vælge et object fra listen");
-
 				} else {
-
+					//changes selected trailer to being departed
+					(lstDeparturingTrailers.getSelectedValue())
+							.setTrailerState(TrailerState.DEPARTED);
+					//set the departuretime of the trailer
 					(lstDeparturingTrailers.getSelectedValue())
 							.setTimeOfDeparture(DU.createDate());
+					//refreshes the list
 					controller.fillDepartureLst();
 
 				}
@@ -144,7 +146,7 @@ public class TrailerView extends JFrame
 
 				ArrayList<Trailer> arraylistTrailer = new ArrayList<>();
 				for (Trailer t : Dao.getTrailer()) {
-					if (t.hasArrived() == false) {
+					if (t.getTrailerState() == TrailerState.ENROUTE) {
 						arraylistTrailer.add(t);
 					}
 				}
@@ -161,7 +163,7 @@ public class TrailerView extends JFrame
 
 				ArrayList<Trailer> arraylistTrailer = new ArrayList<>();
 				for (Trailer t : Dao.getTrailer()) {
-					if (t.isLoaded() == true && t.getTimeOfDeparture() == null) {
+					if (t.getTrailerState() == TrailerState.LOADED) {
 						arraylistTrailer.add(t);
 					}
 				}

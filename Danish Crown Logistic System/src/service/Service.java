@@ -9,27 +9,32 @@ import model.Order;
 import model.ProductType;
 import model.SubOrder;
 import model.Trailer;
+import model.TrailerState;
 import dao.Dao;
 import dateutil.DU;
 
-public class Service {
+public class Service
+{
 
 	public static Driver createDriver(String name, String phoneNumber,
-			String licensePlate) {
+			String licensePlate)
+	{
 		Driver driver = new Driver(name, phoneNumber, licensePlate);
 		Dao.addDriver(driver);
 		return driver;
 	}
 
 	public static Trailer createTrailer(String trailerID, double weightMax,
-			Date timeOfArrival) {
+			Date timeOfArrival)
+	{
 		Trailer trailer = new Trailer(trailerID, weightMax, timeOfArrival);
 		Dao.addTrailer(trailer);
 		return trailer;
 	}
 
 	public static ProductType createProductType(String description,
-			double minuteToKiloRatio) {
+			double minuteToKiloRatio)
+	{
 		ProductType productType = new ProductType(description,
 				minuteToKiloRatio);
 		Dao.addProductType(productType);
@@ -37,36 +42,42 @@ public class Service {
 	}
 
 	public static Order createOrder(int orderNumber, double weightMargin,
-			Date loadingDate) {
+			Date loadingDate)
+	{
 		Order order = new Order(orderNumber, weightMargin, loadingDate);
 		Dao.addOrder(order);
 		return order;
 	}
 
 	public static SubOrder createSubOrder(double estimatedWeight,
-			Trailer trailer, ProductType productType) {
+			Trailer trailer, ProductType productType)
+	{
 		SubOrder subOrder = new SubOrder(estimatedWeight, trailer, productType);
 		trailer.addSubOrder(subOrder);
 		Dao.addSubOrder(subOrder);
+		trailer.setTrailerState(TrailerState.ENROUTE);
 		return subOrder;
 	}
 
 	public static LoadingBay createLoadingBay(int loadingBayNumber,
-			ProductType productType) {
+			ProductType productType)
+	{
 		LoadingBay loadingBay = new LoadingBay(loadingBayNumber, productType);
 		Dao.addLoadingBay(loadingBay);
 		return loadingBay;
 	}
 
 	public static LoadingInfo createLoadingInfo(SubOrder subOrder,
-			LoadingBay loadingBay) {
+			LoadingBay loadingBay)
+	{
 		LoadingInfo loadingInfo = new LoadingInfo(subOrder, loadingBay);
 		Dao.addLoadingInfo(loadingInfo);
 		return loadingInfo;
 	}
 
 	@SuppressWarnings("deprecation")
-	public static void startUpData() {
+	public static void startUpData()
+	{
 
 		Driver d1 = Service.createDriver("Peter Hansen", "22 37 54 98",
 				"EH 95 128");
