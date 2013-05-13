@@ -9,17 +9,19 @@ import org.eclipse.jdt.annotation.Nullable;
 @NonNullByDefault
 public class Trailer
 {
-
+	//fields
 	private String trailerID;
 	private Date timeOfArrival;
 	private Date timeOfDeparture = null;
-	private boolean isLoaded = false;
-	private boolean hasArrived = false;
+
 	private double weightCurrent;
 	private double weightMax;
+	private TrailerState trailerState;
 
+	//Links
 	private Driver driver;
 	private ArrayList<ProductType> productTypes = new ArrayList<ProductType>();
+	private ArrayList<SubOrder> subOrders = new ArrayList<SubOrder>();
 
 	public Trailer(String trailerID, double weightMax, Date timeOfArrival)
 	{
@@ -27,6 +29,18 @@ public class Trailer
 		this.timeOfArrival = timeOfArrival;
 		this.trailerID = trailerID;
 		this.weightMax = weightMax;
+		this.trailerState = TrailerState.IDLE;
+
+	}
+
+	public TrailerState getTrailerState()
+	{
+		return trailerState;
+	}
+
+	public void setTrailerState(TrailerState trailerState)
+	{
+		this.trailerState = trailerState;
 	}
 
 	public String getTrailerID()
@@ -58,26 +72,6 @@ public class Trailer
 	public void setTimeOfDeparture(Date timeOfDeparture)
 	{
 		this.timeOfDeparture = timeOfDeparture;
-	}
-
-	public boolean isLoaded()
-	{
-		return isLoaded;
-	}
-
-	public void setLoaded(boolean isLoaded)
-	{
-		this.isLoaded = isLoaded;
-	}
-
-	public boolean hasArrived()
-	{
-		return hasArrived;
-	}
-
-	public void setHasArrived(boolean hasArrived)
-	{
-		this.hasArrived = hasArrived;
 	}
 
 	public double getWeightCurrent()
@@ -138,6 +132,30 @@ public class Trailer
 	public void removeProductType(ProductType productType)
 	{
 		productTypes.remove(productType);
+	}
+
+	/**
+	 * Returns a list of productTypes in this Trailer.
+	 */
+	public ArrayList<SubOrder> getSubOrders()
+	{
+		return new ArrayList<SubOrder>(subOrders);
+	}
+
+	/**
+	 * Adds the productType to this Trailer.
+	 */
+	public void addSubOrder(SubOrder subOrder)
+	{
+		subOrders.add(subOrder);
+	}
+
+	/**
+	 * Removes the productType from this Trailer.
+	 */
+	public void removeSubOrder(SubOrder subOrder)
+	{
+		subOrders.remove(subOrder);
 	}
 
 	@Override
