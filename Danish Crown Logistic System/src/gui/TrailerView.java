@@ -63,14 +63,14 @@ public class TrailerView extends JFrame
 		contentPane.add(lblTrailerView);
 
 		lstArrivingTrailersModel = new DefaultListModel<Trailer>();
-		lstArrivingTrailers = new JList<Trailer>();
+		lstArrivingTrailers = new JList<Trailer>(lstArrivingTrailersModel);
 		lstArrivingTrailers.setBounds(5, 55, 155, 233);
 		contentPane.add(lstArrivingTrailers);
 		lstArrivingTrailers
 				.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
 		lstDeparturingTrailersModel = new DefaultListModel<Trailer>();
-		lstDeparturingTrailers = new JList<Trailer>();
+		lstDeparturingTrailers = new JList<Trailer>(lstDeparturingTrailersModel);
 		lstDeparturingTrailers.setBounds(285, 55, 155, 233);
 		contentPane.add(lstDeparturingTrailers);
 		lstDeparturingTrailers
@@ -130,9 +130,8 @@ public class TrailerView extends JFrame
 
 				} else {
 
-					(lstArrivingTrailers.getSelectedValue())
+					(lstDeparturingTrailers.getSelectedValue())
 							.setTimeOfDeparture(DU.createDate());
-
 					controller.fillDepartureLst();
 
 				}
