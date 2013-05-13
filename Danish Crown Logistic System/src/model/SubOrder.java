@@ -4,17 +4,19 @@ public class SubOrder {
 
 	private double estimatedWeight;
 	private int estimatedLoadingTime;
+	private boolean isLoaded = false;
 	private Order order;
 	private Trailer trailer;
 	private ProductType productType;
 
-	public SubOrder(double estimatedWeight, int estimatedLoadingTime,
-			Trailer trailer, ProductType productType) {
+	public SubOrder(double estimatedWeight, Trailer trailer,
+			ProductType productType) {
 		super();
 		this.estimatedWeight = estimatedWeight;
-		this.estimatedLoadingTime = estimatedLoadingTime;
 		this.trailer = trailer;
 		this.productType = productType;
+		this.estimatedLoadingTime = (int) (this.productType
+				.getminuteToKiloRatio() * this.estimatedWeight);
 	}
 
 	public double getEstimatedWeight() {

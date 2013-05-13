@@ -44,9 +44,10 @@ public class Service {
 	}
 
 	public static SubOrder createSubOrder(double estimatedWeight,
-			int estimatedLoadingTime, Trailer trailer, ProductType productType) {
-		SubOrder subOrder = new SubOrder(estimatedWeight, estimatedLoadingTime,
-				trailer, productType);
+			Trailer trailer, ProductType productType) {
+		SubOrder subOrder = new SubOrder(estimatedWeight, trailer, productType);
+		trailer.addSubOrder(subOrder);
+		Dao.addSubOrder(subOrder);
 		return subOrder;
 	}
 
@@ -64,6 +65,7 @@ public class Service {
 		return loadingInfo;
 	}
 
+	@SuppressWarnings("deprecation")
 	public static void startUpData() {
 
 		Driver d1 = Service.createDriver("Peter Hansen", "22 37 54 98",
@@ -78,16 +80,64 @@ public class Service {
 				"EQ 87 224");
 		Driver d6 = Service.createDriver("Jens Skærbæk", "22 18 74 67",
 				"KE 92 465");
+		Driver d7 = Service.createDriver("Lasse Tidemann", "22 54 74 67",
+				"VF 81 841");
+		Driver d8 = Service.createDriver("Peder Bruun", "22 18 12 67",
+				"GH 81 124");
+		Driver d9 = Service.createDriver("Adam Søndergaard", "22 47 74 67",
+				"TK 78 165");
+		Driver d10 = Service.createDriver("Benny Bliktud", "22 87 74 67",
+				"LD 98 114");
+		Driver d11 = Service.createDriver("Carsten Green", "22 46 74 67",
+				"PS 94 748");
+		Driver d12 = Service.createDriver("Dennis Lindstrøm", "22 32 74 67",
+				"SU 84 449");
+		Driver d13 = Service.createDriver("Felix Kat", "22 48 74 67",
+				"PA 79 686");
+		Driver d14 = Service.createDriver("Gunnar Ølstyk", "22 97 74 67",
+				"YE 95 782");
+		Driver d15 = Service.createDriver("Henrik Huber", "22 88 74 67",
+				"AN 97 354");
+		Driver d16 = Service.createDriver("Ivan Jørgensen", "22 48 74 67",
+				"ME 86 987");
+		Driver d17 = Service.createDriver("Janus Marius", "22 23 74 67",
+				"MM 78 325");
+		Driver d18 = Service.createDriver("Klaus Bundgaard", "22 11 74 67",
+				"SE 92 778");
 
 		Date date1 = new Date(113, 0, 1, 9, 0);
-		Date date2 = new Date(113, 0, 1, 10, 0);
-		Date date3 = new Date(113, 0, 1, 11, 0);
-		Date date4 = new Date(113, 0, 1, 12, 0);
+		Date date2 = new Date(113, 0, 1, 9, 20);
+		Date date3 = new Date(113, 0, 1, 9, 40);
+		Date date4 = new Date(113, 0, 1, 10, 0);
+		Date date5 = new Date(113, 0, 1, 10, 20);
+		Date date6 = new Date(113, 0, 1, 10, 40);
+		Date date7 = new Date(113, 0, 1, 11, 0);
+		Date date8 = new Date(113, 0, 1, 11, 20);
+		Date date9 = new Date(113, 0, 1, 11, 40);
+		Date date10 = new Date(113, 0, 1, 12, 0);
+		Date date11 = new Date(113, 0, 1, 12, 20);
+		Date date12 = new Date(113, 0, 1, 12, 40);
+		Date date13 = new Date(113, 0, 1, 13, 0);
+		Date date14 = new Date(113, 0, 1, 13, 20);
+		Date date15 = new Date(113, 0, 1, 13, 40);
+		Date date16 = new Date(113, 0, 1, 14, 0);
 
 		Trailer t1 = Service.createTrailer("1", 25000, date1);
 		Trailer t2 = Service.createTrailer("2", 25000, date2);
 		Trailer t3 = Service.createTrailer("3", 25000, date3);
 		Trailer t4 = Service.createTrailer("4", 25000, date4);
+		Trailer t5 = Service.createTrailer("5", 25000, date5);
+		Trailer t6 = Service.createTrailer("6", 25000, date6);
+		Trailer t7 = Service.createTrailer("7", 25000, date7);
+		Trailer t8 = Service.createTrailer("8", 25000, date8);
+		Trailer t9 = Service.createTrailer("9", 25000, date9);
+		Trailer t10 = Service.createTrailer("10", 25000, date10);
+		Trailer t11 = Service.createTrailer("11", 25000, date11);
+		Trailer t12 = Service.createTrailer("12", 25000, date12);
+		Trailer t13 = Service.createTrailer("13", 25000, date13);
+		Trailer t14 = Service.createTrailer("14", 25000, date14);
+		Trailer t15 = Service.createTrailer("15", 25000, date15);
+		Trailer t16 = Service.createTrailer("16", 25000, date16);
 
 		ProductType p1 = Service.createProductType("Christmas Trees", 0.0031);
 		ProductType p2 = Service.createProductType("Pallets", 0.0028);
@@ -95,34 +145,110 @@ public class Service {
 
 		t1.addProductType(p1);
 		t2.addProductType(p1);
-		t2.addProductType(p2);
-		t3.addProductType(p2);
-		t4.addProductType(p3);
+		t3.addProductType(p1);
+		t4.addProductType(p1);
+		t5.addProductType(p1);
+		t5.addProductType(p2);
+		t6.addProductType(p1);
+		t6.addProductType(p3);
+		t7.addProductType(p2);
+		t8.addProductType(p2);
+		t9.addProductType(p2);
+		t10.addProductType(p2);
+		t11.addProductType(p2);
+		t11.addProductType(p3);
+		t12.addProductType(p3);
+		t13.addProductType(p3);
+		t14.addProductType(p3);
+		t15.addProductType(p3);
+		t16.addProductType(p3);
+		t16.addProductType(p2);
 
 		t1.setDriver(d1);
 		t2.setDriver(d2);
 		t3.setDriver(d3);
 		t4.setDriver(d4);
+		t5.setDriver(d5);
+		t6.setDriver(d6);
+		t7.setDriver(d7);
+		t8.setDriver(d8);
+		t9.setDriver(d9);
+		t10.setDriver(d10);
+		t11.setDriver(d11);
+		t12.setDriver(d12);
+		t13.setDriver(d13);
+		t14.setDriver(d14);
+		t15.setDriver(d15);
+		t16.setDriver(d16);
 
 		d1.setTrailer(t1);
 		d2.setTrailer(t2);
 		d3.setTrailer(t3);
 		d4.setTrailer(t4);
+		d5.setTrailer(t5);
+		d6.setTrailer(t6);
+		d7.setTrailer(t7);
+		d8.setTrailer(t8);
+		d9.setTrailer(t9);
+		d10.setTrailer(t10);
+		d11.setTrailer(t11);
+		d12.setTrailer(t12);
+		d13.setTrailer(t13);
+		d14.setTrailer(t14);
+		d15.setTrailer(t15);
+		d16.setTrailer(t16);
 
-		SubOrder so1 = Service.createSubOrder(20000, 62, t1, p1);
-		SubOrder so2 = Service.createSubOrder(19000, 53, t2, p2);
+		SubOrder so1 = Service.createSubOrder(20000, t1, p1);
+		SubOrder so2 = Service.createSubOrder(19000, t2, p1);
+		SubOrder so3 = Service.createSubOrder(18000, t3, p1);
+		SubOrder so4 = Service.createSubOrder(24000, t4, p1);
+		SubOrder so5 = Service.createSubOrder(12000, t5, p1);
+		SubOrder so6 = Service.createSubOrder(12000, t5, p2);
+		SubOrder so7 = Service.createSubOrder(8000, t6, p1);
+		SubOrder so8 = Service.createSubOrder(16000, t6, p3);
+		SubOrder so9 = Service.createSubOrder(20000, t7, p2);
+		SubOrder so10 = Service.createSubOrder(16000, t8, p2);
+		SubOrder so11 = Service.createSubOrder(24000, t9, p2);
+		SubOrder so12 = Service.createSubOrder(24500, t10, p2);
+		SubOrder so13 = Service.createSubOrder(9000, t11, p2);
+		SubOrder so14 = Service.createSubOrder(9000, t11, p3);
+		SubOrder so15 = Service.createSubOrder(23000, t12, p3);
+		SubOrder so16 = Service.createSubOrder(24000, t13, p3);
+		SubOrder so17 = Service.createSubOrder(20000, t14, p3);
+		SubOrder so18 = Service.createSubOrder(19000, t15, p3);
+		SubOrder so19 = Service.createSubOrder(12000, t16, p3);
+		SubOrder so20 = Service.createSubOrder(11000, t16, p2);
 
 		Order o1 = Service.createOrder(1, 150, DU.createDate("2013-01-01"));
+		Order o2 = Service.createOrder(2, 150, DU.createDate("2013-01-01"));
+		Order o3 = Service.createOrder(3, 150, DU.createDate("2013-01-01"));
+		Order o4 = Service.createOrder(4, 150, DU.createDate("2013-01-01"));
+		Order o5 = Service.createOrder(5, 150, DU.createDate("2013-01-01"));
+		Order o6 = Service.createOrder(6, 150, DU.createDate("2013-01-01"));
+		Order o7 = Service.createOrder(7, 150, DU.createDate("2013-01-01"));
+		Order o8 = Service.createOrder(8, 150, DU.createDate("2013-01-01"));
+		Order o9 = Service.createOrder(9, 150, DU.createDate("2013-01-01"));
+		Order o10 = Service.createOrder(10, 150, DU.createDate("2013-01-01"));
 
 		o1.addSubOrder(so1);
 		o1.addSubOrder(so2);
-
-		// Test trailer for TrailerView
-		Date dateTest = new Date(113, 0, 1, 8, 0);
-		Trailer testTrailer = Service.createTrailer("TestTrailer", 25000,
-				dateTest);
-		testTrailer.setHasArrived(true);
-		testTrailer.setLoaded(true);
-
+		o2.addSubOrder(so3);
+		o2.addSubOrder(so4);
+		o3.addSubOrder(so5);
+		o3.addSubOrder(so6);
+		o4.addSubOrder(so7);
+		o4.addSubOrder(so8);
+		o5.addSubOrder(so9);
+		o5.addSubOrder(so10);
+		o6.addSubOrder(so11);
+		o6.addSubOrder(so12);
+		o7.addSubOrder(so13);
+		o7.addSubOrder(so14);
+		o8.addSubOrder(so15);
+		o8.addSubOrder(so16);
+		o9.addSubOrder(so17);
+		o9.addSubOrder(so18);
+		o10.addSubOrder(so19);
+		o10.addSubOrder(so20);
 	}
 }

@@ -161,8 +161,7 @@ public class NewSubOrderDialog extends JDialog {
 
 				double weight = Double.parseDouble(txfWeight.getText());
 
-				SubOrder s1 = Service.createSubOrder(weight,
-						(int) (weight * p1.getminuteToKiloRatio()), t1, p1);
+				SubOrder s1 = Service.createSubOrder(weight, t1, p1);
 
 				t1.setWeightCurrent(t1.getWeightCurrent()
 						+ (Double.parseDouble(txfWeight.getText())));
