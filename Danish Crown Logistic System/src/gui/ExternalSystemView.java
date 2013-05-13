@@ -36,9 +36,8 @@ public class ExternalSystemView extends JFrame {
 		this.setTitle("External System");
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setBounds(400, 100, 569, 347);
+		InitContent();
 		this.setVisible(true);
-		InitContent();
-		InitContent();
 		System.out.println(Dao.getProductTypes());
 		System.out.println(Dao.getTrailer());
 		System.out.println(Dao.getDrivers());
