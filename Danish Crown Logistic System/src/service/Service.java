@@ -16,41 +16,35 @@ import dateutil.DU;
 public class Service
 {
 
-	public static Driver createDriver(String name, String phoneNumber,
-			String licensePlate)
+	public static Driver createDriver(String name, String phoneNumber, String licensePlate)
 	{
 		Driver driver = new Driver(name, phoneNumber, licensePlate);
 		Dao.addDriver(driver);
 		return driver;
 	}
 
-	public static Trailer createTrailer(String trailerID, double weightMax,
-			Date timeOfArrival)
+	public static Trailer createTrailer(String trailerID, double weightMax, Date timeOfArrival)
 	{
 		Trailer trailer = new Trailer(trailerID, weightMax, timeOfArrival);
 		Dao.addTrailer(trailer);
 		return trailer;
 	}
 
-	public static ProductType createProductType(String description,
-			double minuteToKiloRatio)
+	public static ProductType createProductType(String description, double minuteToKiloRatio)
 	{
-		ProductType productType = new ProductType(description,
-				minuteToKiloRatio);
+		ProductType productType = new ProductType(description, minuteToKiloRatio);
 		Dao.addProductType(productType);
 		return productType;
 	}
 
-	public static Order createOrder(int orderNumber, double weightMargin,
-			Date loadingDate)
+	public static Order createOrder(int orderNumber, double weightMargin, Date loadingDate)
 	{
 		Order order = new Order(orderNumber, weightMargin, loadingDate);
 		Dao.addOrder(order);
 		return order;
 	}
 
-	public static SubOrder createSubOrder(double estimatedWeight,
-			Trailer trailer, ProductType productType)
+	public static SubOrder createSubOrder(double estimatedWeight, Trailer trailer, ProductType productType)
 	{
 		SubOrder subOrder = new SubOrder(estimatedWeight, trailer, productType);
 		trailer.addSubOrder(subOrder);
@@ -59,19 +53,18 @@ public class Service
 		return subOrder;
 	}
 
-	public static LoadingBay createLoadingBay(int loadingBayNumber,
-			ProductType productType)
+	public static LoadingBay createLoadingBay(int loadingBayNumber, ProductType productType)
 	{
 		LoadingBay loadingBay = new LoadingBay(loadingBayNumber, productType);
 		Dao.addLoadingBay(loadingBay);
 		return loadingBay;
 	}
 
-	public static LoadingInfo createLoadingInfo(SubOrder subOrder,
-			LoadingBay loadingBay)
+	public static LoadingInfo createLoadingInfo(SubOrder subOrder, LoadingBay loadingBay)
 	{
 		LoadingInfo loadingInfo = new LoadingInfo(subOrder, loadingBay);
 		Dao.addLoadingInfo(loadingInfo);
+		loadingBay.addLoadingInfo(loadingInfo);
 		return loadingInfo;
 	}
 
@@ -79,42 +72,24 @@ public class Service
 	public static void startUpData()
 	{
 
-		Driver d1 = Service.createDriver("Peter Hansen", "22 37 54 98",
-				"EH 95 128");
-		Driver d2 = Service.createDriver("Søren Overgaard", "22 52 12 71",
-				"GH 81 411");
-		Driver d3 = Service.createDriver("Morgens Nygaard", "22 14 21 45",
-				"TR 92 798");
-		Driver d4 = Service.createDriver("Ove Pedersen", "22 74 45 19",
-				"DW 96 725");
-		Driver d5 = Service.createDriver("Kasper Bilder", "22 49 98 94",
-				"EQ 87 224");
-		Driver d6 = Service.createDriver("Jens Skærbæk", "22 18 74 67",
-				"KE 92 465");
-		Driver d7 = Service.createDriver("Lasse Tidemann", "22 54 74 67",
-				"VF 81 841");
-		Driver d8 = Service.createDriver("Peder Bruun", "22 18 12 67",
-				"GH 81 124");
-		Driver d9 = Service.createDriver("Adam Søndergaard", "22 47 74 67",
-				"TK 78 165");
-		Driver d10 = Service.createDriver("Benny Bliktud", "22 87 74 67",
-				"LD 98 114");
-		Driver d11 = Service.createDriver("Carsten Green", "22 46 74 67",
-				"PS 94 748");
-		Driver d12 = Service.createDriver("Dennis Lindstrøm", "22 32 74 67",
-				"SU 84 449");
-		Driver d13 = Service.createDriver("Felix Kat", "22 48 74 67",
-				"PA 79 686");
-		Driver d14 = Service.createDriver("Gunnar Ølstyk", "22 97 74 67",
-				"YE 95 782");
-		Driver d15 = Service.createDriver("Henrik Huber", "22 88 74 67",
-				"AN 97 354");
-		Driver d16 = Service.createDriver("Ivan Jørgensen", "22 48 74 67",
-				"ME 86 987");
-		Driver d17 = Service.createDriver("Janus Marius", "22 23 74 67",
-				"MM 78 325");
-		Driver d18 = Service.createDriver("Klaus Bundgaard", "22 11 74 67",
-				"SE 92 778");
+		Driver d1 = Service.createDriver("Peter Hansen", "22 37 54 98", "EH 95 128");
+		Driver d2 = Service.createDriver("Søren Overgaard", "22 52 12 71", "GH 81 411");
+		Driver d3 = Service.createDriver("Morgens Nygaard", "22 14 21 45", "TR 92 798");
+		Driver d4 = Service.createDriver("Ove Pedersen", "22 74 45 19", "DW 96 725");
+		Driver d5 = Service.createDriver("Kasper Bilder", "22 49 98 94", "EQ 87 224");
+		Driver d6 = Service.createDriver("Jens Skærbæk", "22 18 74 67", "KE 92 465");
+		Driver d7 = Service.createDriver("Lasse Tidemann", "22 54 74 67", "VF 81 841");
+		Driver d8 = Service.createDriver("Peder Bruun", "22 18 12 67", "GH 81 124");
+		Driver d9 = Service.createDriver("Adam Søndergaard", "22 47 74 67", "TK 78 165");
+		Driver d10 = Service.createDriver("Benny Bliktud", "22 87 74 67", "LD 98 114");
+		Driver d11 = Service.createDriver("Carsten Green", "22 46 74 67", "PS 94 748");
+		Driver d12 = Service.createDriver("Dennis Lindstrøm", "22 32 74 67", "SU 84 449");
+		Driver d13 = Service.createDriver("Felix Kat", "22 48 74 67", "PA 79 686");
+		Driver d14 = Service.createDriver("Gunnar Ølstyk", "22 97 74 67", "YE 95 782");
+		Driver d15 = Service.createDriver("Henrik Huber", "22 88 74 67", "AN 97 354");
+		Driver d16 = Service.createDriver("Ivan Jørgensen", "22 48 74 67", "ME 86 987");
+		Driver d17 = Service.createDriver("Janus Marius", "22 23 74 67", "MM 78 325");
+		Driver d18 = Service.createDriver("Klaus Bundgaard", "22 11 74 67", "SE 92 778");
 
 		Date date1 = new Date(113, 0, 1, 9, 0);
 		Date date2 = new Date(113, 0, 1, 9, 20);
@@ -261,5 +236,18 @@ public class Service
 		o9.addSubOrder(so18);
 		o10.addSubOrder(so19);
 		o10.addSubOrder(so20);
+
+		LoadingBay lb1 = Service.createLoadingBay(1, p1);
+		LoadingBay lb2 = Service.createLoadingBay(2, p1);
+		LoadingBay lb3 = Service.createLoadingBay(3, p2);
+		LoadingBay lb4 = Service.createLoadingBay(4, p2);
+		LoadingBay lb5 = Service.createLoadingBay(5, p3);
+
+		//These are currently hardcoded, unsure if we meant for system to create them. None the less, hardcoded for now for testing.
+		LoadingInfo li1 = Service.createLoadingInfo(so1, lb1);
+		LoadingInfo li2 = Service.createLoadingInfo(so2, lb1);
+		LoadingInfo li3 = Service.createLoadingInfo(so3, lb1);
+		LoadingInfo li4 = Service.createLoadingInfo(so4, lb1);
+		LoadingInfo li5 = Service.createLoadingInfo(so5, lb1);
 	}
 }

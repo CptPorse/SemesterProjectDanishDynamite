@@ -3,7 +3,8 @@ package model;
 import java.util.Date;
 
 //Author: Jens Nyberg Porse
-public class LoadingInfo {
+public class LoadingInfo
+{
 
 	private Date timeOfLoadingStart;
 	private Date timeOfLoadingEnd;
@@ -11,51 +12,69 @@ public class LoadingInfo {
 	private SubOrder subOrder;
 	private LoadingBay loadingBay;
 
-	public LoadingInfo(SubOrder subOrder, LoadingBay loadingBay) {
+	public LoadingInfo(SubOrder subOrder, LoadingBay loadingBay)
+	{
 		super();
 		this.subOrder = subOrder;
 		this.loadingBay = loadingBay;
 		this.highPriority = false;
 	}
 
-	public Date getTimeOfLoadingStart() {
+	public Date getTimeOfLoadingStart()
+	{
 		return timeOfLoadingStart;
 	}
 
-	public void setTimeOfLoadingStart(Date timeOfLoadingStart) {
+	public void setTimeOfLoadingStart(Date timeOfLoadingStart)
+	{
 		this.timeOfLoadingStart = timeOfLoadingStart;
 	}
 
-	public Date getTimeOfLoadingEnd() {
+	public Date getTimeOfLoadingEnd()
+	{
 		return timeOfLoadingEnd;
 	}
 
-	public void setTimeOfLoadingEnd(Date timeOfLoadingEnd) {
+	public void setTimeOfLoadingEnd(Date timeOfLoadingEnd)
+	{
 		this.timeOfLoadingEnd = timeOfLoadingEnd;
 	}
 
-	public boolean isHighPriority() {
+	public boolean isHighPriority()
+	{
 		return highPriority;
 	}
 
-	public void setHighPriority(boolean highPriority) {
+	public void setHighPriority(boolean highPriority)
+	{
 		this.highPriority = highPriority;
 	}
 
-	public SubOrder getSubOrder() {
+	public SubOrder getSubOrder()
+	{
 		return subOrder;
 	}
 
-	public void setSubOrder(SubOrder subOrder) {
+	public void setSubOrder(SubOrder subOrder)
+	{
 		this.subOrder = subOrder;
 	}
 
-	public LoadingBay getLoadingBay() {
+	public LoadingBay getLoadingBay()
+	{
 		return loadingBay;
 	}
 
-	public void setLoadingBay(LoadingBay loadingBay) {
+	public void setLoadingBay(LoadingBay loadingBay)
+	{
 		this.loadingBay = loadingBay;
+	}
+
+	@Override
+	public String toString()
+	{
+		return "LoadingInfo [timeOfLoadingStart=" + timeOfLoadingStart + ", timeOfLoadingEnd=" + timeOfLoadingEnd
+				+ ", highPriority=" + highPriority + ", subOrder=" + subOrder + ", loadingBay=" + loadingBay + "]";
 	}
 
 }
