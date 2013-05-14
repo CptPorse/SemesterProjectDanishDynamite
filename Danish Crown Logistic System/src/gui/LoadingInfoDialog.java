@@ -11,15 +11,19 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
-//Author: Jens Nyberg Porse
-public class LoadingInfoDialog extends JDialog {
+import model.LoadingInfo;
 
-	public LoadingInfoDialog(JFrame owner) {
+//Author: Jens Nyberg Porse
+public class LoadingInfoDialog extends JDialog
+{
+
+	public LoadingInfoDialog(JFrame owner)
+	{
 		super(owner);
 		System.out.println("Created new Window");
 		setTitle("Loading Info");
 		this.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-
+		this.setBounds(600, 500, 569, 347);
 		InitContent();
 		this.setVisible(true);
 
@@ -34,7 +38,8 @@ public class LoadingInfoDialog extends JDialog {
 
 	private Controller controller;
 
-	private void InitContent() {
+	private void InitContent()
+	{
 
 		controller = new Controller();
 
@@ -102,10 +107,17 @@ public class LoadingInfoDialog extends JDialog {
 
 	}
 
-	private class Controller implements ActionListener {
+	public void fillModel(LoadingInfo lInfo)
+	{
+
+	}
+
+	private class Controller implements ActionListener
+	{
 
 		@Override
-		public void actionPerformed(ActionEvent e) {
+		public void actionPerformed(ActionEvent e)
+		{
 
 		}
 
