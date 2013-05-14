@@ -11,6 +11,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.border.EmptyBorder;
@@ -63,6 +64,8 @@ public class ExternalSystemView extends JFrame {
 	private JList<SubOrder> lstSubOrders;
 	private DefaultListModel<SubOrder> lstSubOrderModel;
 	private DefaultListModel<Order> lstOrderModel;
+	private JScrollPane scpOrders;
+	private JScrollPane scpSubOrders;
 
 	private void InitContent() {
 
@@ -93,7 +96,8 @@ public class ExternalSystemView extends JFrame {
 
 		lstOrderModel = new DefaultListModel<Order>();
 		lstOrders = new JList<Order>(lstOrderModel);
-		lstOrders.setBounds(18, 30, 180, 200);
+		scpOrders = new JScrollPane(lstOrders);
+		scpOrders.setBounds(18, 30, 180, 200);
 		lstOrders.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		lstOrders.addListSelectionListener(new ListSelectionListener() {
 			public void valueChanged(ListSelectionEvent evt) {
@@ -105,7 +109,7 @@ public class ExternalSystemView extends JFrame {
 			}
 		});
 
-		panelExternalSystem.add(lstOrders);
+		panelExternalSystem.add(scpOrders);
 
 		lblOrderList = new JLabel("Orders:");
 		lblOrderList.setFont(new Font("Tahoma", Font.BOLD, 11));
@@ -147,8 +151,8 @@ public class ExternalSystemView extends JFrame {
 
 		lstSubOrderModel = new DefaultListModel<SubOrder>();
 		lstSubOrders = new JList<SubOrder>(lstSubOrderModel);
-		lstSubOrders.setBounds(388, 30, 146, 110);
-		panelExternalSystem.add(lstSubOrders);
+		scpSubOrders = new JScrollPane(lstSubOrders);
+		scpSubOrders.setBounds(388, 30, 146, 110);
 		lstSubOrders.addListSelectionListener(new ListSelectionListener() {
 			public void valueChanged(ListSelectionEvent evt) {
 				if (!evt.getValueIsAdjusting()) {
@@ -162,7 +166,7 @@ public class ExternalSystemView extends JFrame {
 		lblSuborders = new JLabel("Sub-Orders:");
 		lblSuborders.setFont(new Font("Tahoma", Font.BOLD, 11));
 		lblSuborders.setBounds(388, 10, 160, 14);
-		panelExternalSystem.add(lblSuborders);
+		panelExternalSystem.add(scpSubOrders);
 
 		lblSubProduct = new JLabel("Sub-Order Product Type:");
 		lblSubProduct.setFont(new Font("Tahoma", Font.BOLD, 11));
