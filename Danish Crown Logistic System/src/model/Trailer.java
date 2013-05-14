@@ -161,7 +161,14 @@ public class Trailer
 	@Override
 	public String toString()
 	{
-		return "Trailer " + trailerID;
-	}
+		String min = "00";
+		String tempTrailerID = "" + trailerID + "                       ";
+		if (timeOfArrival.getMinutes() != 0) {
+			min = "" + timeOfArrival.getMinutes();
+		}
+		return "<html><table border=1 width=120 >" + "Trailer: "
+				+ tempTrailerID.substring(0, 12) + "<br/>" + "ETA: "
+				+ timeOfArrival.getHours() + ":" + min + "</table> </html>";
 
+	}
 }
