@@ -1,6 +1,7 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 //Author: Jens Nyberg Porse
 public class LoadingBay {
@@ -67,6 +68,21 @@ public class LoadingBay {
 			waitingTime = +timeEnd - timeStart;
 		}
 		return waitingTime;
+	}
+
+	public Date getNextFreeTime() {
+
+		Date loadingDone = null;
+		for (int i = 0; i < loadingInfos.size(); i++) {
+			if (loadingInfos.get(i).getState() == LoadingInfoState.LOADING) {
+				loadingDone = loadingInfos.get(i).getTimeOfLoadingEnd();
+			}
+		}
+		if (loadingDone == null)
+			loadingDone = loadingInfos.get(loadingInfos.size() - 1)
+					.getTimeOfLoadingEnd();
+
+		return loadingDone;
 	}
 
 	@Override
