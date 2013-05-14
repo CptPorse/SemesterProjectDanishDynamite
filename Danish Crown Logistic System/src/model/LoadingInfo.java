@@ -19,7 +19,7 @@ public class LoadingInfo
 		this.subOrder = subOrder;
 		this.loadingBay = loadingBay;
 		this.highPriority = false;
-		state = LoadingInfoState.FINISHED;
+		state = LoadingInfoState.PENDING;
 	}
 
 	public Date getTimeOfLoadingStart()
@@ -92,34 +92,23 @@ public class LoadingInfo
 	public String toString()
 	{
 		String line = "- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ";
-		String green = "lime";
-		String yellow = "yellow";
-		String white = "white";
-
-		String bgColor = "<body bgcolor=" + green + ">";
-		if (state == LoadingInfoState.PENDING)
+		String bgColor = "";
+		if (state == LoadingInfoState.FINISHED)
 		{
-			bgColor = "<body bgcolor=" + white + ">";
+			bgColor = "<body bgcolor='lime'>";
 		}
 		else if (state == LoadingInfoState.LOADING)
 		{
-			bgColor = "<body bgcolor=" + yellow + ">";
+			bgColor = "<body bgcolor='yellow'>";
 		}
 
+		String hp = "";
 		if (highPriority == true)
 		{
-			return "<html>" + bgColor + "<h3 align=" + "center" + ">HIGH PRIORITY</h3><br>Suborder: " + subOrder + "<br>Estimated start: " + timeOfLoadingStart
-					+ "<br>Estimated loading time: " + subOrder.getEstimatedLoadingTime() + " min<br>" + line;
+			hp = "<h3 align='center'>HIGH PRIORITY</h3><br>";
 		}
-		else
-//		{
-//			return "<html>" + bgColor + "Suborder: " + subOrder + "<br>Estimated start: " + timeOfLoadingStart + "<p align=" + "right"
-//					+ ">Estimated loading time: " + subOrder.getEstimatedLoadingTime() + " min<br>" + line;
-//		}
-		{
-			return "<html><table border=" + "1" + "><tr><td width='275'>Suborder: " + subOrder + "</td><td width='275'></td></tr><br><tr><td>Estimated start: "
-					+ timeOfLoadingStart + " </td><td>Estimated loading time: " + subOrder.getEstimatedLoadingTime() + " min";
-		}
+		return "<html>" + bgColor + hp + "<table><tr><td width='255'>Suborder: " + subOrder + "</td><td width='255' align='right'>State: " + state
+				+ "</td></tr><br><tr><td>Estimated start: " + timeOfLoadingStart + " </td><td align='right'>Estimated loading time: "
+				+ subOrder.getEstimatedLoadingTime() + " min</td></tr></table>" + line;
 	}
-
 }
