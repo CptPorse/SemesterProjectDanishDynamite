@@ -10,7 +10,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
+import javax.swing.JScrollPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.border.EmptyBorder;
 
@@ -36,15 +36,17 @@ public class TrailerView extends JFrame
 	}
 
 	private Controller controller;
+
 	private JPanel contentPane;
 	private JLabel lblTrailerView;
-	private JTextField txfClock;
+
 	private JList<Trailer> lstArrivingTrailers;
-	private JList<Trailer> lstDeparturingTrailers;
-
 	private DefaultListModel<Trailer> lstArrivingTrailersModel;
+	private JScrollPane scpArriving;
 
+	private JList<Trailer> lstDeparturingTrailers;
 	private DefaultListModel<Trailer> lstDeparturingTrailersModel;
+	private JScrollPane scpDeparture;
 
 	private JLabel lblNewLabel;
 	private JLabel lblDeparture;
@@ -65,28 +67,24 @@ public class TrailerView extends JFrame
 
 		lstArrivingTrailersModel = new DefaultListModel<Trailer>();
 		lstArrivingTrailers = new JList<Trailer>(lstArrivingTrailersModel);
-		lstArrivingTrailers.setBounds(5, 55, 155, 233);
-		contentPane.add(lstArrivingTrailers);
 		lstArrivingTrailers
 				.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		scpArriving = new JScrollPane(lstArrivingTrailers);
+		scpArriving.setBounds(5, 55, 155, 233);
+		contentPane.add(scpArriving);
 
 		lstDeparturingTrailersModel = new DefaultListModel<Trailer>();
 		lstDeparturingTrailers = new JList<Trailer>(lstDeparturingTrailersModel);
-		lstDeparturingTrailers.setBounds(285, 55, 155, 233);
-		contentPane.add(lstDeparturingTrailers);
 		lstDeparturingTrailers
 				.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		scpDeparture = new JScrollPane(lstDeparturingTrailers);
+		contentPane.add(scpDeparture);
+		scpDeparture.setBounds(285, 55, 155, 233);
 
 		btnHasArrived = new JButton("hasArrived");
 		btnHasArrived.setBounds(170, 265, 89, 23);
 		contentPane.add(btnHasArrived);
 		btnHasArrived.addActionListener(controller);
-
-		txfClock = new JTextField();
-		txfClock.setEditable(false);
-		txfClock.setBounds(175, 74, 86, 20);
-		contentPane.add(txfClock);
-		txfClock.setColumns(10);
 
 		btnCheckDeparture = new JButton("Check Departure");
 		btnCheckDeparture.setBounds(464, 265, 113, 23);
