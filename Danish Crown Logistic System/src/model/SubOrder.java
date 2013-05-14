@@ -19,6 +19,14 @@ public class SubOrder {
 				.getminuteToKiloRatio() * this.estimatedWeight);
 	}
 
+	public boolean isLoaded() {
+		return isLoaded;
+	}
+
+	public void setLoaded(boolean isLoaded) {
+		this.isLoaded = isLoaded;
+	}
+
 	public double getEstimatedWeight() {
 		return estimatedWeight;
 	}
