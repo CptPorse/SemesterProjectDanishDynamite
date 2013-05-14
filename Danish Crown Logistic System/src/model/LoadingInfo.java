@@ -88,6 +88,7 @@ public class LoadingInfo
 		this.state = state;
 	}
 
+	//Author: Christian Møller Pedersen
 	@Override
 	public String toString()
 	{
