@@ -11,6 +11,7 @@ public class LoadingInfo
 	private boolean highPriority;
 	private SubOrder subOrder;
 	private LoadingBay loadingBay;
+	private LoadingInfoState state;
 
 	public LoadingInfo(SubOrder subOrder, LoadingBay loadingBay)
 	{
@@ -18,6 +19,7 @@ public class LoadingInfo
 		this.subOrder = subOrder;
 		this.loadingBay = loadingBay;
 		this.highPriority = false;
+		state = LoadingInfoState.FINISHED;
 	}
 
 	public Date getTimeOfLoadingStart()
@@ -73,8 +75,31 @@ public class LoadingInfo
 	@Override
 	public String toString()
 	{
-		return "LoadingInfo [timeOfLoadingStart=" + timeOfLoadingStart + ", timeOfLoadingEnd=" + timeOfLoadingEnd
-				+ ", highPriority=" + highPriority + ", subOrder=" + subOrder + ", loadingBay=" + loadingBay + "]";
+		String line = "- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ";
+		String green = "lime";
+		String yellow = "yellow";
+		String white = "white";
+
+		String bgColor = "<body bgcolor=" + green + ">";
+		if (state == LoadingInfoState.PENDING)
+		{
+			bgColor = "<body bgcolor=" + white + ">";
+		}
+		else if (state == LoadingInfoState.LOADING)
+		{
+			bgColor = "<body bgcolor=" + yellow + ">";
+		}
+
+		if (highPriority == true)
+		{
+			return "<html>" + bgColor + "<h3 align=" + "center" + ">HIGH PRIORITY</h3><br>Suborder: " + subOrder + "<br>Estimated start: " + timeOfLoadingStart
+					+ "<br>Estimated loading time: " + subOrder.getEstimatedLoadingTime() + " min<br>" + line;
+		}
+		else
+		{
+			return "<html>" + bgColor + "Suborder: " + subOrder + "<br><p align=" + "right" + ">Estimated start: " + timeOfLoadingStart
+					+ "</tr></td></table><br>Estimated loading time: " + subOrder.getEstimatedLoadingTime() + " min<br>" + line;
+		}
 	}
 
 }
