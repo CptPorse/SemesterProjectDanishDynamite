@@ -2,7 +2,7 @@ package gui;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Date;
+import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -13,14 +13,15 @@ import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
 import model.LoadingInfo;
+import model.LoadingInfoState;
+import model.SubOrder;
+import model.TrailerState;
 import dateutil.DU;
 
-//Author: Jens Nyberg Porse
-public class LoadingInfoDialog extends JDialog
-{
+//Author: Jens "Il duce" Nyberg Porse
+public class LoadingInfoDialog extends JDialog {
 
-	public LoadingInfoDialog(JFrame owner)
-	{
+	public LoadingInfoDialog(JFrame owner) {
 		super(owner);
 		System.out.println("Created new Window");
 		setTitle("Loading Info");
@@ -40,8 +41,7 @@ public class LoadingInfoDialog extends JDialog
 
 	private Controller controller;
 
-	private void InitContent()
-	{
+	private void InitContent() {
 
 		controller = new Controller();
 
@@ -75,74 +75,116 @@ public class LoadingInfoDialog extends JDialog
 		contentPanel.add(lblProductType);
 
 		txfProductType = new JTextField();
-		txfProductType.setBounds(20, 146, 86, 20);
+		txfProductType.setBounds(20, 146, 155, 20);
 		contentPanel.add(txfProductType);
 		txfProductType.setColumns(10);
 		txfProductType.setEditable(false);
 
 		lblBeganLoading = new JLabel("Began Loading:");
-		lblBeganLoading.setBounds(139, 24, 94, 14);
+		lblBeganLoading.setBounds(274, 24, 94, 14);
 		contentPanel.add(lblBeganLoading);
 
-		txfBeganLoading = new JTextField();
-		txfBeganLoading.setBounds(139, 43, 107, 20);
+		txfBeganLoading = new JTextField("");
+		txfBeganLoading.setBounds(274, 43, 135, 20);
 		contentPanel.add(txfBeganLoading);
 		txfBeganLoading.setColumns(10);
 
 		lblEndedLoading = new JLabel("Ended Loading:");
-		lblEndedLoading.setBounds(142, 104, 86, 14);
+		lblEndedLoading.setBounds(277, 104, 86, 14);
 		contentPanel.add(lblEndedLoading);
 
-		txfEndedLoading = new JTextField();
-		txfEndedLoading.setBounds(142, 123, 104, 20);
+		txfEndedLoading = new JTextField("");
+		txfEndedLoading.setBounds(277, 123, 135, 20);
 		contentPanel.add(txfEndedLoading);
 		txfEndedLoading.setColumns(10);
 
 		btnBeginLoading = new JButton("Begin Loading");
-		btnBeginLoading.setBounds(139, 70, 107, 23);
+		btnBeginLoading.setBounds(274, 70, 107, 23);
 		contentPanel.add(btnBeginLoading);
+		btnBeginLoading.addActionListener(controller);
 
 		btnEndLoading = new JButton("End Loading");
-		btnEndLoading.setBounds(139, 150, 107, 23);
+		btnEndLoading.setBounds(274, 150, 107, 23);
 		contentPanel.add(btnEndLoading);
+		btnEndLoading.addActionListener(controller);
 
 		btnCancel = new JButton("Cancel");
-		btnCancel.setBounds(86, 195, 89, 23);
+		btnCancel.setBounds(274, 218, 89, 23);
 		contentPanel.add(btnCancel);
 
 	}
 
-//Author: Soren Moller Nielsen
+	// Author: Soren Moller Nielsen
 	private LoadingInfo loadingInfo;
 
-	public void fillModel(LoadingInfo lInfo)
-	{
+	public void fillModel(LoadingInfo lInfo) {
 		this.loadingInfo = lInfo;
 		txfTrailer.setText(lInfo.getSubOrder().getTrailer().getTrailerID());
 		txfProductType.setText(lInfo.getSubOrder().getProductType()
 				.getDescription());
 		txfLoadingBay.setText("" + lInfo.getLoadingBay().getLoadingBayNumber());
-		txfBeganLoading.setText(lInfo.getTimeOfLoadingStart().toString());
-		txfEndedLoading.setText(lInfo.getTimeOfLoadingEnd().toString());
+
 	}
 
-	private class Controller implements ActionListener
-	{
+	// Author: Soren Moller Nielsen
+	private class Controller implements ActionListener {
 
 		@Override
-		public void actionPerformed(ActionEvent e)
-		{
+		public void actionPerformed(ActionEvent e) {
+
 			if (e.getSource() == btnBeginLoading) {
-				Date tempDate = DU.createDate();
-				loadingInfo.setTimeOfLoadingStart(tempDate);
-				txfBeganLoading.setText(tempDate.toString());
+				// Checks the format of the input
+				if (txfBeganLoading.getText().isEmpty() == true) {
+					txfBeganLoading.setText("invalid input");
+				}
+				// If no unregularities have been caught, starts loading the
+				// truck
+				else {
+
+					loadingInfo.setTimeOfLoadingStart(DU
+							.createDate(txfBeganLoading.getText()));
+					loadingInfo.setState(LoadingInfoState.LOADING);
+					System.out.println("Woop di doo!, began loading ze truck!");
+				}
+
 			}
+
 			if (e.getSource() == btnEndLoading) {
-				//skal rettes til
-				//skal sendes til trailerview, hvis alle subordre er loaded
-				Date tempDate = DU.createDate();
-				loadingInfo.setTimeOfLoadingEnd(tempDate);
-				txfEndedLoading.setText(tempDate.toString());
+				// Checks if the format is correct
+				if (txfEndedLoading.getText().isEmpty() == true) {
+					txfEndedLoading.setText("Invalid input");
+				}
+				// sets the loadinginfo as loaded, possible trailer aswell
+				else {
+
+					// sets the loadingInfo as finished
+					loadingInfo.setState(LoadingInfoState.FINISHED);
+
+					// sets the subOrder as loaded
+					loadingInfo.getSubOrder().setLoaded(true);
+
+					// checking, if the trailer is fully loaded
+					boolean trailerFullyLoaded = true;
+					ArrayList<SubOrder> subOrders = loadingInfo.getSubOrder()
+							.getTrailer().getSubOrders();
+
+					// seaches if any of the attached suborders to the trailer,
+					// aren't done loading
+					for (SubOrder s : subOrders) {
+						if (s.isLoaded() == false) {
+							trailerFullyLoaded = false;
+						}
+					}
+					// if all the suborders are done, trailer changes
+					// trailerstate to: loaded
+					if (trailerFullyLoaded == true) {
+						loadingInfo.getSubOrder().getTrailer()
+								.setTrailerState(TrailerState.LOADED);
+
+					}
+
+				}
+
 			}
 			if (e.getSource() == btnCancel) {
 

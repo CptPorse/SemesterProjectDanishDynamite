@@ -20,11 +20,9 @@ import dao.Dao;
 import dateutil.DU;
 
 //Author: Soren Moller Nielsen
-public class TrailerView extends JFrame
-{
+public class TrailerView extends JFrame {
 
-	public TrailerView()
-	{
+	public TrailerView() {
 		setResizable(false);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setBounds(1000, 100, 604, 347);
@@ -50,10 +48,9 @@ public class TrailerView extends JFrame
 
 	private JLabel lblNewLabel;
 	private JLabel lblDeparture;
-	private JButton btnHasArrived, btnCheckDeparture;
+	private JButton btnHasArrived, btnCheckDeparture, btnRefreshListstemp;
 
-	private void InitContent()
-	{
+	private void InitContent() {
 		controller = new Controller();
 
 		contentPane = new JPanel();
@@ -99,25 +96,34 @@ public class TrailerView extends JFrame
 		lblDeparture.setBounds(285, 30, 134, 14);
 		contentPane.add(lblDeparture);
 
+		btnRefreshListstemp = new JButton("Refresh lists(temp)");
+		btnRefreshListstemp.setBounds(464, 177, 124, 23);
+		contentPane.add(btnRefreshListstemp);
+		btnRefreshListstemp.addActionListener(controller);
+
 		controller.fillArrivingLst();
 		controller.fillDepartureLst();
 	}
 
-	public class Controller implements ActionListener
-	{
+	public class Controller implements ActionListener {
 		@Override
-		public void actionPerformed(ActionEvent e)
-		{
+		public void actionPerformed(ActionEvent e) {
+
+			if (e.getSource() == btnRefreshListstemp) {
+				fillArrivingLst();
+				fillDepartureLst();
+			}
 			if (e.getSource() == btnHasArrived) {
 				if (lstArrivingTrailers.isSelectionEmpty() == true) {
 					System.out
 							.println("Tag dig sammen, du mangler at vælge et object fra listen");
 				} else {
-					//Changes the state from being outside the gate to being inside
+					// Changes the state from being outside the gate to being
+					// inside
 					(lstArrivingTrailers.getSelectedValue())
 							.setTrailerState(TrailerState.ARRIVED);
 
-					//refreshes the list
+					// refreshes the list
 					controller.fillArrivingLst();
 				}
 			}
@@ -126,21 +132,20 @@ public class TrailerView extends JFrame
 					System.out
 							.println("Tag dig sammen, du mangler at vælge et object fra listen");
 				} else {
-					//changes selected trailer to being departed
+					// changes selected trailer to being departed
 					(lstDeparturingTrailers.getSelectedValue())
 							.setTrailerState(TrailerState.DEPARTED);
-					//set the departuretime of the trailer
+					// set the departuretime of the trailer
 					(lstDeparturingTrailers.getSelectedValue())
 							.setTimeOfDeparture(DU.createDate());
-					//refreshes the list
+					// refreshes the list
 					controller.fillDepartureLst();
 
 				}
 			}
 		}
 
-		public void fillArrivingLst()
-		{
+		public void fillArrivingLst() {
 			if (Dao.getTrailer().size() > 0) {
 
 				ArrayList<Trailer> arraylistTrailer = new ArrayList<>();
@@ -156,8 +161,7 @@ public class TrailerView extends JFrame
 			}
 		}
 
-		public void fillDepartureLst()
-		{
+		public void fillDepartureLst() {
 			if (Dao.getTrailer().size() > 0) {
 
 				ArrayList<Trailer> arraylistTrailer = new ArrayList<>();
