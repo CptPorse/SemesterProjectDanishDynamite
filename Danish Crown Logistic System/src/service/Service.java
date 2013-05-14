@@ -1,5 +1,6 @@
 package service;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 import model.Driver;
@@ -65,7 +66,104 @@ public class Service {
 		LoadingInfo loadingInfo = new LoadingInfo(subOrder, loadingBay);
 		Dao.addLoadingInfo(loadingInfo);
 		loadingBay.addLoadingInfo(loadingInfo);
+		System.out.println("" + loadingInfo);
 		return loadingInfo;
+	}
+
+	public static void startUpSubOrderSort(ProductType productType) {
+		ArrayList<SubOrder> subOrders = new ArrayList<SubOrder>();
+		for (int i = 0; i < Dao.getSubOrders().size(); i++) {
+			if (Dao.getSubOrders().get(i).getProductType() == productType)
+				subOrders.add(Dao.getSubOrders().get(i));
+		}
+
+		// Booblesort
+		int position, scan;
+		for (position = subOrders.size() - 1; position >= 0; position--) {
+			for (scan = 0; scan <= position - 1; scan++) {
+				if (subOrders
+						.get(scan)
+						.getTrailer()
+						.getTimeOfArrival()
+						.after((subOrders.get(scan + 1).getTrailer()
+								.getTimeOfArrival())))
+					swap(subOrders, scan, scan + 1);
+			}
+		}
+		Service.startUpCreateLoadingInfo(productType, subOrders);
+	}
+
+	private static <T> void swap(ArrayList<T> items, int index1, int index2) {
+		T temp = items.get(index1);
+		items.set(index1, items.get(index2));
+		items.set(index2, temp);
+	}
+
+	public static void startUpCreateLoadingInfo(ProductType productType,
+			ArrayList<SubOrder> subOrders) {
+
+		for (int i = 0; i < subOrders.size(); i++) {
+			SubOrder subOrder = subOrders.get(i);
+			LoadingBay loadingBay = Service
+					.getEarliestAccesibleLoadingBay(productType);
+			LoadingInfo loadingInfo = Service.createLoadingInfo(subOrder,
+					loadingBay);
+
+			if (loadingBay.getLoadingInfos().size() == 1) {
+				Date startLoadingTime = subOrder.getTrailer()
+						.getTimeOfArrival();
+				loadingInfo.setTimeOfLoadingStart(startLoadingTime);
+				loadingInfo.setTimeOfLoadingEnd(Service.getEndTime(
+						startLoadingTime, subOrder.getEstimatedLoadingTime()));
+
+			} else {
+				LoadingInfo previousLoadingInfo = loadingBay.getLoadingInfos()
+						.get((loadingBay.getLoadingInfos().size() - 2));
+
+				System.out.println("Previous Loading Info: "
+						+ previousLoadingInfo);
+
+				loadingInfo.setTimeOfLoadingStart(previousLoadingInfo
+						.getTimeOfLoadingEnd());
+				loadingInfo.setTimeOfLoadingEnd(Service.getEndTime(
+						previousLoadingInfo.getTimeOfLoadingEnd(),
+						subOrder.getEstimatedLoadingTime()));
+
+				System.out.println("Loading Start: "
+						+ loadingInfo.getTimeOfLoadingStart());
+				System.out.println("Loading End: "
+						+ loadingInfo.getTimeOfLoadingEnd());
+			}
+		}
+	}
+
+	public static LoadingBay getEarliestAccesibleLoadingBay(
+			ProductType productType) {
+		ArrayList<LoadingBay> loadingBays = new ArrayList<LoadingBay>();
+
+		for (int i = 0; i < Dao.getLoadingBays().size(); i++) {
+			if (Dao.getLoadingBays().get(i).getProductType() == productType) {
+				loadingBays.add(Dao.getLoadingBays().get(i));
+			}
+		}
+
+		LoadingBay earliestLoadingBay = loadingBays.get(0);
+		for (int n = 0; n < loadingBays.size(); n++) {
+			if (loadingBays.get(n).getBayWaitingTime() < earliestLoadingBay
+					.getBayWaitingTime()) {
+				earliestLoadingBay = loadingBays.get(n);
+			}
+		}
+
+		return earliestLoadingBay;
+	}
+
+	public static Date getEndTime(Date startTime, int loadingTime) {
+		Long time = startTime.getTime();
+		Long loadingTimeInMS = (long) (loadingTime * 60000);
+
+		Date endTime = new Date(time + loadingTimeInMS);
+		return endTime;
 	}
 
 	@SuppressWarnings("deprecation")
@@ -114,16 +212,6 @@ public class Service {
 		Date date4 = new Date(113, 0, 1, 10, 0);
 		Date date5 = new Date(113, 0, 1, 10, 20);
 		Date date6 = new Date(113, 0, 1, 10, 40);
-		Date date7 = new Date(113, 0, 1, 11, 0);
-		Date date8 = new Date(113, 0, 1, 11, 20);
-		Date date9 = new Date(113, 0, 1, 11, 40);
-		Date date10 = new Date(113, 0, 1, 12, 0);
-		Date date11 = new Date(113, 0, 1, 12, 20);
-		Date date12 = new Date(113, 0, 1, 12, 40);
-		Date date13 = new Date(113, 0, 1, 13, 0);
-		Date date14 = new Date(113, 0, 1, 13, 20);
-		Date date15 = new Date(113, 0, 1, 13, 40);
-		Date date16 = new Date(113, 0, 1, 14, 0);
 
 		Trailer t1 = Service.createTrailer("1", 25000, date1);
 		Trailer t2 = Service.createTrailer("2", 25000, date2);
@@ -131,16 +219,16 @@ public class Service {
 		Trailer t4 = Service.createTrailer("4", 25000, date4);
 		Trailer t5 = Service.createTrailer("5", 25000, date5);
 		Trailer t6 = Service.createTrailer("6", 25000, date6);
-		Trailer t7 = Service.createTrailer("7", 25000, date7);
-		Trailer t8 = Service.createTrailer("8", 25000, date8);
-		Trailer t9 = Service.createTrailer("9", 25000, date9);
-		Trailer t10 = Service.createTrailer("10", 25000, date10);
-		Trailer t11 = Service.createTrailer("11", 25000, date11);
-		Trailer t12 = Service.createTrailer("12", 25000, date12);
-		Trailer t13 = Service.createTrailer("13", 25000, date13);
-		Trailer t14 = Service.createTrailer("14", 25000, date14);
-		Trailer t15 = Service.createTrailer("15", 25000, date15);
-		Trailer t16 = Service.createTrailer("16", 25000, date16);
+		Trailer t7 = Service.createTrailer("7", 25000, date1);
+		Trailer t8 = Service.createTrailer("8", 25000, date2);
+		Trailer t9 = Service.createTrailer("9", 25000, date3);
+		Trailer t10 = Service.createTrailer("10", 25000, date4);
+		Trailer t11 = Service.createTrailer("11", 25000, date5);
+		Trailer t12 = Service.createTrailer("12", 25000, date1);
+		Trailer t13 = Service.createTrailer("13", 25000, date2);
+		Trailer t14 = Service.createTrailer("14", 25000, date3);
+		Trailer t15 = Service.createTrailer("15", 25000, date4);
+		Trailer t16 = Service.createTrailer("16", 25000, date5);
 
 		ProductType p1 = Service.createProductType("Christmas Trees", 0.0031);
 		ProductType p2 = Service.createProductType("Pallets", 0.0028);
@@ -270,10 +358,15 @@ public class Service {
 
 		// These are currently hardcoded, unsure if we meant for system to
 		// create them. None the less, hardcoded for now for testing.
-		LoadingInfo li1 = Service.createLoadingInfo(so1, lb1);
-		LoadingInfo li2 = Service.createLoadingInfo(so2, lb1);
-		LoadingInfo li3 = Service.createLoadingInfo(so3, lb1);
-		LoadingInfo li4 = Service.createLoadingInfo(so4, lb1);
-		LoadingInfo li5 = Service.createLoadingInfo(so5, lb1);
+		// LoadingInfo li1 = Service.createLoadingInfo(so1, lb1);
+		// LoadingInfo li2 = Service.createLoadingInfo(so2, lb1);
+		// LoadingInfo li3 = Service.createLoadingInfo(so3, lb1);
+		// LoadingInfo li4 = Service.createLoadingInfo(so4, lb1);
+		// LoadingInfo li5 = Service.createLoadingInfo(so5, lb1);
+
+		Service.startUpSubOrderSort(p1);
+		Service.startUpSubOrderSort(p2);
+		Service.startUpSubOrderSort(p3);
+
 	}
 }
