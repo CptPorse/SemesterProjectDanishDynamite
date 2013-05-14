@@ -68,29 +68,49 @@ public class Service {
 		return loadingInfo;
 	}
 
-	// Author: Jens Porse
-	public static void startUpSubOrderSort(ProductType productType) {
-		ArrayList<SubOrder> subOrders = new ArrayList<SubOrder>();
-		for (int i = 0; i < Dao.getSubOrders().size(); i++) {
-			if (Dao.getSubOrders().get(i).getProductType() == productType)
-				subOrders.add(Dao.getSubOrders().get(i));
-		}
+	public static void sortTrailerArrival() {
 
-		// Bobblesort
+		ArrayList<Trailer> trailers = new ArrayList<Trailer>();
+		trailers.addAll(Dao.getTrailer());
+
+		int position, scan;
+		for (position = trailers.size() - 1; position >= 0; position--) {
+			for (scan = 0; scan <= position - 1; scan++) {
+				if (trailers.get(scan).getTimeOfArrival()
+						.after((trailers.get(scan + 1).getTimeOfArrival())))
+					swap(trailers, scan, scan + 1);
+			}
+		}
+		for (int i = trailers.size() - 1; i >= 0; i--) {
+			Dao.removeTrailer(Dao.getTrailer().get(i));
+		}
+		for (int i = 0; i < trailers.size(); i++) {
+			Dao.addTrailer(trailers.get(i));
+		}
+	}
+
+	public static void sortSubOrders() {
+
+		ArrayList<SubOrder> subOrders = new ArrayList<SubOrder>();
+		subOrders.addAll(Dao.getSubOrders());
+
 		int position, scan;
 		for (position = subOrders.size() - 1; position >= 0; position--) {
 			for (scan = 0; scan <= position - 1; scan++) {
 				if (subOrders
 						.get(scan)
-						.getTrailer()
-						.getTimeOfArrival()
-						.after((subOrders.get(scan + 1).getTrailer()
-								.getTimeOfArrival())))
+						.getEarliestLoadingTime()
+						.after((subOrders.get(scan + 1)
+								.getEarliestLoadingTime())))
 					swap(subOrders, scan, scan + 1);
 			}
 		}
-		System.out.println(subOrders);
-		Service.startUpCreateLoadingInfo(productType, subOrders);
+		for (int i = subOrders.size() - 1; i >= 0; i--) {
+			Dao.removeSubOrder(Dao.getSubOrders().get(i));
+		}
+		for (int i = 0; i < subOrders.size(); i++) {
+			Dao.addSubOrder(subOrders.get(i));
+		}
 	}
 
 	private static <T> void swap(ArrayList<T> items, int index1, int index2) {
@@ -99,39 +119,12 @@ public class Service {
 		items.set(index2, temp);
 	}
 
-	// Author: Jens Porse
-	public static void startUpCreateLoadingInfo(ProductType productType,
-			ArrayList<SubOrder> subOrders) {
+	public static LoadingBay firstAvailableLoadingBay(ProductType productType,
+			Date earliestLoadingTime) {
 
-		for (int i = 0; i < subOrders.size(); i++) {
-			SubOrder subOrder = subOrders.get(i);
-			LoadingBay loadingBay = Service
-					.getEarliestAccesibleLoadingBay(productType);
-			LoadingInfo loadingInfo = Service.createLoadingInfo(subOrder,
-					loadingBay);
-
-			if (loadingBay.getLoadingInfos().size() == 1) {
-				Date startLoadingTime = subOrder.getTrailer()
-						.getTimeOfArrival();
-				loadingInfo.setTimeOfLoadingStart(startLoadingTime);
-				loadingInfo.setTimeOfLoadingEnd(Service.getEndTime(
-						startLoadingTime, subOrder.getEstimatedLoadingTime()));
-
-			} else {
-				LoadingInfo previousLoadingInfo = loadingBay.getLoadingInfos()
-						.get((loadingBay.getLoadingInfos().size() - 2));
-				loadingInfo.setTimeOfLoadingStart(previousLoadingInfo
-						.getTimeOfLoadingEnd());
-				loadingInfo.setTimeOfLoadingEnd(Service.getEndTime(
-						previousLoadingInfo.getTimeOfLoadingEnd(),
-						subOrder.getEstimatedLoadingTime()));
-			}
-		}
-	}
-
-	// Author: Jens Porse
-	public static LoadingBay getEarliestAccesibleLoadingBay(
-			ProductType productType) {
+		System.out
+				.println("Started Method firstAvailableLoadingBay(ProductType "
+						+ productType + ", Date " + earliestLoadingTime + ")");
 		ArrayList<LoadingBay> loadingBays = new ArrayList<LoadingBay>();
 
 		for (int i = 0; i < Dao.getLoadingBays().size(); i++) {
@@ -141,12 +134,21 @@ public class Service {
 		}
 
 		LoadingBay earliestLoadingBay = loadingBays.get(0);
+		Long shortestWaitTime = earliestLoadingBay.getNextFreeTime(
+				earliestLoadingTime).getTime();
 		for (int n = 0; n < loadingBays.size(); n++) {
-			if (loadingBays.get(n).getBayWaitingTime() < earliestLoadingBay
-					.getBayWaitingTime()) {
+			Date bayAvailable = loadingBays.get(n).getNextFreeTime(
+					earliestLoadingTime);
+			Long waitTime = (bayAvailable.getTime() - earliestLoadingTime
+					.getTime());
+			if (waitTime <= shortestWaitTime && waitTime >= 0) {
 				earliestLoadingBay = loadingBays.get(n);
+				shortestWaitTime = waitTime;
+				System.out.println("Found Shorter waiting time");
 			}
 		}
+		System.out.println("LoadingBay with shortest Waiting time: "
+				+ earliestLoadingBay);
 		return earliestLoadingBay;
 	}
 

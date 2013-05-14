@@ -3,10 +3,13 @@ package model;
 import java.util.ArrayList;
 import java.util.Date;
 
+import org.eclipse.jdt.annotation.NonNullByDefault;
+
 //Author: Jens Nyberg Porse
 public class LoadingBay {
 
 	private int loadingBayNumber;
+	private boolean isloading;
 	private ProductType productType;
 	private ArrayList<LoadingInfo> loadingInfos;
 
@@ -23,6 +26,14 @@ public class LoadingBay {
 
 	public void setLoadingBayNumber(int loadingBayNumber) {
 		this.loadingBayNumber = loadingBayNumber;
+	}
+
+	public boolean isIsloading() {
+		return isloading;
+	}
+
+	public void setIsloading(boolean isloading) {
+		this.isloading = isloading;
 	}
 
 	public ProductType getProductType() {
@@ -70,19 +81,42 @@ public class LoadingBay {
 		return waitingTime;
 	}
 
-	// NOT WORKING
-	public Date getNextFreeTime() {
+	@NonNullByDefault
+	public Date getNextFreeTime(Date earliestPacking) {
 
-		Date loadingDone = null;
-		for (int i = 0; i < loadingInfos.size(); i++) {
-			if (loadingInfos.get(i).getState() == LoadingInfoState.LOADING) {
-				loadingDone = loadingInfos.get(i).getTimeOfLoadingEnd();
-			} else {
+		System.out.println("Started Method getNextFreeTime(Date "
+				+ earliestPacking + ")");
+		Date loadingDone = earliestPacking;
+
+		if (isIsloading() == true) {
+			for (LoadingInfo loadingInfo : loadingInfos) {
+				if (loadingInfo.getState() == LoadingInfoState.LOADING) {
+					loadingInfo.getTimeOfLoadingEnd();
+				}
+			}
+		} else {
+			if (loadingInfos.size() == 1) {
+				System.out.println("List is not empty");
+				System.out.println(loadingInfos);
+				System.out.println(loadingInfos.get(loadingInfos.size() - 1)
+						.getTimeOfLoadingEnd());
+				System.out.println(loadingInfos);
 				loadingDone = loadingInfos.get(loadingInfos.size() - 1)
 						.getTimeOfLoadingEnd();
-
+			}
+			if (loadingInfos.size() > 1) {
+				System.out.println("List is not empty");
+				System.out.println(loadingInfos);
+				System.out.println(loadingInfos.get(loadingInfos.size() - 2)
+						.getTimeOfLoadingEnd());
+				System.out.println(loadingInfos);
+				loadingDone = loadingInfos.get(loadingInfos.size() - 2)
+						.getTimeOfLoadingEnd();
 			}
 		}
+		System.out.println("LoadingBay " + loadingBayNumber + ", "
+				+ getProductType());
+		System.out.println("Returned: " + loadingDone);
 		return loadingDone;
 	}
 

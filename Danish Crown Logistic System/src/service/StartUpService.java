@@ -1,16 +1,80 @@
 package service;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 import model.Driver;
 import model.LoadingBay;
+import model.LoadingInfo;
 import model.Order;
 import model.ProductType;
 import model.SubOrder;
 import model.Trailer;
+import dao.Dao;
 import dateutil.DU;
 
 public class StartUpService {
+
+	public static void setSubOrderEarliestLoadingTime() {
+
+		ArrayList<Trailer> trailers = Dao.getTrailer();
+
+		for (int i = 0; i < trailers.size(); i++) {
+			if (trailers.get(i).getSubOrders().size() > 1) {
+				Date time = trailers.get(i).getTimeOfArrival();
+				ArrayList<SubOrder> trailerSubOrders = trailers.get(i)
+						.getSubOrders();
+				for (SubOrder subOrder : trailerSubOrders) {
+					subOrder.setEarliestLoadingTime(time);
+					time = Service.getEndTime(time,
+							subOrder.getEstimatedLoadingTime());
+				}
+
+			} else {
+				trailers.get(i)
+						.getSubOrders()
+						.get(0)
+						.setEarliestLoadingTime(
+								trailers.get(i).getTimeOfArrival());
+
+			}
+		}
+		Service.sortSubOrders();
+	}
+
+	public static void createLoadingBaySchedule() {
+
+		System.out.println("Started Method createLoadingBaySchedule()");
+
+		ArrayList<SubOrder> subOrders = Dao.getSubOrders();
+
+		for (int i = 0; i < subOrders.size(); i++) {
+			SubOrder subOrder = subOrders.get(i);
+			ProductType productType = subOrder.getProductType();
+			Date earliestLoadingTime = subOrder.getEarliestLoadingTime();
+			LoadingBay loadingBay = Service.firstAvailableLoadingBay(
+					productType, earliestLoadingTime);
+
+			LoadingInfo loadingInfo = Service.createLoadingInfo(subOrder,
+					loadingBay);
+
+			if (loadingBay.getLoadingInfos().size() == 1) {
+				loadingInfo.setTimeOfLoadingStart(earliestLoadingTime);
+				loadingInfo
+						.setTimeOfLoadingEnd(Service.getEndTime(
+								earliestLoadingTime,
+								subOrder.getEstimatedLoadingTime()));
+			} else {
+				loadingInfo.setTimeOfLoadingStart(loadingBay
+						.getNextFreeTime(earliestLoadingTime));
+				loadingInfo.setTimeOfLoadingEnd(Service.getEndTime(
+						loadingInfo.getTimeOfLoadingStart(),
+						subOrder.getEstimatedLoadingTime()));
+			}
+			System.out.println();
+			System.out.println("Beginning New Iteration:");
+		}
+	}
 
 	@SuppressWarnings("deprecation")
 	public static void startUpData() {
@@ -62,14 +126,14 @@ public class StartUpService {
 		Trailer t1 = Service.createTrailer("1", 25000, date1);
 		Trailer t2 = Service.createTrailer("2", 25000, date2);
 		Trailer t3 = Service.createTrailer("3", 25000, date3);
-		Trailer t4 = Service.createTrailer("4", 25000, date4);
+		Trailer t4 = Service.createTrailer("4", 25000, date1);
 		Trailer t5 = Service.createTrailer("5", 25000, date5);
 		Trailer t6 = Service.createTrailer("6", 25000, date6);
 		Trailer t7 = Service.createTrailer("7", 25000, date1);
 		Trailer t8 = Service.createTrailer("8", 25000, date2);
 		Trailer t9 = Service.createTrailer("9", 25000, date3);
 		Trailer t10 = Service.createTrailer("10", 25000, date4);
-		Trailer t11 = Service.createTrailer("11", 25000, date5);
+		Trailer t11 = Service.createTrailer("11", 25000, date3);
 		Trailer t12 = Service.createTrailer("12", 25000, date1);
 		Trailer t13 = Service.createTrailer("13", 25000, date2);
 		Trailer t14 = Service.createTrailer("14", 25000, date3);
@@ -204,11 +268,5 @@ public class StartUpService {
 		LoadingBay lb6 = Service.createLoadingBay(6, p3);
 		LoadingBay lb7 = Service.createLoadingBay(7, p3);
 		LoadingBay lb8 = Service.createLoadingBay(7, p3);
-
-		Service.startUpSubOrderSort(p1);
-		Service.startUpSubOrderSort(p2);
-		Service.startUpSubOrderSort(p3);
-
 	}
-
 }
