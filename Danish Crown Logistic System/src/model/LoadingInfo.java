@@ -72,6 +72,22 @@ public class LoadingInfo
 		this.loadingBay = loadingBay;
 	}
 
+	/**
+	* @return the state
+	*/
+	public LoadingInfoState getState()
+	{
+		return state;
+	}
+
+	/**
+	 * @param state the state to set
+	 */
+	public void setState(LoadingInfoState state)
+	{
+		this.state = state;
+	}
+
 	@Override
 	public String toString()
 	{
@@ -96,9 +112,13 @@ public class LoadingInfo
 					+ "<br>Estimated loading time: " + subOrder.getEstimatedLoadingTime() + " min<br>" + line;
 		}
 		else
+//		{
+//			return "<html>" + bgColor + "Suborder: " + subOrder + "<br>Estimated start: " + timeOfLoadingStart + "<p align=" + "right"
+//					+ ">Estimated loading time: " + subOrder.getEstimatedLoadingTime() + " min<br>" + line;
+//		}
 		{
-			return "<html>" + bgColor + "Suborder: " + subOrder + "<br><p align=" + "right" + ">Estimated start: " + timeOfLoadingStart
-					+ "</tr></td></table><br>Estimated loading time: " + subOrder.getEstimatedLoadingTime() + " min<br>" + line;
+			return "<html><table border=" + "1" + "><tr><td width='275'>Suborder: " + subOrder + "</td><td width='275'></td></tr><br><tr><td>Estimated start: "
+					+ timeOfLoadingStart + " </td><td>Estimated loading time: " + subOrder.getEstimatedLoadingTime() + " min";
 		}
 	}
 
