@@ -2,6 +2,7 @@ package gui;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Date;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -12,6 +13,7 @@ import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
 import model.LoadingInfo;
+import dateutil.DU;
 
 //Author: Jens Nyberg Porse
 public class LoadingInfoDialog extends JDialog
@@ -56,6 +58,7 @@ public class LoadingInfoDialog extends JDialog
 		txfLoadingBay.setBounds(20, 43, 86, 20);
 		contentPanel.add(txfLoadingBay);
 		txfLoadingBay.setColumns(10);
+		txfLoadingBay.setEditable(false);
 
 		lblTrailer = new JLabel("Trailer:");
 		lblTrailer.setBounds(20, 74, 86, 14);
@@ -65,6 +68,7 @@ public class LoadingInfoDialog extends JDialog
 		txfTrailer.setBounds(20, 93, 86, 20);
 		contentPanel.add(txfTrailer);
 		txfTrailer.setColumns(10);
+		txfTrailer.setEditable(false);
 
 		lblProductType = new JLabel("Product Type:");
 		lblProductType.setBounds(20, 124, 86, 14);
@@ -74,6 +78,7 @@ public class LoadingInfoDialog extends JDialog
 		txfProductType.setBounds(20, 146, 86, 20);
 		contentPanel.add(txfProductType);
 		txfProductType.setColumns(10);
+		txfProductType.setEditable(false);
 
 		lblBeganLoading = new JLabel("Began Loading:");
 		lblBeganLoading.setBounds(139, 24, 94, 14);
@@ -107,13 +112,18 @@ public class LoadingInfoDialog extends JDialog
 
 	}
 
+//Author: Soren Moller Nielsen
+	private LoadingInfo loadingInfo;
+
 	public void fillModel(LoadingInfo lInfo)
 	{
-
+		this.loadingInfo = lInfo;
 		txfTrailer.setText(lInfo.getSubOrder().getTrailer().getTrailerID());
 		txfProductType.setText(lInfo.getSubOrder().getProductType()
 				.getDescription());
 		txfLoadingBay.setText("" + lInfo.getLoadingBay().getLoadingBayNumber());
+		txfBeganLoading.setText(lInfo.getTimeOfLoadingStart().toString());
+		txfEndedLoading.setText(lInfo.getTimeOfLoadingEnd().toString());
 	}
 
 	private class Controller implements ActionListener
@@ -122,8 +132,22 @@ public class LoadingInfoDialog extends JDialog
 		@Override
 		public void actionPerformed(ActionEvent e)
 		{
+			if (e.getSource() == btnBeginLoading) {
+				Date tempDate = DU.createDate();
+				loadingInfo.setTimeOfLoadingStart(tempDate);
+				txfBeganLoading.setText(tempDate.toString());
+			}
+			if (e.getSource() == btnEndLoading) {
+				//skal rettes til
+				//skal sendes til trailerview, hvis alle subordre er loaded
+				Date tempDate = DU.createDate();
+				loadingInfo.setTimeOfLoadingEnd(tempDate);
+				txfEndedLoading.setText(tempDate.toString());
+			}
+			if (e.getSource() == btnCancel) {
+
+			}
 
 		}
-
 	}
 }
