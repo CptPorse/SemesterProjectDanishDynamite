@@ -70,7 +70,7 @@ public class TrailerView extends JFrame
 		lstArrivingTrailers
 				.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		scpArriving = new JScrollPane(lstArrivingTrailers);
-		scpArriving.setBounds(5, 55, 155, 233);
+		scpArriving.setBounds(5, 55, 145, 230);
 		contentPane.add(scpArriving);
 
 		lstDeparturingTrailersModel = new DefaultListModel<Trailer>();
@@ -79,7 +79,7 @@ public class TrailerView extends JFrame
 				.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		scpDeparture = new JScrollPane(lstDeparturingTrailers);
 		contentPane.add(scpDeparture);
-		scpDeparture.setBounds(285, 55, 155, 233);
+		scpDeparture.setBounds(285, 55, 145, 230);
 
 		btnHasArrived = new JButton("hasArrived");
 		btnHasArrived.setBounds(170, 265, 89, 23);
@@ -116,6 +116,7 @@ public class TrailerView extends JFrame
 					//Changes the state from being outside the gate to being inside
 					(lstArrivingTrailers.getSelectedValue())
 							.setTrailerState(TrailerState.ARRIVED);
+
 					//refreshes the list
 					controller.fillArrivingLst();
 				}
