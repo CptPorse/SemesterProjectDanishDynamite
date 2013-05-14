@@ -70,18 +70,20 @@ public class LoadingBay {
 		return waitingTime;
 	}
 
+	// NOT WORKING
 	public Date getNextFreeTime() {
 
 		Date loadingDone = null;
 		for (int i = 0; i < loadingInfos.size(); i++) {
+			System.out.println(loadingInfos.get(i).getTimeOfLoadingStart());
 			if (loadingInfos.get(i).getState() == LoadingInfoState.LOADING) {
 				loadingDone = loadingInfos.get(i).getTimeOfLoadingEnd();
+			} else {
+				loadingDone = loadingInfos.get(loadingInfos.size() - 1)
+						.getTimeOfLoadingEnd();
+
 			}
 		}
-		if (loadingDone == null)
-			loadingDone = loadingInfos.get(loadingInfos.size() - 1)
-					.getTimeOfLoadingEnd();
-
 		return loadingDone;
 	}
 

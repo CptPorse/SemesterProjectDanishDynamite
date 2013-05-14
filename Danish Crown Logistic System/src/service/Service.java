@@ -143,12 +143,11 @@ public class Service {
 
 		LoadingBay earliestLoadingBay = loadingBays.get(0);
 		for (int n = 0; n < loadingBays.size(); n++) {
-			if (loadingBays.get(n).getNextFreeTime()
-					.before(earliestLoadingBay.getNextFreeTime())) {
+			if (loadingBays.get(n).getBayWaitingTime() < earliestLoadingBay
+					.getBayWaitingTime()) {
 				earliestLoadingBay = loadingBays.get(n);
 			}
 		}
-		System.out.println(earliestLoadingBay);
 		return earliestLoadingBay;
 	}
 
