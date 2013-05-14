@@ -112,7 +112,7 @@ public class LoadingBayView extends JFrame
 
 		}
 
-//author Soren "Honeybear" Moller Nielsen
+//author Soren Moller Nielsen
 		@Override
 		public void mouseClicked(MouseEvent e)
 		{
