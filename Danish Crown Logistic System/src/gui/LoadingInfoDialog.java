@@ -109,7 +109,10 @@ public class LoadingInfoDialog extends JDialog
 
 	public void fillModel(LoadingInfo lInfo)
 	{
-
+		txfTrailer.setText(lInfo.getSubOrder().getTrailer().getTrailerID());
+		txfProductType.setText(lInfo.getSubOrder().getProductType()
+				.getDescription());
+		txfLoadingBay.setText("" + lInfo.getLoadingBay().getLoadingBayNumber());
 	}
 
 	private class Controller implements ActionListener
