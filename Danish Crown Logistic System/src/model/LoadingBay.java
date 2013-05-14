@@ -75,7 +75,6 @@ public class LoadingBay {
 
 		Date loadingDone = null;
 		for (int i = 0; i < loadingInfos.size(); i++) {
-			System.out.println(loadingInfos.get(i).getTimeOfLoadingStart());
 			if (loadingInfos.get(i).getState() == LoadingInfoState.LOADING) {
 				loadingDone = loadingInfos.get(i).getTimeOfLoadingEnd();
 			} else {
