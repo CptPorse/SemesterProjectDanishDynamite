@@ -88,7 +88,8 @@ public class LoadingBayView extends JFrame
 	public static void fillBays()
 	{
 		cmbBays.removeAll();
-		for (LoadingBay lb : Dao.getLoadingBays()) {
+		for (LoadingBay lb : Dao.getLoadingBays())
+		{
 			cmbBays.addItem(lb);
 		}
 	}
@@ -96,13 +97,13 @@ public class LoadingBayView extends JFrame
 	public static void fillInfo(LoadingBay lb)
 	{
 		infoModel.clear();
-		for (LoadingInfo li : lb.getLoadingInfos()) {
+		for (LoadingInfo li : lb.getLoadingInfos())
+		{
 			infoModel.addElement(li);
 		}
 	}
 
-	private class Controller implements ActionListener, MouseListener,
-			ItemListener
+	private class Controller implements ActionListener, MouseListener, ItemListener
 	{
 
 		@Override
@@ -111,12 +112,12 @@ public class LoadingBayView extends JFrame
 
 		}
 
-//author Soren Moller Nielsen
+//author Soren "Honeybear" Moller Nielsen
 		@Override
 		public void mouseClicked(MouseEvent e)
 		{
-			if (e.getSource() == (lstBayList.getSelectedValue())
-					&& e.getClickCount() == 3 || e.getClickCount() == 2) {
+			if (e.getSource() == (lstBayList.getSelectedValue()) && e.getClickCount() == 3 || e.getClickCount() == 2)
+			{
 
 				System.out.println((lstBayList.getSelectedValue()));
 				loadingInfoDialog.fillModel((lstBayList.getSelectedValue()));
@@ -153,7 +154,8 @@ public class LoadingBayView extends JFrame
 		@Override
 		public void itemStateChanged(ItemEvent arg0)
 		{
-			if (arg0.getSource() == cmbBays) {
+			if (arg0.getSource() == cmbBays)
+			{
 				fillInfo((LoadingBay)cmbBays.getSelectedItem());
 			}
 		}
