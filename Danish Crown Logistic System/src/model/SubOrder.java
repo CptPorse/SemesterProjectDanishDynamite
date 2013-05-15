@@ -106,6 +106,9 @@ public class SubOrder
 	@Override
 	public String toString()
 	{
-		return "Suborder of order nr: " + order.getOrderNumber();
+		if (getOrder() == null) {
+			return estimatedWeight + "kg of " + productType;
+		} else
+			return "Suborder of order nr: " + order.getOrderNumber();
 	}
 }

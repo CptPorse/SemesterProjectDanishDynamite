@@ -21,6 +21,7 @@ import javax.swing.border.EmptyBorder;
 import model.Order;
 import model.SubOrder;
 import service.Service;
+import dao.Dao;
 import dateutil.DU;
 
 //Author: Jens Nyberg Porse
@@ -192,11 +193,14 @@ public class NewOrderDialog extends JDialog
 
 				externalSystemView.updateLstOrder();
 				System.out.println("I send this Update");
-				NewOrderDialog.this.setVisible(false);
+				NewOrderDialog.this.dispose();
 			}
 
 			if (e.getSource() == btnCancel) {
-				NewOrderDialog.this.setVisible(false);
+				for (SubOrder subOrder : subOrders) {
+					Dao.removeSubOrder(subOrder);
+				}
+				NewOrderDialog.this.dispose();
 			}
 
 		}

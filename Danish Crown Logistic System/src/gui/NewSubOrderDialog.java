@@ -24,12 +24,14 @@ import service.Service;
 import dao.Dao;
 
 //Author: Jens Nyberg Porse
-public class NewSubOrderDialog extends JDialog {
+public class NewSubOrderDialog extends JDialog
+{
 
 	private Controller controller;
 	private NewOrderDialog orderDialog;
 
-	public NewSubOrderDialog(NewOrderDialog owner) {
+	public NewSubOrderDialog(NewOrderDialog owner)
+	{
 		this.orderDialog = owner;
 		setTitle("Create Sub-Order");
 		this.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
@@ -37,7 +39,8 @@ public class NewSubOrderDialog extends JDialog {
 		InitContent();
 	}
 
-	public NewSubOrderDialog GetInstance() {
+	public NewSubOrderDialog GetInstance()
+	{
 		return this;
 	}
 
@@ -49,7 +52,8 @@ public class NewSubOrderDialog extends JDialog {
 	private JComboBox<ProductType> cmbProductType;
 	private JComboBox<Trailer> cmbTrailer;
 
-	private void InitContent() {
+	private void InitContent()
+	{
 
 		controller = new Controller();
 
@@ -119,24 +123,25 @@ public class NewSubOrderDialog extends JDialog {
 		controller.fillCmbProductType();
 	}
 
-	private class Controller implements ActionListener {
+	private class Controller implements ActionListener
+	{
 
-		private void fillCmbProductType() {
+		private void fillCmbProductType()
+		{
 			DefaultComboBoxModel<ProductType> cmbProductTypeModel = new DefaultComboBoxModel<ProductType>(
 					Dao.getProductTypes().toArray(new ProductType[0]));
 			cmbProductType.setModel(cmbProductTypeModel);
 			cmbProductType.setSelectedItem(null);
 		}
 
-		private void fillCmbTrailer() {
+		private void fillCmbTrailer()
+		{
 			ArrayList<Trailer> avalibleTrailers = new ArrayList<Trailer>();
 			for (int i = 0; i < Dao.getTrailer().size(); i++) {
 				Trailer t1 = Dao.getTrailer().get(i);
-				if (t1.getProductTypes().contains(
-						cmbProductType.getSelectedItem()) == true
-						&& t1.getWeightCurrent()
-								+ Double.parseDouble(txfWeight.getText()) < t1
-									.getWeightMax()) {
+				if (t1.getProductTypes().contains(cmbProductType.getSelectedItem()) == true
+						&& t1.getWeightCurrent() + Double.parseDouble(txfWeight.getText()) < t1
+								.getWeightMax()) {
 					avalibleTrailers.add(Dao.getTrailer().get(i));
 					System.out.println("Added " + Dao.getTrailer().get(i));
 				}
@@ -149,15 +154,14 @@ public class NewSubOrderDialog extends JDialog {
 		}
 
 		@Override
-		public void actionPerformed(ActionEvent e) {
+		public void actionPerformed(ActionEvent e)
+		{
 
 			if (e.getSource() == btnCreate) {
 
-				Trailer t1 = cmbTrailer
-						.getItemAt(cmbTrailer.getSelectedIndex());
+				Trailer t1 = cmbTrailer.getItemAt(cmbTrailer.getSelectedIndex());
 
-				ProductType p1 = cmbProductType.getItemAt(cmbProductType
-						.getSelectedIndex());
+				ProductType p1 = cmbProductType.getItemAt(cmbProductType.getSelectedIndex());
 
 				double weight = Double.parseDouble(txfWeight.getText());
 
@@ -167,11 +171,11 @@ public class NewSubOrderDialog extends JDialog {
 						+ (Double.parseDouble(txfWeight.getText())));
 				Dao.addSubOrder(s1);
 				orderDialog.addSubOrder(s1);
-				NewSubOrderDialog.this.setVisible(false);
+				NewSubOrderDialog.this.dispose();
 			}
 
 			if (e.getSource() == btnCancel) {
-				NewSubOrderDialog.this.setVisible(false);
+				NewSubOrderDialog.this.dispose();
 			}
 
 			if (e.getSource() == cmbProductType) {
