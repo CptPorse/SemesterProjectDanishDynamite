@@ -164,11 +164,7 @@ public class TrailerView extends JFrame
 		{
 			if (e.getSource() == btnArrived)
 			{
-				if (lstEnRoute.isSelectionEmpty() == true)
-				{
-					System.out.println("Tag dig sammen, du mangler at vælge et object fra listen");
-				}
-				else
+				if (lstEnRoute.isSelectionEmpty() == false)
 				{
 					(lstEnRoute.getSelectedValue()).setTrailerState(TrailerState.ARRIVED);
 					for (SubOrder subOrder : (lstEnRoute.getSelectedValue()).getSubOrders())
@@ -177,31 +173,20 @@ public class TrailerView extends JFrame
 					}
 					fillModel(TrailerState.ENROUTE);
 					fillModel(TrailerState.ARRIVED);
-
-					//Updates Loadingbayview current view
 					LoadingBayView.fillInfo(null);
-
 				}
 			}
 			if (e.getSource() == btnApprove)
 			{
 				if (lstLoaded.isSelectionEmpty() == true)
 				{
-					System.out.println("Tag dig sammen, du mangler at vælge et object fra listen");
-				}
-				else
-				{
-					// changes selected trailer to being departed
 					(lstLoaded.getSelectedValue()).setTrailerState(TrailerState.DEPARTED);
-					// set the Departedtime of the trailer
 					(lstLoaded.getSelectedValue()).setTimeOfDeparture(DU.createDate());
-					// refreshes the list
 					fillModel(TrailerState.LOADED);
 					fillModel(TrailerState.DEPARTED);
-
 				}
 			}
-		}
 
+		}
 	}
 }
