@@ -81,6 +81,8 @@ public class LoadingInfo {
 		String bgColor = "";
 		if (state == LoadingInfoState.FINISHED) {
 			bgColor = "<body bgcolor='lime'>";
+		} else if (state == LoadingInfoState.READY_TO_LOAD) {
+			bgColor = "<body bgcolor='lightblue'>";
 		} else if (state == LoadingInfoState.LOADING) {
 			bgColor = "<body bgcolor='yellow'>";
 		}

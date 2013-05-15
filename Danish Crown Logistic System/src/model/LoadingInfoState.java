@@ -1,6 +1,5 @@
 package model;
 
-public enum LoadingInfoState
-{
-	PENDING, LOADING, FINISHED;
+public enum LoadingInfoState {
+	PENDING, READY_TO_LOAD, LOADING, FINISHED;
 }
