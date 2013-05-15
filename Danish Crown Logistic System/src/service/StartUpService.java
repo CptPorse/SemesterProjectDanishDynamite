@@ -21,22 +21,18 @@ public class StartUpService
 
 		ArrayList<Trailer> trailers = Dao.getTrailer();
 
-		for (int i = 0; i < trailers.size(); i++)
-		{
-			if (trailers.get(i).getSubOrders().size() > 1)
-			{
+		for (int i = 0; i < trailers.size(); i++) {
+			if (trailers.get(i).getSubOrders().size() > 1) {
 				Date time = trailers.get(i).getTimeOfArrival();
 				ArrayList<SubOrder> trailerSubOrders = trailers.get(i).getSubOrders();
-				for (SubOrder subOrder : trailerSubOrders)
-				{
+				for (SubOrder subOrder : trailerSubOrders) {
 					subOrder.setEarliestLoadingTime(time);
 					time = Service.getEndTime(time, subOrder.getEstimatedLoadingTime());
 				}
 
-			}
-			else
-			{
-				trailers.get(i).getSubOrders().get(0).setEarliestLoadingTime(trailers.get(i).getTimeOfArrival());
+			} else {
+				trailers.get(i).getSubOrders().get(0)
+						.setEarliestLoadingTime(trailers.get(i).getTimeOfArrival());
 
 			}
 		}
@@ -50,25 +46,24 @@ public class StartUpService
 		/*
 		 * 
 		 */
-		for (int i = 0; i < subOrders.size(); i++)
-		{
+		for (int i = 0; i < subOrders.size(); i++) {
 			SubOrder subOrder = subOrders.get(i);
 			ProductType productType = subOrder.getProductType();
 
 			Date earliestLoadingTime = subOrder.getEarliestLoadingTime();
-			LoadingBay loadingBay = Service.firstAvailableLoadingBay(productType, earliestLoadingTime);
+			LoadingBay loadingBay = Service.firstAvailableLoadingBay(productType,
+					earliestLoadingTime);
 
 			LoadingInfo loadingInfo = Service.createLoadingInfo(subOrder, loadingBay);
 
-			if (loadingBay.getLoadingInfos().size() == 1)
-			{
+			if (loadingBay.getLoadingInfos().size() == 1) {
 				loadingInfo.setTimeOfLoadingStart(earliestLoadingTime);
-				loadingInfo.setTimeOfLoadingEnd(Service.getEndTime(earliestLoadingTime, subOrder.getEstimatedLoadingTime()));
-			}
-			else
-			{
+				loadingInfo.setTimeOfLoadingEnd(Service.getEndTime(earliestLoadingTime,
+						subOrder.getEstimatedLoadingTime()));
+			} else {
 				loadingInfo.setTimeOfLoadingStart(loadingBay.getNextFreeTime(earliestLoadingTime));
-				loadingInfo.setTimeOfLoadingEnd(Service.getEndTime(loadingInfo.getTimeOfLoadingStart(), subOrder.getEstimatedLoadingTime()));
+				loadingInfo.setTimeOfLoadingEnd(Service.getEndTime(
+						loadingInfo.getTimeOfLoadingStart(), subOrder.getEstimatedLoadingTime()));
 			}
 		}
 	}
@@ -200,23 +195,23 @@ public class StartUpService
 		SubOrder so19 = Service.createSubOrder(12000, t16, p3);
 		SubOrder so20 = Service.createSubOrder(11000, t16, p2);
 
-		Order o1 = Service.createOrder(1, 150, DU.createDate("2013-01-01"));
-		Order o2 = Service.createOrder(2, 150, DU.createDate("2013-01-01"));
-		Order o3 = Service.createOrder(3, 150, DU.createDate("2013-01-01"));
-		Order o4 = Service.createOrder(4, 150, DU.createDate("2013-01-01"));
-		Order o5 = Service.createOrder(5, 150, DU.createDate("2013-01-01"));
-		Order o6 = Service.createOrder(6, 150, DU.createDate("2013-01-01"));
-		Order o7 = Service.createOrder(7, 150, DU.createDate("2013-01-01"));
-		Order o8 = Service.createOrder(8, 150, DU.createDate("2013-01-01"));
-		Order o9 = Service.createOrder(9, 150, DU.createDate("2013-01-01"));
-		Order o10 = Service.createOrder(10, 150, DU.createDate("2013-01-01"));
-		Order o11 = Service.createOrder(11, 150, DU.createDate("2013-01-01"));
-		Order o12 = Service.createOrder(12, 150, DU.createDate("2013-01-01"));
-		Order o13 = Service.createOrder(13, 150, DU.createDate("2013-01-01"));
-		Order o14 = Service.createOrder(14, 150, DU.createDate("2013-01-01"));
-		Order o15 = Service.createOrder(15, 150, DU.createDate("2013-01-01"));
-		Order o16 = Service.createOrder(16, 150, DU.createDate("2013-01-01"));
-		Order o17 = Service.createOrder(17, 150, DU.createDate("2013-01-01"));
+		Order o1 = Service.createOrder(1, DU.createDate("2013-01-01"));
+		Order o2 = Service.createOrder(2, DU.createDate("2013-01-01"));
+		Order o3 = Service.createOrder(3, DU.createDate("2013-01-01"));
+		Order o4 = Service.createOrder(4, DU.createDate("2013-01-01"));
+		Order o5 = Service.createOrder(5, DU.createDate("2013-01-01"));
+		Order o6 = Service.createOrder(6, DU.createDate("2013-01-01"));
+		Order o7 = Service.createOrder(7, DU.createDate("2013-01-01"));
+		Order o8 = Service.createOrder(8, DU.createDate("2013-01-01"));
+		Order o9 = Service.createOrder(9, DU.createDate("2013-01-01"));
+		Order o10 = Service.createOrder(10, DU.createDate("2013-01-01"));
+		Order o11 = Service.createOrder(11, DU.createDate("2013-01-01"));
+		Order o12 = Service.createOrder(12, DU.createDate("2013-01-01"));
+		Order o13 = Service.createOrder(13, DU.createDate("2013-01-01"));
+		Order o14 = Service.createOrder(14, DU.createDate("2013-01-01"));
+		Order o15 = Service.createOrder(15, DU.createDate("2013-01-01"));
+		Order o16 = Service.createOrder(16, DU.createDate("2013-01-01"));
+		Order o17 = Service.createOrder(17, DU.createDate("2013-01-01"));
 
 		o1.addSubOrder(so1);
 		o2.addSubOrder(so2);
