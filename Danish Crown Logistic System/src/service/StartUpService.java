@@ -44,8 +44,6 @@ public class StartUpService {
 
 	public static void createLoadingBaySchedule() {
 
-		System.out.println("Started Method createLoadingBaySchedule()");
-
 		ArrayList<SubOrder> subOrders = Dao.getSubOrders();
 
 		for (int i = 0; i < subOrders.size(); i++) {
@@ -71,8 +69,6 @@ public class StartUpService {
 						loadingInfo.getTimeOfLoadingStart(),
 						subOrder.getEstimatedLoadingTime()));
 			}
-			System.out.println();
-			System.out.println("Beginning New Iteration:");
 		}
 	}
 

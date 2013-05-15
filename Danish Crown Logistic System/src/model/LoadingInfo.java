@@ -18,8 +18,6 @@ public class LoadingInfo {
 		this.loadingBay = loadingBay;
 		this.highPriority = false;
 		state = LoadingInfoState.PENDING;
-		System.out.println("Created LoadingInfo(" + subOrder + ", "
-				+ loadingBay + ")");
 	}
 
 	public Date getTimeOfLoadingStart() {
@@ -28,7 +26,6 @@ public class LoadingInfo {
 
 	public void setTimeOfLoadingStart(Date timeOfLoadingStart) {
 		this.timeOfLoadingStart = timeOfLoadingStart;
-		System.out.println("Sat TimeOfLoadingStart to: " + timeOfLoadingStart);
 	}
 
 	public Date getTimeOfLoadingEnd() {
@@ -37,7 +34,6 @@ public class LoadingInfo {
 
 	public void setTimeOfLoadingEnd(Date timeOfLoadingEnd) {
 		this.timeOfLoadingEnd = timeOfLoadingEnd;
-		System.out.println("Sat TimeOfLoadingEnd to: " + timeOfLoadingEnd);
 	}
 
 	public boolean isHighPriority() {

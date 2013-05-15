@@ -122,9 +122,6 @@ public class Service {
 	public static LoadingBay firstAvailableLoadingBay(ProductType productType,
 			Date earliestLoadingTime) {
 
-		System.out
-				.println("Started Method firstAvailableLoadingBay(ProductType "
-						+ productType + ", Date " + earliestLoadingTime + ")");
 		ArrayList<LoadingBay> loadingBays = new ArrayList<LoadingBay>();
 
 		for (int i = 0; i < Dao.getLoadingBays().size(); i++) {
@@ -144,11 +141,8 @@ public class Service {
 			if (waitTime <= shortestWaitTime && waitTime >= 0) {
 				earliestLoadingBay = loadingBays.get(n);
 				shortestWaitTime = waitTime;
-				System.out.println("Found Shorter waiting time");
 			}
 		}
-		System.out.println("LoadingBay with shortest Waiting time: "
-				+ earliestLoadingBay);
 		return earliestLoadingBay;
 	}
 

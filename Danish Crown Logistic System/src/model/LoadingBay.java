@@ -3,8 +3,6 @@ package model;
 import java.util.ArrayList;
 import java.util.Date;
 
-import org.eclipse.jdt.annotation.NonNullByDefault;
-
 //Author: Jens Nyberg Porse
 public class LoadingBay {
 
@@ -65,27 +63,8 @@ public class LoadingBay {
 		loadingInfos.remove(loadingInfo);
 	}
 
-	public int getBayWaitingTime() {
-
-		int waitingTime = 0;
-		for (int i = 0; i < loadingInfos.size(); i++) {
-			int timeStart = (loadingInfos.get(i).getTimeOfLoadingStart()
-					.getHours())
-					* 60
-					+ (loadingInfos.get(i).getTimeOfLoadingEnd().getMinutes());
-			int timeEnd = (loadingInfos.get(i).getTimeOfLoadingEnd().getHours())
-					* 60
-					+ (loadingInfos.get(i).getTimeOfLoadingStart().getMinutes());
-			waitingTime = +timeEnd - timeStart;
-		}
-		return waitingTime;
-	}
-
-	@NonNullByDefault
 	public Date getNextFreeTime(Date earliestPacking) {
 
-		System.out.println("Started Method getNextFreeTime(Date "
-				+ earliestPacking + ")");
 		Date loadingDone = earliestPacking;
 
 		if (isIsloading() == true) {
@@ -96,27 +75,16 @@ public class LoadingBay {
 			}
 		} else {
 			if (loadingInfos.size() == 1) {
-				System.out.println("List is not empty");
-				System.out.println(loadingInfos);
-				System.out.println(loadingInfos.get(loadingInfos.size() - 1)
-						.getTimeOfLoadingEnd());
-				System.out.println(loadingInfos);
+
 				loadingDone = loadingInfos.get(loadingInfos.size() - 1)
 						.getTimeOfLoadingEnd();
 			}
 			if (loadingInfos.size() > 1) {
-				System.out.println("List is not empty");
-				System.out.println(loadingInfos);
-				System.out.println(loadingInfos.get(loadingInfos.size() - 2)
-						.getTimeOfLoadingEnd());
-				System.out.println(loadingInfos);
+
 				loadingDone = loadingInfos.get(loadingInfos.size() - 2)
 						.getTimeOfLoadingEnd();
 			}
 		}
-		System.out.println("LoadingBay " + loadingBayNumber + ", "
-				+ getProductType());
-		System.out.println("Returned: " + loadingDone);
 		return loadingDone;
 	}
 
