@@ -17,7 +17,6 @@ import model.LoadingInfoState;
 import model.SubOrder;
 import model.TrailerState;
 import service.Service;
-import dateutil.DU;
 
 //Author: Jens "Il duce" Nyberg Porse
 public class LoadingInfoDialog extends JDialog
@@ -168,7 +167,7 @@ public class LoadingInfoDialog extends JDialog
 				// If no unregularities have been caught, starts loading the truck
 				else {
 
-					loadingInfo.setTimeOfLoadingStart(DU.createDate(txfBeganLoading.getText()));
+					loadingInfo.setTimeOfLoadingStart(Service.getTimeStringToDate(txfBeganLoading.getText()));
 					loadingInfo.setState(LoadingInfoState.LOADING);
 					txfEndedLoading.setEditable(true);
 					btnEndLoading.setEnabled(true);
