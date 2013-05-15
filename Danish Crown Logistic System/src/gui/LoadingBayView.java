@@ -23,14 +23,12 @@ import model.LoadingInfo;
 import dao.Dao;
 
 //Author Christian "sexy" Møller Pedersen
-public class LoadingBayView extends JFrame
-{
+public class LoadingBayView extends JFrame {
 
 	private Controller controller;
 	private static LoadingInfoDialog loadingInfoDialog;
 
-	public LoadingBayView()
-	{
+	public LoadingBayView() {
 		setResizable(false);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setBounds(600, 500, 569, 347);
@@ -48,8 +46,7 @@ public class LoadingBayView extends JFrame
 	private static DefaultListModel<LoadingInfo> infoModel;
 	private JScrollPane scpInfo;
 
-	private void InitContent()
-	{
+	private void InitContent() {
 
 		controller = new Controller();
 
@@ -85,39 +82,38 @@ public class LoadingBayView extends JFrame
 
 	}
 
-	public static void fillBays()
-	{
+	public static LoadingBay getSelecetedLoadingBay() {
+		LoadingBay lb = (LoadingBay) cmbBays.getSelectedItem();
+		return lb;
+	}
+
+	public static void fillBays() {
 		cmbBays.removeAll();
-		for (LoadingBay lb : Dao.getLoadingBays())
-		{
+		for (LoadingBay lb : Dao.getLoadingBays()) {
 			cmbBays.addItem(lb);
 		}
 	}
 
-	public static void fillInfo(LoadingBay lb)
-	{
+	public static void fillInfo(LoadingBay lb) {
 		infoModel.clear();
-		for (LoadingInfo li : lb.getLoadingInfos())
-		{
+		for (LoadingInfo li : lb.getLoadingInfos()) {
 			infoModel.addElement(li);
 		}
 	}
 
-	private class Controller implements ActionListener, MouseListener, ItemListener
-	{
+	private class Controller implements ActionListener, MouseListener,
+			ItemListener {
 
 		@Override
-		public void actionPerformed(ActionEvent e)
-		{
+		public void actionPerformed(ActionEvent e) {
 
 		}
 
-//author Soren Moller Nielsen
+		// author Soren Moller Nielsen
 		@Override
-		public void mouseClicked(MouseEvent e)
-		{
-			if (e.getSource() == (lstBayList.getSelectedValue()) && e.getClickCount() == 3 || e.getClickCount() == 2)
-			{
+		public void mouseClicked(MouseEvent e) {
+			if (e.getSource() == (lstBayList.getSelectedValue())
+					&& e.getClickCount() == 3 || e.getClickCount() == 2) {
 
 				System.out.println((lstBayList.getSelectedValue()));
 				loadingInfoDialog.fillModel((lstBayList.getSelectedValue()));
@@ -128,35 +124,29 @@ public class LoadingBayView extends JFrame
 		}
 
 		@Override
-		public void mouseEntered(MouseEvent e)
-		{
+		public void mouseEntered(MouseEvent e) {
 
 		}
 
 		@Override
-		public void mouseExited(MouseEvent e)
-		{
+		public void mouseExited(MouseEvent e) {
 
 		}
 
 		@Override
-		public void mousePressed(MouseEvent e)
-		{
+		public void mousePressed(MouseEvent e) {
 
 		}
 
 		@Override
-		public void mouseReleased(MouseEvent e)
-		{
+		public void mouseReleased(MouseEvent e) {
 
 		}
 
 		@Override
-		public void itemStateChanged(ItemEvent arg0)
-		{
-			if (arg0.getSource() == cmbBays)
-			{
-				fillInfo((LoadingBay)cmbBays.getSelectedItem());
+		public void itemStateChanged(ItemEvent arg0) {
+			if (arg0.getSource() == cmbBays) {
+				fillInfo((LoadingBay) cmbBays.getSelectedItem());
 			}
 		}
 
