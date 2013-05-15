@@ -7,15 +7,15 @@ public class Order
 {
 
 	private int orderNumber;
-	private double weightMargin;
+	private double weightMarginPercent = 2;
+	private double weightMarginKilo;
 	private Date loadingDate;
 	private ArrayList<SubOrder> subOrders = new ArrayList<SubOrder>();
 
-	public Order(int orderNumber, double weightMargin, Date loadingDate)
+	public Order(int orderNumber, Date loadingDate)
 	{
 		super();
 		this.orderNumber = orderNumber;
-		this.weightMargin = weightMargin;
 		this.loadingDate = loadingDate;
 	}
 
@@ -29,14 +29,24 @@ public class Order
 		this.orderNumber = orderNumber;
 	}
 
-	public double getWeightMargin()
+	public double getWeightMarginPercent()
 	{
-		return weightMargin;
+		return weightMarginPercent;
 	}
 
-	public void setWeightMargin(double weightMargin)
+	public void setWeightMarginPercent(double weightMarginPercent)
 	{
-		this.weightMargin = weightMargin;
+		this.weightMarginPercent = weightMarginPercent;
+	}
+
+	public double getWeightMarginKilo()
+	{
+		return weightMarginKilo;
+	}
+
+	public void setWeightMarginKilo(double weightMarginKilo)
+	{
+		this.weightMarginKilo = weightMarginKilo;
 	}
 
 	public Date getLoadingDate()
@@ -64,6 +74,7 @@ public class Order
 	{
 		subOrders.add(subOrder);
 		subOrder.setOrder(this);
+		weightMarginKilo = calculateWeightMargin();
 	}
 
 	/**
@@ -72,6 +83,15 @@ public class Order
 	public void removeSubOrder(SubOrder subOrder)
 	{
 		subOrders.remove(subOrder);
+	}
+
+	private double calculateWeightMargin()
+	{
+		double totalWeight = 0;
+		for (SubOrder subOrder : subOrders) {
+			totalWeight += subOrder.getEstimatedWeight();
+		}
+		return totalWeight * ((weightMarginPercent / 100));
 	}
 
 	@Override

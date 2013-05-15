@@ -172,21 +172,19 @@ public class NewOrderDialog extends JDialog
 		public void actionPerformed(ActionEvent e)
 		{
 
-			if (e.getSource() == btnAddSuborder)
-			{
+			if (e.getSource() == btnAddSuborder) {
 				NewSubOrderDialog createSubOrderDialog = new NewSubOrderDialog(orderFrame);
 				createSubOrderDialog.setVisible(true);
 
 			}
 
-			if (e.getSource() == btnCreate)
-			{
+			if (e.getSource() == btnCreate) {
 
 				Date loadingDate = DU.createDate(txfLoadingDate.getText());
-				Order o = Service.createOrder(Integer.parseInt(txfOrderID.getText()), Double.parseDouble(txfWeightMargin.getText()), loadingDate);
+				Order o = Service.createOrder(Integer.parseInt(txfOrderID.getText()), loadingDate);
+				o.setWeightMarginKilo(Double.parseDouble(txfWeightMargin.getText()));
 
-				for (int i = 0; i < lstSubOrders.getModel().getSize(); i++)
-				{
+				for (int i = 0; i < lstSubOrders.getModel().getSize(); i++) {
 					SubOrder subOrder = lstSubOrders.getModel().getElementAt(i);
 					o.addSubOrder(subOrder);
 					subOrder.setOrder(o);
@@ -197,8 +195,7 @@ public class NewOrderDialog extends JDialog
 				NewOrderDialog.this.setVisible(false);
 			}
 
-			if (e.getSource() == btnCancel)
-			{
+			if (e.getSource() == btnCancel) {
 				NewOrderDialog.this.setVisible(false);
 			}
 

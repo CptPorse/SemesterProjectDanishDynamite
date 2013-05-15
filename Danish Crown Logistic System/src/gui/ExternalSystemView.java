@@ -53,8 +53,11 @@ public class ExternalSystemView extends JFrame
 	}
 
 	private JPanel panelExternalSystem;
-	private JTextField txfOrderID, txfWeightMargin, txfSubOrderArrival, txfSubProduct, txfSubWeight, txfSubTrailer, txfLoadingTime;
-	private JLabel lblOrderList, lblOrderId, lblWeightMargin, lblSubOrderArrival, lblSuborders, lblSubProduct, lblSubWeight, lblSubTrailer, lblLoadingTime, lblWeighKilo, lblMinuts, lblMarginKilo;
+	private JTextField txfOrderID, txfWeightMargin, txfSubOrderArrival, txfSubProduct,
+			txfSubWeight, txfSubTrailer, txfLoadingTime;
+	private JLabel lblOrderList, lblOrderId, lblWeightMargin, lblSubOrderArrival, lblSuborders,
+			lblSubProduct, lblSubWeight, lblSubTrailer, lblLoadingTime, lblWeighKilo, lblMinuts,
+			lblMarginKilo;
 	private JButton btnNewTrailer, btnNewDriver, btnNewOrder;
 
 	private Controller controller;
@@ -248,7 +251,7 @@ public class ExternalSystemView extends JFrame
 	public void updateOrderView(Order order)
 	{
 		txfOrderID.setText("" + order.getOrderNumber());
-		txfWeightMargin.setText("" + order.getWeightMargin());
+		txfWeightMargin.setText("" + order.getWeightMarginKilo());
 		txfSubOrderArrival.setText("");
 		txfLoadingTime.setText("");
 		txfSubTrailer.setText("");
@@ -287,7 +290,8 @@ public class ExternalSystemView extends JFrame
 		public void actionPerformed(ActionEvent e)
 		{
 			if (e.getSource() == btnNewOrder) {
-				NewOrderDialog createOrderDialog = new NewOrderDialog(ExternalSystemView.getInstance());
+				NewOrderDialog createOrderDialog = new NewOrderDialog(
+						ExternalSystemView.getInstance());
 				createOrderDialog.setVisible(true);
 
 				// waiting for dialog NewOrderDialog to close
@@ -295,7 +299,8 @@ public class ExternalSystemView extends JFrame
 			}
 
 			if (e.getSource() == btnNewTrailer) {
-				NewTrailerDialog createTrailerDialog = new NewTrailerDialog(ExternalSystemView.getInstance());
+				NewTrailerDialog createTrailerDialog = new NewTrailerDialog(
+						ExternalSystemView.getInstance());
 				createTrailerDialog.setVisible(true);
 
 				// waiting for dialog NewOrderDialog to close
@@ -303,7 +308,8 @@ public class ExternalSystemView extends JFrame
 			}
 
 			if (e.getSource() == btnNewDriver) {
-				NewDriverDialog createDriverDialog = new NewDriverDialog(ExternalSystemView.getInstance());
+				NewDriverDialog createDriverDialog = new NewDriverDialog(
+						ExternalSystemView.getInstance());
 				createDriverDialog.setVisible(true);
 
 				// waiting for dialog NewOrderDialog to close

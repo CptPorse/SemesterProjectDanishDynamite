@@ -37,9 +37,9 @@ public class Service
 		return productType;
 	}
 
-	public static Order createOrder(int orderNumber, double weightMargin, Date loadingDate)
+	public static Order createOrder(int orderNumber, Date loadingDate)
 	{
-		Order order = new Order(orderNumber, weightMargin, loadingDate);
+		Order order = new Order(orderNumber, loadingDate);
 		Dao.addOrder(order);
 		return order;
 	}
