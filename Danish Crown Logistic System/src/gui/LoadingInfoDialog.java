@@ -171,8 +171,12 @@ public class LoadingInfoDialog extends JDialog
 				btnBeginLoading.setEnabled(false);
 				txfEndedLoading.setEditable(true);
 				btnEndLoading.setEnabled(true);
-				LoadingBayView.fillInfo(LoadingBayView.getSelecetedLoadingBay());
+				LoadingBayView.fillInfo(null);
 
+				//Update the trailer view and trailer state - Christian
+				loadingInfo.getSubOrder().getTrailer().setTrailerState(TrailerState.BEING_LOADED);
+				TrailerView.fillModel(TrailerState.ARRIVED);
+				TrailerView.fillModel(TrailerState.BEING_LOADED);
 			}
 
 			if (e.getSource() == btnEndLoading)
@@ -202,8 +206,13 @@ public class LoadingInfoDialog extends JDialog
 					loadingInfo.getSubOrder().getTrailer().setTrailerState(TrailerState.LOADED);
 					SmsDialog sms = new SmsDialog(loadingInfo);
 				}
-				LoadingBayView.fillInfo(LoadingBayView.getSelecetedLoadingBay());
+				LoadingBayView.fillInfo(null);
 				((Window)btnEndLoading.getTopLevelAncestor()).dispose();
+
+				//Update the trailer view and trailer state - Christian
+				loadingInfo.getSubOrder().getTrailer().setTrailerState(TrailerState.LOADED);
+				TrailerView.fillModel(TrailerState.BEING_LOADED);
+				TrailerView.fillModel(TrailerState.LOADED);
 			}
 
 			if (e.getSource() == btnCancel)

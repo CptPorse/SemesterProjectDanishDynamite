@@ -20,6 +20,9 @@ import javax.swing.border.EmptyBorder;
 
 import model.LoadingBay;
 import model.LoadingInfo;
+
+import com.sun.istack.internal.Nullable;
+
 import dao.Dao;
 
 //Author Christian "sexy" Møller Pedersen
@@ -80,12 +83,6 @@ public class LoadingBayView extends JFrame
 
 	}
 
-	public static LoadingBay getSelecetedLoadingBay()
-	{
-		LoadingBay lb = (LoadingBay)cmbBays.getSelectedItem();
-		return lb;
-	}
-
 	public static void fillBays()
 	{
 		cmbBays.removeAll();
@@ -95,8 +92,12 @@ public class LoadingBayView extends JFrame
 		}
 	}
 
-	public static void fillInfo(LoadingBay lb)
+	public static void fillInfo(@Nullable LoadingBay lb)
 	{
+		if (lb == null)
+		{
+			lb = (LoadingBay)cmbBays.getSelectedItem();
+		}
 		infoModel.clear();
 		for (LoadingInfo li : lb.getLoadingInfos())
 		{

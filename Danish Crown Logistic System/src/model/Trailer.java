@@ -163,35 +163,6 @@ public class Trailer
 	@Override
 	public String toString()
 	{
-		String min = "00";
-		String tempTrailerID = "" + trailerID + "                       ";
-		if (timeOfArrival.getMinutes() != 0) {
-			min = "" + timeOfArrival.getMinutes();
-		}
-
-		if (trailerState == TrailerState.ENROUTE) {
-
-			return "<html><table border=1 width=120 >" + "Trailer: " + tempTrailerID.substring(0, 12) + "<br/>" + "ETA: " + timeOfArrival.getHours() + ":" + min + "</table> </html>";
-		}
-		if (trailerState == TrailerState.LOADED) {
-
-			return "<html><table border=1 width=120 >" + "Trailer: " + tempTrailerID.substring(0, 12) + "<br/>" + "Weight: " + weightCurrent / 1000 + "t" + "</table> </html>";
-		}
-
-		if (trailerState == TrailerState.BEING_LOADED) {
-			String bayNumber = "";
-			for (SubOrder s : getSubOrders()) {
-				if (s.getLoadingInfo().getState() == LoadingInfoState.LOADING) {
-					bayNumber = "" + s.getLoadingInfo().getLoadingBay().getLoadingBayNumber();
-				}
-			}
-			return "<html><table border=1 width=120 >" + "Trailer: " + tempTrailerID.substring(0, 12) + "<br/>" + "Located at:" + bayNumber + "<br/>" + "#suborders" + getSubOrders().size() + "</table> </html>";
-		}
-		if (trailerState == TrailerState.ARRIVED) {
-			return "<html><table border=1 width=120 >" + "Trailer: " + tempTrailerID.substring(0, 12) + "<br/>" + "Located at:" + "waiting" + "<br/>" + "#suborders" + getSubOrders().size() + "</table> </html>";
-
-		} else {
-			return "Trailer: " + trailerID;
-		}
+		return trailerID;
 	}
 }
