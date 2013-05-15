@@ -113,6 +113,7 @@ public class LoadingInfoDialog extends JDialog
 		btnCancel = new JButton("Cancel");
 		btnCancel.setBounds(274, 218, 89, 23);
 		contentPanel.add(btnCancel);
+		btnCancel.addActionListener(controller);
 
 	}
 
