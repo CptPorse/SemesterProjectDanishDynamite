@@ -136,6 +136,11 @@ public class TrailerView extends JFrame
 					}
 					// refreshes the list
 					controller.fillArrivingLst();
+
+					//Updates Loadingbayview current view
+					LoadingBayView.fillInfo(LoadingBayView
+							.getSelecetedLoadingBay());
+
 				}
 			}
 			if (e.getSource() == btnCheckDeparture) {
