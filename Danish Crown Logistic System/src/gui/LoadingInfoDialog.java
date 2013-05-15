@@ -16,6 +16,7 @@ import model.LoadingInfo;
 import model.LoadingInfoState;
 import model.SubOrder;
 import model.TrailerState;
+import service.Service;
 import dateutil.DU;
 
 //Author: Jens "Il duce" Nyberg Porse
@@ -28,17 +29,15 @@ public class LoadingInfoDialog extends JDialog
 		System.out.println("Created new Window");
 		setTitle("Loading Info");
 		this.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-		this.setBounds(600, 500, 569, 347);
+		this.setBounds(30, 30, 569, 347);
 		InitContent();
 		this.setVisible(true);
 
 	}
 
 	private JPanel contentPanel = new JPanel();
-	private JLabel lblLoadingBay, lblTrailer, lblProductType, lblBeganLoading,
-			lblEndedLoading;
-	private JTextField txfLoadingBay, txfTrailer, txfProductType,
-			txfBeganLoading, txfEndedLoading;
+	private JLabel lblLoadingBay, lblTrailer, lblProductType, lblBeganLoading, lblEndedLoading;
+	private JTextField txfLoadingBay, txfTrailer, txfProductType, txfBeganLoading, txfEndedLoading;
 	private JButton btnBeginLoading, btnEndLoading, btnCancel;
 
 	private Controller controller;
@@ -88,7 +87,7 @@ public class LoadingInfoDialog extends JDialog
 		contentPanel.add(lblBeganLoading);
 
 		txfBeganLoading = new JTextField("");
-		txfBeganLoading.setBounds(274, 43, 135, 20);
+		txfBeganLoading.setBounds(274, 43, 170, 20);
 		contentPanel.add(txfBeganLoading);
 		txfBeganLoading.setColumns(10);
 
@@ -97,7 +96,7 @@ public class LoadingInfoDialog extends JDialog
 		contentPanel.add(lblEndedLoading);
 
 		txfEndedLoading = new JTextField("");
-		txfEndedLoading.setBounds(277, 123, 135, 20);
+		txfEndedLoading.setBounds(277, 123, 170, 20);
 		contentPanel.add(txfEndedLoading);
 		txfEndedLoading.setColumns(10);
 
@@ -118,15 +117,37 @@ public class LoadingInfoDialog extends JDialog
 	}
 
 	// Author: Soren Moller Nielsen
+
 	private LoadingInfo loadingInfo;
 
 	public void fillModel(LoadingInfo lInfo)
 	{
 		this.loadingInfo = lInfo;
 		txfTrailer.setText(lInfo.getSubOrder().getTrailer().getTrailerID());
-		txfProductType.setText(lInfo.getSubOrder().getProductType()
-				.getDescription());
+		txfProductType.setText(lInfo.getSubOrder().getProductType().getDescription());
 		txfLoadingBay.setText("" + lInfo.getLoadingBay().getLoadingBayNumber());
+		txfBeganLoading.setText(Service.getDateToStringTime(lInfo.getTimeOfLoadingStart()));
+		txfEndedLoading.setText(Service.getDateToStringTime(lInfo.getTimeOfLoadingEnd()));
+		if (lInfo.getState() == LoadingInfoState.PENDING || lInfo.getState() == LoadingInfoState.FINISHED) {
+			txfBeganLoading.setEditable(false);
+			txfEndedLoading.setEditable(false);
+			btnBeginLoading.setEnabled(false);
+			btnEndLoading.setEnabled(false);
+		}
+		if (lInfo.getState() == LoadingInfoState.READY_TO_LOAD) {
+			txfBeganLoading.setEditable(true);
+			btnBeginLoading.setEnabled(true);
+			txfEndedLoading.setEditable(false);
+			btnEndLoading.setEnabled(false);
+
+		}
+		if (lInfo.getState() == LoadingInfoState.LOADING) {
+			txfBeganLoading.setEditable(true);
+
+			btnBeginLoading.setEnabled(true);
+			txfEndedLoading.setEditable(true);
+			btnEndLoading.setEnabled(true);
+		}
 
 	}
 
@@ -139,6 +160,7 @@ public class LoadingInfoDialog extends JDialog
 		{
 
 			if (e.getSource() == btnBeginLoading) {
+
 				// Checks the format of the input
 				if (txfBeganLoading.getText().isEmpty() == true) {
 					txfBeganLoading.setText("invalid input");
@@ -146,9 +168,10 @@ public class LoadingInfoDialog extends JDialog
 				// If no unregularities have been caught, starts loading the truck
 				else {
 
-					loadingInfo.setTimeOfLoadingStart(DU
-							.createDate(txfBeganLoading.getText()));
+					loadingInfo.setTimeOfLoadingStart(DU.createDate(txfBeganLoading.getText()));
 					loadingInfo.setState(LoadingInfoState.LOADING);
+					txfEndedLoading.setEditable(true);
+					btnEndLoading.setEnabled(true);
 
 				}
 
@@ -170,21 +193,17 @@ public class LoadingInfoDialog extends JDialog
 
 					// checking, if the trailer is fully loaded
 					boolean trailerFullyLoaded = true;
-					ArrayList<SubOrder> subOrders = loadingInfo.getSubOrder()
-							.getTrailer().getSubOrders();
+					ArrayList<SubOrder> subOrders = loadingInfo.getSubOrder().getTrailer().getSubOrders();
 
-					// seaches if any of the attached suborders to the trailer,
-					// aren't done loading
+					// seaches if any of the attached suborders to the trailer, aren't done loading
 					for (SubOrder s : subOrders) {
 						if (s.isLoaded() == false) {
 							trailerFullyLoaded = false;
 						}
 					}
-					// if all the suborders are done, trailer changes
-					// trailerstate to: loaded
+					// if all the suborders are done, trailer changes trailerstate to: loaded
 					if (trailerFullyLoaded == true) {
-						loadingInfo.getSubOrder().getTrailer()
-								.setTrailerState(TrailerState.LOADED);
+						loadingInfo.getSubOrder().getTrailer().setTrailerState(TrailerState.LOADED);
 
 					}
 
