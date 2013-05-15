@@ -129,23 +129,21 @@ public class LoadingInfoDialog extends JDialog
 		txfLoadingBay.setText("" + lInfo.getLoadingBay().getLoadingBayNumber());
 		txfBeganLoading.setText(Service.getDateToStringTime(lInfo.getTimeOfLoadingStart()));
 		txfEndedLoading.setText(Service.getDateToStringTime(lInfo.getTimeOfLoadingEnd()));
-		if (lInfo.getState() == LoadingInfoState.PENDING || lInfo.getState() == LoadingInfoState.FINISHED)
-		{
+		if (lInfo.getState() == LoadingInfoState.PENDING
+				|| lInfo.getState() == LoadingInfoState.FINISHED) {
 			txfBeganLoading.setEditable(false);
 			txfEndedLoading.setEditable(false);
 			btnBeginLoading.setEnabled(false);
 			btnEndLoading.setEnabled(false);
 		}
-		if (lInfo.getState() == LoadingInfoState.READY_TO_LOAD)
-		{
+		if (lInfo.getState() == LoadingInfoState.READY_TO_LOAD) {
 			txfBeganLoading.setEditable(true);
 			btnBeginLoading.setEnabled(true);
 			txfEndedLoading.setEditable(false);
 			btnEndLoading.setEnabled(false);
 
 		}
-		if (lInfo.getState() == LoadingInfoState.LOADING)
-		{
+		if (lInfo.getState() == LoadingInfoState.LOADING) {
 			txfBeganLoading.setEditable(false);
 			btnBeginLoading.setEnabled(false);
 			txfEndedLoading.setEditable(true);
@@ -162,10 +160,10 @@ public class LoadingInfoDialog extends JDialog
 		public void actionPerformed(ActionEvent e)
 		{
 
-			if (e.getSource() == btnBeginLoading)
-			{
+			if (e.getSource() == btnBeginLoading) {
 
-				loadingInfo.setTimeOfLoadingStart(Service.getTimeStringToDate(txfBeganLoading.getText()));
+				loadingInfo.setTimeOfLoadingStart(Service.getTimeStringToDate(txfBeganLoading
+						.getText()));
 				loadingInfo.setState(LoadingInfoState.LOADING);
 				txfBeganLoading.setEditable(false);
 				btnBeginLoading.setEnabled(false);
@@ -179,8 +177,7 @@ public class LoadingInfoDialog extends JDialog
 				TrailerView.fillModel(TrailerState.BEING_LOADED);
 			}
 
-			if (e.getSource() == btnEndLoading)
-			{
+			if (e.getSource() == btnEndLoading) {
 
 				// sets the loadingInfo as finished
 				loadingInfo.setState(LoadingInfoState.FINISHED);
@@ -190,19 +187,17 @@ public class LoadingInfoDialog extends JDialog
 
 				// checking, if the trailer is fully loaded
 				boolean trailerFullyLoaded = true;
-				ArrayList<SubOrder> subOrders = loadingInfo.getSubOrder().getTrailer().getSubOrders();
+				ArrayList<SubOrder> subOrders = loadingInfo.getSubOrder().getTrailer()
+						.getSubOrders();
 
 				// searches if any of the attached suborders to the trailer, aren't done loading
-				for (SubOrder s : subOrders)
-				{
-					if (s.isLoaded() == false)
-					{
+				for (SubOrder s : subOrders) {
+					if (s.isLoaded() == false) {
 						trailerFullyLoaded = false;
 					}
 				}
 				// if all the suborders are done, trailer changes trailerstate to: loaded
-				if (trailerFullyLoaded == true)
-				{
+				if (trailerFullyLoaded == true) {
 					loadingInfo.getSubOrder().getTrailer().setTrailerState(TrailerState.LOADED);
 					SmsDialog sms = new SmsDialog(loadingInfo);
 				}
@@ -215,8 +210,7 @@ public class LoadingInfoDialog extends JDialog
 				TrailerView.fillModel(TrailerState.LOADED);
 			}
 
-			if (e.getSource() == btnCancel)
-			{
+			if (e.getSource() == btnCancel) {
 				((Window)btnCancel.getTopLevelAncestor()).dispose();
 
 			}

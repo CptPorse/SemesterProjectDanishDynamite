@@ -181,8 +181,8 @@ public class Service
 	//Author: Jens Porse
 	public static Date getTimeStringToDate(String time)
 	{
-		int hours = Integer.parseInt(time.substring(0, 1));
-		int minutes = Integer.parseInt(time.substring(3, 4));
+		int hours = Integer.parseInt(time.substring(0, 2));
+		int minutes = Integer.parseInt(time.substring(3, 5));
 		Date date = new Date(113, 0, 1, hours, minutes);
 
 		return date;
