@@ -44,7 +44,8 @@ public class Service
 		return order;
 	}
 
-	public static SubOrder createSubOrder(double estimatedWeight, Trailer trailer, ProductType productType)
+	public static SubOrder createSubOrder(double estimatedWeight, Trailer trailer,
+			ProductType productType)
 	{
 		SubOrder subOrder = new SubOrder(estimatedWeight, trailer, productType);
 		trailer.addSubOrder(subOrder);
@@ -78,7 +79,8 @@ public class Service
 		int position, scan;
 		for (position = trailers.size() - 1; position >= 0; position--) {
 			for (scan = 0; scan <= position - 1; scan++) {
-				if (trailers.get(scan).getTimeOfArrival().after((trailers.get(scan + 1).getTimeOfArrival())))
+				if (trailers.get(scan).getTimeOfArrival()
+						.after((trailers.get(scan + 1).getTimeOfArrival())))
 					swap(trailers, scan, scan + 1);
 			}
 		}
@@ -99,7 +101,8 @@ public class Service
 		int position, scan;
 		for (position = subOrders.size() - 1; position >= 0; position--) {
 			for (scan = 0; scan <= position - 1; scan++) {
-				if (subOrders.get(scan).getEarliestLoadingTime().after((subOrders.get(scan + 1).getEarliestLoadingTime())))
+				if (subOrders.get(scan).getEarliestLoadingTime()
+						.after((subOrders.get(scan + 1).getEarliestLoadingTime())))
 					swap(subOrders, scan, scan + 1);
 			}
 		}
@@ -118,7 +121,8 @@ public class Service
 		items.set(index2, temp);
 	}
 
-	public static LoadingBay firstAvailableLoadingBay(ProductType productType, Date earliestLoadingTime)
+	public static LoadingBay firstAvailableLoadingBay(ProductType productType,
+			Date earliestLoadingTime)
 	{
 
 		ArrayList<LoadingBay> loadingBays = new ArrayList<LoadingBay>();
@@ -155,12 +159,9 @@ public class Service
 	// Author: Jens Porse
 	public static String getDateToStringTime(Date date)
 	{
-		String hours = String.valueOf(date.getHours());
-		String minutes = String.valueOf(date.getMinutes());
-		if (minutes.length() == 1) {
-			minutes = "0" + minutes;
+		String hours = String.format("%2d", date.getHours()).replace(' ', '0');
+		String minutes = String.format("%2d", date.getMinutes()).replace(' ', '0');
 
-		}
 		return hours + ":" + minutes;
 	}
 
