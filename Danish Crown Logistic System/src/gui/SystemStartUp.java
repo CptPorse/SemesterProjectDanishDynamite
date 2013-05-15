@@ -4,13 +4,15 @@ import service.Service;
 import service.StartUpService;
 
 //Author: Jens Nyberg Porse
-public class SystemStartUp {
+public class SystemStartUp
+{
 
 	private static ExternalSystemView externalSystemView;
 	private static TrailerView trailerView;
 	private static LoadingBayView loadingBayView;
 
-	public static void main(String[] args) {
+	public static void main(String[] args)
+	{
 
 		StartUpService.startUpData();
 		Service.sortTrailerArrival();
@@ -19,6 +21,5 @@ public class SystemStartUp {
 		trailerView = new TrailerView();
 		loadingBayView = new LoadingBayView();
 		externalSystemView = new ExternalSystemView();
-
 	}
 }
