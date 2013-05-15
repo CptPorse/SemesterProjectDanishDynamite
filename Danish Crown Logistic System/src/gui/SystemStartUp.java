@@ -2,6 +2,7 @@ package gui;
 
 import service.Service;
 import service.StartUpService;
+import dao.Dao;
 
 //Author: Jens Nyberg Porse
 public class SystemStartUp
@@ -17,7 +18,7 @@ public class SystemStartUp
 		StartUpService.startUpData();
 		Service.sortTrailerArrival();
 		StartUpService.setSubOrderEarliestLoadingTime();
-		StartUpService.createLoadingBaySchedule();
+		StartUpService.createLoadingBaySchedule(Dao.getSubOrders());
 		trailerView = new TrailerView();
 		loadingBayView = new LoadingBayView();
 		externalSystemView = new ExternalSystemView();

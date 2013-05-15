@@ -6,6 +6,7 @@ import java.util.Date;
 import model.Driver;
 import model.LoadingBay;
 import model.LoadingInfo;
+import model.LoadingInfoState;
 import model.Order;
 import model.ProductType;
 import model.SubOrder;
@@ -92,26 +93,19 @@ public class Service
 		}
 	}
 
-	public static void sortSubOrders()
+	public static ArrayList<SubOrder> sortSubOrders(ArrayList<SubOrder> subOrders)
 	{
 
-		ArrayList<SubOrder> subOrders = new ArrayList<SubOrder>();
-		subOrders.addAll(Dao.getSubOrders());
-
+		ArrayList<SubOrder> subOrdersSorted = subOrders;
 		int position, scan;
-		for (position = subOrders.size() - 1; position >= 0; position--) {
+		for (position = subOrdersSorted.size() - 1; position >= 0; position--) {
 			for (scan = 0; scan <= position - 1; scan++) {
-				if (subOrders.get(scan).getEarliestLoadingTime()
-						.after((subOrders.get(scan + 1).getEarliestLoadingTime())))
-					swap(subOrders, scan, scan + 1);
+				if (subOrdersSorted.get(scan).getEarliestLoadingTime()
+						.after((subOrdersSorted.get(scan + 1).getEarliestLoadingTime())))
+					swap(subOrdersSorted, scan, scan + 1);
 			}
 		}
-		for (int i = subOrders.size() - 1; i >= 0; i--) {
-			Dao.removeSubOrder(Dao.getSubOrders().get(i));
-		}
-		for (int i = 0; i < subOrders.size(); i++) {
-			Dao.addSubOrder(subOrders.get(i));
-		}
+		return subOrdersSorted;
 	}
 
 	private static <T> void swap(ArrayList<T> items, int index1, int index2)
@@ -157,6 +151,35 @@ public class Service
 		Date bayReadyAt = new Date(earliestLoadingTime.getTime() + shortestWaitTime);
 		earliestLoadingBay.setNextAvailableTime(bayReadyAt);
 		return earliestLoadingBay;
+	}
+
+	/**
+	 * A method that preps an ArrayList of SubOrders to be resorted in the LoadingBay Schedule
+	 * @param productType: Used to create a local list of all loadingBays, whos SubOrders we are to resort
+	 */
+	public static void refreshLoadingBays(ProductType productType)
+	{
+		//Creates a local list of all loadingBays from the Dao, that can handle the productType in question.
+		ArrayList<LoadingBay> loadingBays = new ArrayList<LoadingBay>();
+		for (LoadingBay loadingBay : Dao.getLoadingBays()) {
+			if (loadingBay.getProductType() == productType)
+				loadingBays.add(loadingBay);
+		}
+
+		//Loops through the list of loadingBays and adds all subOrders, that is either Ready to be loaded or pending, to the subOrderToSort list.
+		ArrayList<SubOrder> subOrdersToSort = new ArrayList<SubOrder>();
+		for (LoadingBay loadingBay : loadingBays) {
+			for (LoadingInfo loadingInfo : loadingBay.getLoadingInfos()) {
+				if (loadingInfo.getState() == LoadingInfoState.READY_TO_LOAD
+						|| loadingInfo.getState() == LoadingInfoState.PENDING) {
+					subOrdersToSort.add(loadingInfo.getSubOrder());
+					loadingBay.removeLoadingInfo(loadingInfo);
+					Dao.removeLoadingInfo(loadingInfo);
+				}
+			}
+		}
+		subOrdersToSort = sortSubOrders(subOrdersToSort);
+		StartUpService.createLoadingBaySchedule(subOrdersToSort);
 	}
 
 	// Author: Jens Porse

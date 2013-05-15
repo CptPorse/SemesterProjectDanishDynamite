@@ -36,17 +36,44 @@ public class StartUpService
 
 			}
 		}
-		Service.sortSubOrders();
+		sortSubOrdersDao();
+	}
+
+	public static void sortSubOrdersDao()
+	{
+
+		ArrayList<SubOrder> subOrders = new ArrayList<SubOrder>();
+		subOrders.addAll(Dao.getSubOrders());
+
+		int position, scan;
+		for (position = subOrders.size() - 1; position >= 0; position--) {
+			for (scan = 0; scan <= position - 1; scan++) {
+				if (subOrders.get(scan).getEarliestLoadingTime()
+						.after((subOrders.get(scan + 1).getEarliestLoadingTime())))
+					swap(subOrders, scan, scan + 1);
+			}
+		}
+		for (int i = subOrders.size() - 1; i >= 0; i--) {
+			Dao.removeSubOrder(Dao.getSubOrders().get(i));
+		}
+		for (int i = 0; i < subOrders.size(); i++) {
+			Dao.addSubOrder(subOrders.get(i));
+		}
+	}
+
+	private static <T> void swap(ArrayList<T> items, int index1, int index2)
+	{
+		T temp = items.get(index1);
+		items.set(index1, items.get(index2));
+		items.set(index2, temp);
 	}
 
 	/**
 	 * A method that creates the Schedule for when and where the SubOrders should be loaded.
-	 * This method is only run duing the Startup of the program.
+	 * @param subOrders: A list of SubOrders that is either waiting to be loaded, or has yet to arrive at Danish Crown 
 	 */
-	public static void createLoadingBaySchedule()
+	public static void createLoadingBaySchedule(ArrayList<SubOrder> subOrders)
 	{
-
-		ArrayList<SubOrder> subOrders = Dao.getSubOrders();
 
 		for (int i = 0; i < subOrders.size(); i++) {
 			System.out.println("Starting a new Iteration:");

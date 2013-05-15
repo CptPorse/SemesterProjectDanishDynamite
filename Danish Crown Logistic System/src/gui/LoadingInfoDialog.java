@@ -164,11 +164,23 @@ public class LoadingInfoDialog extends JDialog
 
 				loadingInfo.setTimeOfLoadingStart(Service.getTimeStringToDate(txfBeganLoading
 						.getText()));
+				loadingInfo.setTimeOfLoadingEnd(Service.getEndTime(loadingInfo
+						.getTimeOfLoadingStart(), loadingInfo.getSubOrder()
+						.getEstimatedLoadingTime()));
 				loadingInfo.setState(LoadingInfoState.LOADING);
+
+				//Updating texboxes and buttons
+				txfEndedLoading.setText(Service.getDateToStringTime(loadingInfo
+						.getTimeOfLoadingEnd()));
 				txfBeganLoading.setEditable(false);
 				btnBeginLoading.setEnabled(false);
 				txfEndedLoading.setEditable(true);
 				btnEndLoading.setEnabled(true);
+
+				//Updating LoadingBays nextAvailabeTime. This is used for re-sorting LoadingInfos
+				loadingInfo.getLoadingBay().setNextAvailableTime(loadingInfo.getTimeOfLoadingEnd());
+				Service.refreshLoadingBays(loadingInfo.getSubOrder().getProductType());
+
 				LoadingBayView.fillInfo(null);
 
 				//Update the trailer view and trailer state - Christian
@@ -178,6 +190,13 @@ public class LoadingInfoDialog extends JDialog
 			}
 
 			if (e.getSource() == btnEndLoading) {
+
+				loadingInfo.setTimeOfLoadingEnd(Service.getTimeStringToDate(txfEndedLoading
+						.getText()));
+
+				//Updating LoadingBays nextAvailabeTime. This is used for re-sorting LoadingInfos
+				loadingInfo.getLoadingBay().setNextAvailableTime(loadingInfo.getTimeOfLoadingEnd());
+				Service.refreshLoadingBays(loadingInfo.getSubOrder().getProductType());
 
 				// sets the loadingInfo as finished
 				loadingInfo.setState(LoadingInfoState.FINISHED);
