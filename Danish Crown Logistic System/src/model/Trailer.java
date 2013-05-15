@@ -6,6 +6,9 @@ import java.util.Date;
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 
+import service.Service;
+import dao.Dao;
+
 @NonNullByDefault
 public class Trailer
 {
@@ -160,9 +163,42 @@ public class Trailer
 		subOrders.remove(subOrder);
 	}
 
+	//Author: Christian Møller Pedersen
 	@Override
 	public String toString()
 	{
-		return trailerID;
+		String string = null;
+		switch (trailerState) {
+		case ARRIVED:
+			string = "<html><table>Trailer: " + trailerID + "<br>" + subOrders.get(0).getOrder();
+			break;
+		case BEING_LOADED:
+			LoadingBay lb = null;
+			for (LoadingInfo li : Dao.getLoadingInfos())
+			{
+				if (li.getSubOrder().getTrailer() == this)
+				{
+					lb = li.getLoadingBay();
+				}
+			}
+			string = "<html><table>Trailer: " + trailerID + "<br>" + lb;
+			break;
+		case DEPARTED:
+			string = "<html><table>Trailer: " + trailerID + "<br>Departed: "
+					+ Service.getDateToStringTime(timeOfDeparture);
+			break;
+		case ENROUTE:
+			string = "<html><table>Trailer: " + trailerID + "<br>ETA: " + Service.getDateToStringTime(timeOfArrival);
+			break;
+		case LOADED:
+			string = "<html><table>Trailer: " + trailerID + "<br>Weight: " + weightCurrent + " kg<br>Max: " + weightMax
+					+ " kg";
+			break;
+		default:
+			string = trailerID;
+			break;
+
+		}
+		return string;
 	}
 }

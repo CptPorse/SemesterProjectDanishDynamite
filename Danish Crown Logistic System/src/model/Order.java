@@ -88,7 +88,8 @@ public class Order
 	private double calculateWeightMargin()
 	{
 		double totalWeight = 0;
-		for (SubOrder subOrder : subOrders) {
+		for (SubOrder subOrder : subOrders)
+		{
 			totalWeight += subOrder.getEstimatedWeight();
 		}
 		return totalWeight * ((weightMarginPercent / 100));
@@ -97,7 +98,7 @@ public class Order
 	@Override
 	public String toString()
 	{
-		return "OrderNumber: " + orderNumber;
+		return "Order ID: " + orderNumber;
 	}
 
 }

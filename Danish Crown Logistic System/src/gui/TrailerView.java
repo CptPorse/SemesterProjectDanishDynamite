@@ -136,8 +136,6 @@ public class TrailerView extends JFrame
 		case ENROUTE:
 			model = EnRouteModel;
 			break;
-		case IDLE:
-			break;
 		case LOADED:
 			model = LoadedModel;
 			break;
@@ -178,7 +176,7 @@ public class TrailerView extends JFrame
 			}
 			if (e.getSource() == btnApprove)
 			{
-				if (lstLoaded.isSelectionEmpty() == true)
+				if (lstLoaded.isSelectionEmpty() == false)
 				{
 					(lstLoaded.getSelectedValue()).setTrailerState(TrailerState.DEPARTED);
 					(lstLoaded.getSelectedValue()).setTimeOfDeparture(DU.createDate());
