@@ -157,7 +157,10 @@ public class Service
 	{
 		String hours = String.valueOf(date.getHours());
 		String minutes = String.valueOf(date.getMinutes());
+		if (minutes.length() == 1) {
+			minutes = "0" + minutes;
 
+		}
 		return hours + ":" + minutes;
 	}
 
