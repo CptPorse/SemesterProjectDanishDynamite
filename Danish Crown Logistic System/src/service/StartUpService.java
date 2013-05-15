@@ -49,6 +49,8 @@ public class StartUpService
 		ArrayList<SubOrder> subOrders = Dao.getSubOrders();
 
 		for (int i = 0; i < subOrders.size(); i++) {
+			System.out.println("Starting a new Iteration:");
+			System.out.println("Finding the optimal LoadingBay:");
 			//Initiates all needed objects.
 			SubOrder subOrder = subOrders.get(i);
 			ProductType productType = subOrder.getProductType();
@@ -64,13 +66,17 @@ public class StartUpService
 					+ " is the first avaliable to handle " + subOrder);
 
 			LoadingInfo loadingInfo = Service.createLoadingInfo(subOrder, loadingBay);
-			System.out.println();
-			System.out.println("New LoadingInfo from " + subOrder);
+			System.out.println("New LoadingInfo created for " + subOrder);
 
 			//Sets the scheduled time for when the LoadingInfo is to start
 			loadingInfo.setTimeOfLoadingStart(loadingBay.getNextAvailableTime());
+			System.out.println("Its Time of loading start is: "
+					+ Service.getDateToStringTime(loadingInfo.getTimeOfLoadingStart()));
 			loadingInfo.setTimeOfLoadingEnd(Service.getEndTime(loadingInfo.getTimeOfLoadingStart(),
 					subOrder.getEstimatedLoadingTime()));
+			System.out.println("Its Time of loading end is: "
+					+ Service.getDateToStringTime(loadingInfo.getTimeOfLoadingEnd()));
+			System.out.println();
 
 			//Sets the nextAvailableTime for the LoadingBay to the time when the SubOrder is loaded
 			loadingBay.setNextAvailableTime(loadingInfo.getTimeOfLoadingEnd());
