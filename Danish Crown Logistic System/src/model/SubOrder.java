@@ -1,10 +1,13 @@
 package model;
 
+import java.util.Date;
+
 public class SubOrder {
 
 	private double estimatedWeight;
 	private int estimatedLoadingTime;
 	private boolean isLoaded = false;
+	private Date earliestLoadingTime;
 	private Order order;
 	private Trailer trailer;
 	private ProductType productType;
@@ -17,6 +20,14 @@ public class SubOrder {
 		this.productType = productType;
 		this.estimatedLoadingTime = (int) (this.productType
 				.getminuteToKiloRatio() * this.estimatedWeight);
+	}
+
+	public boolean isLoaded() {
+		return isLoaded;
+	}
+
+	public void setLoaded(boolean isLoaded) {
+		this.isLoaded = isLoaded;
 	}
 
 	public double getEstimatedWeight() {
@@ -57,6 +68,14 @@ public class SubOrder {
 
 	public void setProductType(ProductType productType) {
 		this.productType = productType;
+	}
+
+	public Date getEarliestLoadingTime() {
+		return earliestLoadingTime;
+	}
+
+	public void setEarliestLoadingTime(Date earliestLoadingTime) {
+		this.earliestLoadingTime = earliestLoadingTime;
 	}
 
 	@Override

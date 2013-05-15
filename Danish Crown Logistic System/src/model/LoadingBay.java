@@ -7,6 +7,7 @@ import java.util.Date;
 public class LoadingBay {
 
 	private int loadingBayNumber;
+	private boolean isloading;
 	private ProductType productType;
 	private ArrayList<LoadingInfo> loadingInfos;
 
@@ -23,6 +24,14 @@ public class LoadingBay {
 
 	public void setLoadingBayNumber(int loadingBayNumber) {
 		this.loadingBayNumber = loadingBayNumber;
+	}
+
+	public boolean isIsloading() {
+		return isloading;
+	}
+
+	public void setIsloading(boolean isloading) {
+		this.isloading = isloading;
 	}
 
 	public ProductType getProductType() {
@@ -54,34 +63,26 @@ public class LoadingBay {
 		loadingInfos.remove(loadingInfo);
 	}
 
-	public int getBayWaitingTime() {
+	public Date getNextFreeTime(Date earliestPacking) {
 
-		int waitingTime = 0;
-		for (int i = 0; i < loadingInfos.size(); i++) {
-			int timeStart = (loadingInfos.get(i).getTimeOfLoadingStart()
-					.getHours())
-					* 60
-					+ (loadingInfos.get(i).getTimeOfLoadingEnd().getMinutes());
-			int timeEnd = (loadingInfos.get(i).getTimeOfLoadingEnd().getHours())
-					* 60
-					+ (loadingInfos.get(i).getTimeOfLoadingStart().getMinutes());
-			waitingTime = +timeEnd - timeStart;
-		}
-		return waitingTime;
-	}
+		Date loadingDone = earliestPacking;
 
-	// NOT WORKING
-	public Date getNextFreeTime() {
+		if (isIsloading() == true) {
+			for (LoadingInfo loadingInfo : loadingInfos) {
+				if (loadingInfo.getState() == LoadingInfoState.LOADING) {
+					loadingInfo.getTimeOfLoadingEnd();
+				}
+			}
+		} else {
+			if (loadingInfos.size() == 1) {
 
-		Date loadingDone = null;
-		for (int i = 0; i < loadingInfos.size(); i++) {
-			System.out.println(loadingInfos.get(i).getTimeOfLoadingStart());
-			if (loadingInfos.get(i).getState() == LoadingInfoState.LOADING) {
-				loadingDone = loadingInfos.get(i).getTimeOfLoadingEnd();
-			} else {
 				loadingDone = loadingInfos.get(loadingInfos.size() - 1)
 						.getTimeOfLoadingEnd();
+			}
+			if (loadingInfos.size() > 1) {
 
+				loadingDone = loadingInfos.get(loadingInfos.size() - 2)
+						.getTimeOfLoadingEnd();
 			}
 		}
 		return loadingDone;
