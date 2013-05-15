@@ -121,10 +121,18 @@ public class Service
 		items.set(index2, temp);
 	}
 
+	/**
+	 * A method that used to find the first avaliable LoadingBay available for the Suborder.
+	 * @param productType: The productType the SubOrder is made of. Used to filter out loadingBays that cannot load this.
+	 * @param earliestLoadingTime: The earliest time the SubOrder can be loaded unto a Truck.
+	 * @return An Object of type LoadingBay, which has the shortest waitingtime, compared to when the SubOrder earliest can be loaded.
+	 * @author Jens Porse
+	 */
 	public static LoadingBay firstAvailableLoadingBay(ProductType productType,
 			Date earliestLoadingTime)
 	{
 
+		//Creates a list of all LoadingBays in memory which can handle the productType in question
 		ArrayList<LoadingBay> loadingBays = new ArrayList<LoadingBay>();
 
 		for (int i = 0; i < Dao.getLoadingBays().size(); i++) {
@@ -133,16 +141,21 @@ public class Service
 			}
 		}
 
+		//Sets the first LoadingBay in the list as the baseline for comparison  
 		LoadingBay earliestLoadingBay = loadingBays.get(0);
-		Long shortestWaitTime = earliestLoadingBay.getNextFreeTime(earliestLoadingTime).getTime();
+		Long shortestWaitTime = earliestLoadingBay.getNextFreeTime(earliestLoadingTime);
+
+		//Loops through all LoadingBays, and asks for the loadingBays wait time in milliseconds, compared to the LoadinInfos earliest loading time
 		for (int n = 0; n < loadingBays.size(); n++) {
-			Date bayAvailable = loadingBays.get(n).getNextFreeTime(earliestLoadingTime);
-			Long waitTime = (bayAvailable.getTime() - earliestLoadingTime.getTime());
-			if (waitTime <= shortestWaitTime && waitTime >= 0) {
+			Long waitTime = (loadingBays.get(n).getNextFreeTime(earliestLoadingTime));
+			//Compares the two waiting times
+			if (waitTime <= shortestWaitTime) {
 				earliestLoadingBay = loadingBays.get(n);
 				shortestWaitTime = waitTime;
 			}
 		}
+		Date bayReadyAt = new Date(earliestLoadingTime.getTime() + shortestWaitTime);
+		earliestLoadingBay.setNextAvailableTime(bayReadyAt);
 		return earliestLoadingBay;
 	}
 

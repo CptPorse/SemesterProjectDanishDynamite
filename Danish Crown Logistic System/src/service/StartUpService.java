@@ -39,32 +39,41 @@ public class StartUpService
 		Service.sortSubOrders();
 	}
 
+	/**
+	 * A method that creates the Schedule for when and where the SubOrders should be loaded.
+	 * This method is only run duing the Startup of the program.
+	 */
 	public static void createLoadingBaySchedule()
 	{
 
 		ArrayList<SubOrder> subOrders = Dao.getSubOrders();
-		/*
-		 * 
-		 */
+
 		for (int i = 0; i < subOrders.size(); i++) {
+			//Initiates all needed objects.
 			SubOrder subOrder = subOrders.get(i);
 			ProductType productType = subOrder.getProductType();
-
 			Date earliestLoadingTime = subOrder.getEarliestLoadingTime();
+
+			//Askes for the loadingbay with the shortest waiting time, compared to when the subOrder itself is ready to be loaded
 			LoadingBay loadingBay = Service.firstAvailableLoadingBay(productType,
 					earliestLoadingTime);
 
-			LoadingInfo loadingInfo = Service.createLoadingInfo(subOrder, loadingBay);
+			System.out.println(subOrder + " is earliest ready to be loaded at: "
+					+ Service.getDateToStringTime(earliestLoadingTime));
+			System.out.println("Loadingbay " + loadingBay.getLoadingBayNumber()
+					+ " is the first avaliable to handle " + subOrder);
 
-			if (loadingBay.getLoadingInfos().size() == 1) {
-				loadingInfo.setTimeOfLoadingStart(earliestLoadingTime);
-				loadingInfo.setTimeOfLoadingEnd(Service.getEndTime(earliestLoadingTime,
-						subOrder.getEstimatedLoadingTime()));
-			} else {
-				loadingInfo.setTimeOfLoadingStart(loadingBay.getNextFreeTime(earliestLoadingTime));
-				loadingInfo.setTimeOfLoadingEnd(Service.getEndTime(
-						loadingInfo.getTimeOfLoadingStart(), subOrder.getEstimatedLoadingTime()));
-			}
+			LoadingInfo loadingInfo = Service.createLoadingInfo(subOrder, loadingBay);
+			System.out.println();
+			System.out.println("New LoadingInfo from " + subOrder);
+
+			//Sets the scheduled time for when the LoadingInfo is to start
+			loadingInfo.setTimeOfLoadingStart(loadingBay.getNextAvailableTime());
+			loadingInfo.setTimeOfLoadingEnd(Service.getEndTime(loadingInfo.getTimeOfLoadingStart(),
+					subOrder.getEstimatedLoadingTime()));
+
+			//Sets the nextAvailableTime for the LoadingBay to the time when the SubOrder is loaded
+			loadingBay.setNextAvailableTime(loadingInfo.getTimeOfLoadingEnd());
 		}
 	}
 
