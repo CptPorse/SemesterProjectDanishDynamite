@@ -29,30 +29,35 @@ public class TrailerView extends JFrame
 	{
 		setResizable(false);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		this.setBounds(630, 30, 604, 347);
+		this.setBounds(630, 30, 640, 350);
 		this.setTitle("Trailer View");
-
 		InitContent();
 		this.setVisible(true);
-
 	}
 
 	private Controller controller;
 
 	private JPanel contentPane;
-	private JLabel lblTrailerView;
 
-	private JList<Trailer> lstArrivingTrailers;
-	private DefaultListModel<Trailer> lstArrivingTrailersModel;
-	private JScrollPane scpArriving;
+	private JList<Trailer> lstEnRouteTrailers;
+	private DefaultListModel<Trailer> EnRouteModel;
+	private JScrollPane scpEnRoute;
 
-	private JList<Trailer> lstDeparturingTrailers;
-	private DefaultListModel<Trailer> lstDeparturingTrailersModel;
-	private JScrollPane scpDeparture;
+	private JList<Trailer> lstReadyTrailers;
+	private DefaultListModel<Trailer> ReadyModel;
+	private JScrollPane scpReady;
 
-	private JLabel lblNewLabel;
-	private JLabel lblDeparture;
-	private JButton btnHasArrived, btnCheckDeparture, btnRefreshListstemp;
+	private JList<Trailer> lstLoadedTrailers;
+	private DefaultListModel<Trailer> LoadedModel;
+	private JScrollPane scpLoaded;
+
+	private JList<Trailer> lstDepartedTrailers;
+	private DefaultListModel<Trailer> DepartedModel;
+	private JScrollPane scpDeparted;
+
+	private JLabel lblEnRoute, lblReady, lblLoaded, lblDeparted;
+
+	private JButton btnArrived, btnApprove;
 
 	private void InitContent()
 	{
@@ -63,49 +68,59 @@ public class TrailerView extends JFrame
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 
-		lblTrailerView = new JLabel("Trailer View");
-		lblTrailerView.setBounds(5, 5, 553, 14);
-		contentPane.add(lblTrailerView);
+		EnRouteModel = new DefaultListModel<Trailer>();
+		lstEnRouteTrailers = new JList<Trailer>(EnRouteModel);
+		lstEnRouteTrailers.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		scpEnRoute = new JScrollPane(lstEnRouteTrailers);
+		scpEnRoute.setBounds(5, 55, 130, 230);
+		contentPane.add(scpEnRoute);
 
-		lstArrivingTrailersModel = new DefaultListModel<Trailer>();
-		lstArrivingTrailers = new JList<Trailer>(lstArrivingTrailersModel);
-		lstArrivingTrailers.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		scpArriving = new JScrollPane(lstArrivingTrailers);
-		scpArriving.setBounds(5, 55, 145, 230);
-		contentPane.add(scpArriving);
+		ReadyModel = new DefaultListModel<Trailer>();
+		lstReadyTrailers = new JList<Trailer>(ReadyModel);
+		lstReadyTrailers.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		scpReady = new JScrollPane(lstReadyTrailers);
+		contentPane.add(scpReady);
+		scpReady.setBounds(170, 55, 130, 230);
 
-		lstDeparturingTrailersModel = new DefaultListModel<Trailer>();
-		lstDeparturingTrailers = new JList<Trailer>(lstDeparturingTrailersModel);
-		lstDeparturingTrailers.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		scpDeparture = new JScrollPane(lstDeparturingTrailers);
-		contentPane.add(scpDeparture);
-		scpDeparture.setBounds(285, 55, 145, 230);
+		LoadedModel = new DefaultListModel<Trailer>();
+		lstLoadedTrailers = new JList<Trailer>(LoadedModel);
+		lstLoadedTrailers.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		scpLoaded = new JScrollPane(lstLoadedTrailers);
+		contentPane.add(scpLoaded);
+		scpLoaded.setBounds(335, 55, 130, 230);
 
-		btnHasArrived = new JButton("hasArrived");
-		btnHasArrived.setBounds(170, 265, 89, 23);
-		contentPane.add(btnHasArrived);
-		btnHasArrived.addActionListener(controller);
+		DepartedModel = new DefaultListModel<Trailer>();
+		lstDepartedTrailers = new JList<Trailer>(DepartedModel);
+		lstDepartedTrailers.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		scpDeparted = new JScrollPane(lstDepartedTrailers);
+		contentPane.add(scpDeparted);
+		scpDeparted.setBounds(500, 55, 130, 230);
 
-		btnCheckDeparture = new JButton("Check Departure");
-		btnCheckDeparture.setBounds(464, 265, 113, 23);
-		contentPane.add(btnCheckDeparture);
-		btnCheckDeparture.addActionListener(controller);
+		lblEnRoute = new JLabel("En route:");
+		lblEnRoute.setBounds(5, 40, 130, 15);
+		contentPane.add(lblEnRoute);
 
-		lblNewLabel = new JLabel("Arrivingtrailers");
-		lblNewLabel.setBounds(5, 30, 89, 14);
-		contentPane.add(lblNewLabel);
+		lblReady = new JLabel("Ready:");
+		lblReady.setBounds(170, 40, 130, 15);
+		contentPane.add(lblReady);
 
-		lblDeparture = new JLabel("Trailer ready for departure");
-		lblDeparture.setBounds(285, 30, 134, 14);
-		contentPane.add(lblDeparture);
+		lblLoaded = new JLabel("Loaded:");
+		lblLoaded.setBounds(335, 40, 130, 15);
+		contentPane.add(lblLoaded);
 
-		btnRefreshListstemp = new JButton("Refresh lists(temp)");
-		btnRefreshListstemp.setBounds(464, 177, 124, 23);
-		contentPane.add(btnRefreshListstemp);
-		btnRefreshListstemp.addActionListener(controller);
+		lblDeparted = new JLabel("Departed:");
+		lblDeparted.setBounds(500, 40, 130, 15);
+		contentPane.add(lblDeparted);
 
-		controller.fillArrivingLst();
-		controller.fillDepartureLst();
+		btnArrived = new JButton("Arrived");
+		btnArrived.setBounds(5, 290, 130, 25);
+		contentPane.add(btnArrived);
+		btnArrived.addActionListener(controller);
+
+		btnApprove = new JButton("Approve");
+		btnApprove.setBounds(335, 290, 130, 25);
+		contentPane.add(btnApprove);
+		btnApprove.addActionListener(controller);
 	}
 
 	public class Controller implements ActionListener
@@ -113,73 +128,83 @@ public class TrailerView extends JFrame
 		@Override
 		public void actionPerformed(ActionEvent e)
 		{
-
-			if (e.getSource() == btnRefreshListstemp) {
-				fillArrivingLst();
-				fillDepartureLst();
-			}
-			if (e.getSource() == btnHasArrived) {
-				if (lstArrivingTrailers.isSelectionEmpty() == true) {
+			if (e.getSource() == btnArrived)
+			{
+				if (lstEnRouteTrailers.isSelectionEmpty() == true)
+				{
 					System.out.println("Tag dig sammen, du mangler at vælge et object fra listen");
-				} else {
+				}
+				else
+				{
 					// Changes the state from being outside the gate to being
 					// inside
-					(lstArrivingTrailers.getSelectedValue()).setTrailerState(TrailerState.ARRIVED);
-					for (SubOrder s : (lstArrivingTrailers.getSelectedValue()).getSubOrders()) {
+					(lstEnRouteTrailers.getSelectedValue()).setTrailerState(TrailerState.ARRIVED);
+					for (SubOrder s : (lstEnRouteTrailers.getSelectedValue()).getSubOrders())
+					{
 						s.getLoadingInfo().setState(LoadingInfoState.READY_TO_LOAD);
 					}
 					// refreshes the list
-					controller.fillArrivingLst();
+					controller.fillEnRouteLst();
 
 					//Updates Loadingbayview current view
 					LoadingBayView.fillInfo(LoadingBayView.getSelecetedLoadingBay());
 
 				}
 			}
-			if (e.getSource() == btnCheckDeparture) {
-				if (lstDeparturingTrailers.isSelectionEmpty() == true) {
+			if (e.getSource() == btnApprove)
+			{
+				if (lstLoadedTrailers.isSelectionEmpty() == true)
+				{
 					System.out.println("Tag dig sammen, du mangler at vælge et object fra listen");
-				} else {
+				}
+				else
+				{
 					// changes selected trailer to being departed
-					(lstDeparturingTrailers.getSelectedValue()).setTrailerState(TrailerState.DEPARTED);
-					// set the departuretime of the trailer
-					(lstDeparturingTrailers.getSelectedValue()).setTimeOfDeparture(DU.createDate());
+					(lstLoadedTrailers.getSelectedValue()).setTrailerState(TrailerState.DEPARTED);
+					// set the Departedtime of the trailer
+					(lstLoadedTrailers.getSelectedValue()).setTimeOfDeparture(DU.createDate());
 					// refreshes the list
-					controller.fillDepartureLst();
+					controller.fillDepartedLst();
 
 				}
 			}
 		}
 
-		public void fillArrivingLst()
+		public void fillEnRouteLst()
 		{
-			if (Dao.getTrailer().size() > 0) {
+			if (Dao.getTrailer().size() > 0)
+			{
 
 				ArrayList<Trailer> arraylistTrailer = new ArrayList<>();
-				for (Trailer t : Dao.getTrailer()) {
-					if (t.getTrailerState() == TrailerState.ENROUTE) {
+				for (Trailer t : Dao.getTrailer())
+				{
+					if (t.getTrailerState() == TrailerState.ENROUTE)
+					{
 						arraylistTrailer.add(t);
 					}
 				}
 				Trailer[] arrayTrailer = arraylistTrailer.toArray(new Trailer[0]);
 
-				lstArrivingTrailers.setListData(arrayTrailer);
+				lstEnRouteTrailers.setListData(arrayTrailer);
 			}
 		}
 
-		public void fillDepartureLst()
+		public void fillDepartedLst()
 		{
-			if (Dao.getTrailer().size() > 0) {
+			if (Dao.getTrailer().size() > 0)
+			{
 
 				ArrayList<Trailer> arraylistTrailer = new ArrayList<>();
-				for (Trailer t : Dao.getTrailer()) {
-					if (t.getTrailerState() == TrailerState.LOADED) {
+				for (Trailer t : Dao.getTrailer())
+				{
+					if (t.getTrailerState() == TrailerState.LOADED)
+					{
 						arraylistTrailer.add(t);
 					}
 				}
 				Trailer[] arrayTrailer = arraylistTrailer.toArray(new Trailer[0]);
 
-				lstDeparturingTrailers.setListData(arrayTrailer);
+				lstLoadedTrailers.setListData(arrayTrailer);
 			}
 		}
 
