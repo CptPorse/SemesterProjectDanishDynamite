@@ -148,6 +148,8 @@ public class Trailer
 	public void addSubOrder(SubOrder subOrder)
 	{
 		subOrders.add(subOrder);
+		//Updates the current weight of the trailer
+		weightCurrent += subOrder.getEstimatedWeight();
 	}
 
 	/**
@@ -166,9 +168,20 @@ public class Trailer
 		if (timeOfArrival.getMinutes() != 0) {
 			min = "" + timeOfArrival.getMinutes();
 		}
-		return "<html><table border=1 width=120 >" + "Trailer: "
-				+ tempTrailerID.substring(0, 12) + "<br/>" + "ETA: "
-				+ timeOfArrival.getHours() + ":" + min + "</table> </html>";
 
+		if (trailerState == TrailerState.ENROUTE) {
+
+			return "<html><table border=1 width=120 >" + "Trailer: "
+					+ tempTrailerID.substring(0, 12) + "<br/>" + "ETA: "
+					+ timeOfArrival.getHours() + ":" + min + "</table> </html>";
+		}
+		if (trailerState == TrailerState.LOADED) {
+
+			return "<html><table border=1 width=120 >" + "Trailer: "
+					+ tempTrailerID.substring(0, 12) + "<br/>" + "Weight: "
+					+ weightCurrent + "</table> </html>";
+		} else {
+			return "Trailer: " + trailerID;
+		}
 	}
 }

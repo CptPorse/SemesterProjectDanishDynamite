@@ -14,15 +14,19 @@ import javax.swing.JScrollPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.border.EmptyBorder;
 
+import model.LoadingInfoState;
+import model.SubOrder;
 import model.Trailer;
 import model.TrailerState;
 import dao.Dao;
 import dateutil.DU;
 
 //Author: Soren Moller Nielsen
-public class TrailerView extends JFrame {
+public class TrailerView extends JFrame
+{
 
-	public TrailerView() {
+	public TrailerView()
+	{
 		setResizable(false);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setBounds(1000, 100, 604, 347);
@@ -50,7 +54,8 @@ public class TrailerView extends JFrame {
 	private JLabel lblDeparture;
 	private JButton btnHasArrived, btnCheckDeparture, btnRefreshListstemp;
 
-	private void InitContent() {
+	private void InitContent()
+	{
 		controller = new Controller();
 
 		contentPane = new JPanel();
@@ -105,9 +110,11 @@ public class TrailerView extends JFrame {
 		controller.fillDepartureLst();
 	}
 
-	public class Controller implements ActionListener {
+	public class Controller implements ActionListener
+	{
 		@Override
-		public void actionPerformed(ActionEvent e) {
+		public void actionPerformed(ActionEvent e)
+		{
 
 			if (e.getSource() == btnRefreshListstemp) {
 				fillArrivingLst();
@@ -122,7 +129,11 @@ public class TrailerView extends JFrame {
 					// inside
 					(lstArrivingTrailers.getSelectedValue())
 							.setTrailerState(TrailerState.ARRIVED);
-
+					for (SubOrder s : (lstArrivingTrailers.getSelectedValue())
+							.getSubOrders()) {
+						s.getLoadingInfo().setState(
+								LoadingInfoState.READY_TO_LOAD);
+					}
 					// refreshes the list
 					controller.fillArrivingLst();
 				}
@@ -145,7 +156,8 @@ public class TrailerView extends JFrame {
 			}
 		}
 
-		public void fillArrivingLst() {
+		public void fillArrivingLst()
+		{
 			if (Dao.getTrailer().size() > 0) {
 
 				ArrayList<Trailer> arraylistTrailer = new ArrayList<>();
@@ -161,7 +173,8 @@ public class TrailerView extends JFrame {
 			}
 		}
 
-		public void fillDepartureLst() {
+		public void fillDepartureLst()
+		{
 			if (Dao.getTrailer().size() > 0) {
 
 				ArrayList<Trailer> arraylistTrailer = new ArrayList<>();

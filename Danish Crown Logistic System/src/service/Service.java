@@ -13,24 +13,28 @@ import model.Trailer;
 import model.TrailerState;
 import dao.Dao;
 
-public class Service {
+public class Service
+{
 
 	public static Driver createDriver(String name, String phoneNumber,
-			String licensePlate) {
+			String licensePlate)
+	{
 		Driver driver = new Driver(name, phoneNumber, licensePlate);
 		Dao.addDriver(driver);
 		return driver;
 	}
 
 	public static Trailer createTrailer(String trailerID, double weightMax,
-			Date timeOfArrival) {
+			Date timeOfArrival)
+	{
 		Trailer trailer = new Trailer(trailerID, weightMax, timeOfArrival);
 		Dao.addTrailer(trailer);
 		return trailer;
 	}
 
 	public static ProductType createProductType(String description,
-			double minuteToKiloRatio) {
+			double minuteToKiloRatio)
+	{
 		ProductType productType = new ProductType(description,
 				minuteToKiloRatio);
 		Dao.addProductType(productType);
@@ -38,14 +42,16 @@ public class Service {
 	}
 
 	public static Order createOrder(int orderNumber, double weightMargin,
-			Date loadingDate) {
+			Date loadingDate)
+	{
 		Order order = new Order(orderNumber, weightMargin, loadingDate);
 		Dao.addOrder(order);
 		return order;
 	}
 
 	public static SubOrder createSubOrder(double estimatedWeight,
-			Trailer trailer, ProductType productType) {
+			Trailer trailer, ProductType productType)
+	{
 		SubOrder subOrder = new SubOrder(estimatedWeight, trailer, productType);
 		trailer.addSubOrder(subOrder);
 		Dao.addSubOrder(subOrder);
@@ -54,21 +60,25 @@ public class Service {
 	}
 
 	public static LoadingBay createLoadingBay(int loadingBayNumber,
-			ProductType productType) {
+			ProductType productType)
+	{
 		LoadingBay loadingBay = new LoadingBay(loadingBayNumber, productType);
 		Dao.addLoadingBay(loadingBay);
 		return loadingBay;
 	}
 
 	public static LoadingInfo createLoadingInfo(SubOrder subOrder,
-			LoadingBay loadingBay) {
+			LoadingBay loadingBay)
+	{
 		LoadingInfo loadingInfo = new LoadingInfo(subOrder, loadingBay);
 		Dao.addLoadingInfo(loadingInfo);
 		loadingBay.addLoadingInfo(loadingInfo);
+		subOrder.setLoadingInfo(loadingInfo);
 		return loadingInfo;
 	}
 
-	public static void sortTrailerArrival() {
+	public static void sortTrailerArrival()
+	{
 
 		ArrayList<Trailer> trailers = new ArrayList<Trailer>();
 		trailers.addAll(Dao.getTrailer());
@@ -89,7 +99,8 @@ public class Service {
 		}
 	}
 
-	public static void sortSubOrders() {
+	public static void sortSubOrders()
+	{
 
 		ArrayList<SubOrder> subOrders = new ArrayList<SubOrder>();
 		subOrders.addAll(Dao.getSubOrders());
@@ -113,14 +124,16 @@ public class Service {
 		}
 	}
 
-	private static <T> void swap(ArrayList<T> items, int index1, int index2) {
+	private static <T> void swap(ArrayList<T> items, int index1, int index2)
+	{
 		T temp = items.get(index1);
 		items.set(index1, items.get(index2));
 		items.set(index2, temp);
 	}
 
 	public static LoadingBay firstAvailableLoadingBay(ProductType productType,
-			Date earliestLoadingTime) {
+			Date earliestLoadingTime)
+	{
 
 		ArrayList<LoadingBay> loadingBays = new ArrayList<LoadingBay>();
 
@@ -147,9 +160,10 @@ public class Service {
 	}
 
 	// Author: Jens Porse
-	public static Date getEndTime(Date startTime, int loadingTime) {
+	public static Date getEndTime(Date startTime, int loadingTime)
+	{
 		Long time = startTime.getTime();
-		Long loadingTimeInMS = (long) (loadingTime * 60000);
+		Long loadingTimeInMS = (long)(loadingTime * 60000);
 
 		Date endTime = new Date(time + loadingTimeInMS);
 		return endTime;

@@ -19,9 +19,11 @@ import model.TrailerState;
 import dateutil.DU;
 
 //Author: Jens "Il duce" Nyberg Porse
-public class LoadingInfoDialog extends JDialog {
+public class LoadingInfoDialog extends JDialog
+{
 
-	public LoadingInfoDialog(JFrame owner) {
+	public LoadingInfoDialog(JFrame owner)
+	{
 		super(owner);
 		System.out.println("Created new Window");
 		setTitle("Loading Info");
@@ -41,7 +43,8 @@ public class LoadingInfoDialog extends JDialog {
 
 	private Controller controller;
 
-	private void InitContent() {
+	private void InitContent()
+	{
 
 		controller = new Controller();
 
@@ -117,7 +120,8 @@ public class LoadingInfoDialog extends JDialog {
 	// Author: Soren Moller Nielsen
 	private LoadingInfo loadingInfo;
 
-	public void fillModel(LoadingInfo lInfo) {
+	public void fillModel(LoadingInfo lInfo)
+	{
 		this.loadingInfo = lInfo;
 		txfTrailer.setText(lInfo.getSubOrder().getTrailer().getTrailerID());
 		txfProductType.setText(lInfo.getSubOrder().getProductType()
@@ -127,24 +131,25 @@ public class LoadingInfoDialog extends JDialog {
 	}
 
 	// Author: Soren Moller Nielsen
-	private class Controller implements ActionListener {
+	private class Controller implements ActionListener
+	{
 
 		@Override
-		public void actionPerformed(ActionEvent e) {
+		public void actionPerformed(ActionEvent e)
+		{
 
 			if (e.getSource() == btnBeginLoading) {
 				// Checks the format of the input
 				if (txfBeganLoading.getText().isEmpty() == true) {
 					txfBeganLoading.setText("invalid input");
 				}
-				// If no unregularities have been caught, starts loading the
-				// truck
+				// If no unregularities have been caught, starts loading the truck
 				else {
 
 					loadingInfo.setTimeOfLoadingStart(DU
 							.createDate(txfBeganLoading.getText()));
 					loadingInfo.setState(LoadingInfoState.LOADING);
-					System.out.println("Woop di doo!, began loading ze truck!");
+
 				}
 
 			}
