@@ -127,7 +127,8 @@ public class LoadingInfoDialog extends JDialog
 		txfLoadingBay.setText("" + lInfo.getLoadingBay().getLoadingBayNumber());
 		txfBeganLoading.setText(Service.getDateToStringTime(lInfo.getTimeOfLoadingStart()));
 		txfEndedLoading.setText(Service.getDateToStringTime(lInfo.getTimeOfLoadingEnd()));
-		if (lInfo.getState() == LoadingInfoState.PENDING || lInfo.getState() == LoadingInfoState.FINISHED) {
+		if (lInfo.getState() == LoadingInfoState.PENDING
+				|| lInfo.getState() == LoadingInfoState.FINISHED) {
 			txfBeganLoading.setEditable(false);
 			txfEndedLoading.setEditable(false);
 			btnBeginLoading.setEnabled(false);
@@ -141,9 +142,8 @@ public class LoadingInfoDialog extends JDialog
 
 		}
 		if (lInfo.getState() == LoadingInfoState.LOADING) {
-			txfBeganLoading.setEditable(true);
-
-			btnBeginLoading.setEnabled(true);
+			txfBeganLoading.setEditable(false);
+			btnBeginLoading.setEnabled(false);
 			txfEndedLoading.setEditable(true);
 			btnEndLoading.setEnabled(true);
 		}
@@ -160,55 +160,44 @@ public class LoadingInfoDialog extends JDialog
 
 			if (e.getSource() == btnBeginLoading) {
 
-				// Checks the format of the input
-				if (txfBeganLoading.getText().isEmpty() == true) {
-					txfBeganLoading.setText("invalid input");
-				}
-				// If no unregularities have been caught, starts loading the truck
-				else {
-
-					loadingInfo.setTimeOfLoadingStart(Service.getTimeStringToDate(txfBeganLoading.getText()));
-					loadingInfo.setState(LoadingInfoState.LOADING);
-					txfEndedLoading.setEditable(true);
-					btnEndLoading.setEnabled(true);
-
-				}
+				loadingInfo.setTimeOfLoadingStart(Service.getTimeStringToDate(txfBeganLoading
+						.getText()));
+				loadingInfo.setState(LoadingInfoState.LOADING);
+				txfBeganLoading.setEditable(false);
+				btnBeginLoading.setEnabled(false);
+				txfEndedLoading.setEditable(true);
+				btnEndLoading.setEnabled(true);
+				LoadingBayView.fillInfo(LoadingBayView.getSelecetedLoadingBay());
 
 			}
 
 			if (e.getSource() == btnEndLoading) {
-				// Checks if the format is correct
-				if (txfEndedLoading.getText().isEmpty() == true) {
-					txfEndedLoading.setText("Invalid input");
+
+				// sets the loadingInfo as finished
+				loadingInfo.setState(LoadingInfoState.FINISHED);
+
+				// sets the subOrder as loaded
+				loadingInfo.getSubOrder().setLoaded(true);
+
+				// checking, if the trailer is fully loaded
+				boolean trailerFullyLoaded = true;
+				ArrayList<SubOrder> subOrders = loadingInfo.getSubOrder().getTrailer()
+						.getSubOrders();
+
+				// seaches if any of the attached suborders to the trailer, aren't done loading
+				for (SubOrder s : subOrders) {
+					if (s.isLoaded() == false) {
+						trailerFullyLoaded = false;
+					}
 				}
-				// sets the loadinginfo as loaded, possible trailer aswell
-				else {
-
-					// sets the loadingInfo as finished
-					loadingInfo.setState(LoadingInfoState.FINISHED);
-
-					// sets the subOrder as loaded
-					loadingInfo.getSubOrder().setLoaded(true);
-
-					// checking, if the trailer is fully loaded
-					boolean trailerFullyLoaded = true;
-					ArrayList<SubOrder> subOrders = loadingInfo.getSubOrder().getTrailer().getSubOrders();
-
-					// seaches if any of the attached suborders to the trailer, aren't done loading
-					for (SubOrder s : subOrders) {
-						if (s.isLoaded() == false) {
-							trailerFullyLoaded = false;
-						}
-					}
-					// if all the suborders are done, trailer changes trailerstate to: loaded
-					if (trailerFullyLoaded == true) {
-						loadingInfo.getSubOrder().getTrailer().setTrailerState(TrailerState.LOADED);
-
-					}
+				// if all the suborders are done, trailer changes trailerstate to: loaded
+				if (trailerFullyLoaded == true) {
+					loadingInfo.getSubOrder().getTrailer().setTrailerState(TrailerState.LOADED);
 
 				}
-
+				LoadingBayView.fillInfo(LoadingBayView.getSelecetedLoadingBay());
 			}
+
 			if (e.getSource() == btnCancel) {
 
 			}

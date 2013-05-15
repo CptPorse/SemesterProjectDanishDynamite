@@ -13,36 +13,34 @@ import model.Trailer;
 import dao.Dao;
 import dateutil.DU;
 
-public class StartUpService {
+public class StartUpService
+{
 
-	public static void setSubOrderEarliestLoadingTime() {
+	public static void setSubOrderEarliestLoadingTime()
+	{
 
 		ArrayList<Trailer> trailers = Dao.getTrailer();
 
 		for (int i = 0; i < trailers.size(); i++) {
 			if (trailers.get(i).getSubOrders().size() > 1) {
 				Date time = trailers.get(i).getTimeOfArrival();
-				ArrayList<SubOrder> trailerSubOrders = trailers.get(i)
-						.getSubOrders();
+				ArrayList<SubOrder> trailerSubOrders = trailers.get(i).getSubOrders();
 				for (SubOrder subOrder : trailerSubOrders) {
 					subOrder.setEarliestLoadingTime(time);
-					time = Service.getEndTime(time,
-							subOrder.getEstimatedLoadingTime());
+					time = Service.getEndTime(time, subOrder.getEstimatedLoadingTime());
 				}
 
 			} else {
-				trailers.get(i)
-						.getSubOrders()
-						.get(0)
-						.setEarliestLoadingTime(
-								trailers.get(i).getTimeOfArrival());
+				trailers.get(i).getSubOrders().get(0)
+						.setEarliestLoadingTime(trailers.get(i).getTimeOfArrival());
 
 			}
 		}
 		Service.sortSubOrders();
 	}
 
-	public static void createLoadingBaySchedule() {
+	public static void createLoadingBaySchedule()
+	{
 
 		ArrayList<SubOrder> subOrders = Dao.getSubOrders();
 
@@ -50,67 +48,45 @@ public class StartUpService {
 			SubOrder subOrder = subOrders.get(i);
 			ProductType productType = subOrder.getProductType();
 			Date earliestLoadingTime = subOrder.getEarliestLoadingTime();
-			LoadingBay loadingBay = Service.firstAvailableLoadingBay(
-					productType, earliestLoadingTime);
+			LoadingBay loadingBay = Service.firstAvailableLoadingBay(productType,
+					earliestLoadingTime);
 
-			LoadingInfo loadingInfo = Service.createLoadingInfo(subOrder,
-					loadingBay);
+			LoadingInfo loadingInfo = Service.createLoadingInfo(subOrder, loadingBay);
 
 			if (loadingBay.getLoadingInfos().size() == 1) {
 				loadingInfo.setTimeOfLoadingStart(earliestLoadingTime);
-				loadingInfo
-						.setTimeOfLoadingEnd(Service.getEndTime(
-								earliestLoadingTime,
-								subOrder.getEstimatedLoadingTime()));
-			} else {
-				loadingInfo.setTimeOfLoadingStart(loadingBay
-						.getNextFreeTime(earliestLoadingTime));
-				loadingInfo.setTimeOfLoadingEnd(Service.getEndTime(
-						loadingInfo.getTimeOfLoadingStart(),
+				loadingInfo.setTimeOfLoadingEnd(Service.getEndTime(earliestLoadingTime,
 						subOrder.getEstimatedLoadingTime()));
+			} else {
+				loadingInfo.setTimeOfLoadingStart(loadingBay.getNextFreeTime(earliestLoadingTime));
+				loadingInfo.setTimeOfLoadingEnd(Service.getEndTime(
+						loadingInfo.getTimeOfLoadingStart(), subOrder.getEstimatedLoadingTime()));
 			}
 		}
 	}
 
 	@SuppressWarnings("deprecation")
-	public static void startUpData() {
+	public static void startUpData()
+	{
 
-		Driver d1 = Service.createDriver("Peter Hansen", "22 37 54 98",
-				"EH 95 128");
-		Driver d2 = Service.createDriver("Søren Overgaard", "22 52 12 71",
-				"GH 81 411");
-		Driver d3 = Service.createDriver("Morgens Nygaard", "22 14 21 45",
-				"TR 92 798");
-		Driver d4 = Service.createDriver("Ove Pedersen", "22 74 45 19",
-				"DW 96 725");
-		Driver d5 = Service.createDriver("Kasper Bilder", "22 49 98 94",
-				"EQ 87 224");
-		Driver d6 = Service.createDriver("Jens Skærbæk", "22 18 74 67",
-				"KE 92 465");
-		Driver d7 = Service.createDriver("Lasse Tidemann", "22 54 74 67",
-				"VF 81 841");
-		Driver d8 = Service.createDriver("Peder Bruun", "22 18 12 67",
-				"GH 81 124");
-		Driver d9 = Service.createDriver("Adam Søndergaard", "22 47 74 67",
-				"TK 78 165");
-		Driver d10 = Service.createDriver("Benny Bliktud", "22 87 74 67",
-				"LD 98 114");
-		Driver d11 = Service.createDriver("Carsten Green", "22 46 74 67",
-				"PS 94 748");
-		Driver d12 = Service.createDriver("Dennis Lindstrøm", "22 32 74 67",
-				"SU 84 449");
-		Driver d13 = Service.createDriver("Felix Kat", "22 48 74 67",
-				"PA 79 686");
-		Driver d14 = Service.createDriver("Gunnar Ølstyk", "22 97 74 67",
-				"YE 95 782");
-		Driver d15 = Service.createDriver("Henrik Huber", "22 88 74 67",
-				"AN 97 354");
-		Driver d16 = Service.createDriver("Ivan Jørgensen", "22 48 74 67",
-				"ME 86 987");
-		Driver d17 = Service.createDriver("Janus Marius", "22 23 74 67",
-				"MM 78 325");
-		Driver d18 = Service.createDriver("Klaus Bundgaard", "22 11 74 67",
-				"SE 92 778");
+		Driver d1 = Service.createDriver("Peter Hansen", "22 37 54 98", "EH 95 128");
+		Driver d2 = Service.createDriver("Søren Overgaard", "22 52 12 71", "GH 81 411");
+		Driver d3 = Service.createDriver("Morgens Nygaard", "22 14 21 45", "TR 92 798");
+		Driver d4 = Service.createDriver("Ove Pedersen", "22 74 45 19", "DW 96 725");
+		Driver d5 = Service.createDriver("Kasper Bilder", "22 49 98 94", "EQ 87 224");
+		Driver d6 = Service.createDriver("Jens Skærbæk", "22 18 74 67", "KE 92 465");
+		Driver d7 = Service.createDriver("Lasse Tidemann", "22 54 74 67", "VF 81 841");
+		Driver d8 = Service.createDriver("Peder Bruun", "22 18 12 67", "GH 81 124");
+		Driver d9 = Service.createDriver("Adam Søndergaard", "22 47 74 67", "TK 78 165");
+		Driver d10 = Service.createDriver("Benny Bliktud", "22 87 74 67", "LD 98 114");
+		Driver d11 = Service.createDriver("Carsten Green", "22 46 74 67", "PS 94 748");
+		Driver d12 = Service.createDriver("Dennis Lindstrøm", "22 32 74 67", "SU 84 449");
+		Driver d13 = Service.createDriver("Felix Kat", "22 48 74 67", "PA 79 686");
+		Driver d14 = Service.createDriver("Gunnar Ølstyk", "22 97 74 67", "YE 95 782");
+		Driver d15 = Service.createDriver("Henrik Huber", "22 88 74 67", "AN 97 354");
+		Driver d16 = Service.createDriver("Ivan Jørgensen", "22 48 74 67", "ME 86 987");
+		Driver d17 = Service.createDriver("Janus Marius", "22 23 74 67", "MM 78 325");
+		Driver d18 = Service.createDriver("Klaus Bundgaard", "22 11 74 67", "SE 92 778");
 
 		Date date1 = new Date(113, 0, 1, 9, 0);
 		Date date2 = new Date(113, 0, 1, 9, 20);
@@ -231,8 +207,8 @@ public class StartUpService {
 		Order o13 = Service.createOrder(13, 150, DU.createDate("2013-01-01"));
 		Order o14 = Service.createOrder(14, 150, DU.createDate("2013-01-01"));
 		Order o15 = Service.createOrder(15, 150, DU.createDate("2013-01-01"));
-		Order o16 = Service.createOrder(15, 150, DU.createDate("2013-01-01"));
-		Order o17 = Service.createOrder(15, 150, DU.createDate("2013-01-01"));
+		Order o16 = Service.createOrder(16, 150, DU.createDate("2013-01-01"));
+		Order o17 = Service.createOrder(17, 150, DU.createDate("2013-01-01"));
 
 		o1.addSubOrder(so1);
 		o2.addSubOrder(so2);
