@@ -21,18 +21,22 @@ public class StartUpService
 
 		ArrayList<Trailer> trailers = Dao.getTrailer();
 
-		for (int i = 0; i < trailers.size(); i++) {
-			if (trailers.get(i).getSubOrders().size() > 1) {
+		for (int i = 0; i < trailers.size(); i++)
+		{
+			if (trailers.get(i).getSubOrders().size() > 1)
+			{
 				Date time = trailers.get(i).getTimeOfArrival();
 				ArrayList<SubOrder> trailerSubOrders = trailers.get(i).getSubOrders();
-				for (SubOrder subOrder : trailerSubOrders) {
+				for (SubOrder subOrder : trailerSubOrders)
+				{
 					subOrder.setEarliestLoadingTime(time);
 					time = Service.getEndTime(time, subOrder.getEstimatedLoadingTime());
 				}
 
-			} else {
-				trailers.get(i).getSubOrders().get(0)
-						.setEarliestLoadingTime(trailers.get(i).getTimeOfArrival());
+			}
+			else
+			{
+				trailers.get(i).getSubOrders().get(0).setEarliestLoadingTime(trailers.get(i).getTimeOfArrival());
 
 			}
 		}
@@ -43,24 +47,28 @@ public class StartUpService
 	{
 
 		ArrayList<SubOrder> subOrders = Dao.getSubOrders();
-
-		for (int i = 0; i < subOrders.size(); i++) {
+		/*
+		 * 
+		 */
+		for (int i = 0; i < subOrders.size(); i++)
+		{
 			SubOrder subOrder = subOrders.get(i);
 			ProductType productType = subOrder.getProductType();
+
 			Date earliestLoadingTime = subOrder.getEarliestLoadingTime();
-			LoadingBay loadingBay = Service.firstAvailableLoadingBay(productType,
-					earliestLoadingTime);
+			LoadingBay loadingBay = Service.firstAvailableLoadingBay(productType, earliestLoadingTime);
 
 			LoadingInfo loadingInfo = Service.createLoadingInfo(subOrder, loadingBay);
 
-			if (loadingBay.getLoadingInfos().size() == 1) {
+			if (loadingBay.getLoadingInfos().size() == 1)
+			{
 				loadingInfo.setTimeOfLoadingStart(earliestLoadingTime);
-				loadingInfo.setTimeOfLoadingEnd(Service.getEndTime(earliestLoadingTime,
-						subOrder.getEstimatedLoadingTime()));
-			} else {
+				loadingInfo.setTimeOfLoadingEnd(Service.getEndTime(earliestLoadingTime, subOrder.getEstimatedLoadingTime()));
+			}
+			else
+			{
 				loadingInfo.setTimeOfLoadingStart(loadingBay.getNextFreeTime(earliestLoadingTime));
-				loadingInfo.setTimeOfLoadingEnd(Service.getEndTime(
-						loadingInfo.getTimeOfLoadingStart(), subOrder.getEstimatedLoadingTime()));
+				loadingInfo.setTimeOfLoadingEnd(Service.getEndTime(loadingInfo.getTimeOfLoadingStart(), subOrder.getEstimatedLoadingTime()));
 			}
 		}
 	}

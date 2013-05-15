@@ -14,15 +14,13 @@ public class SubOrder
 	private ProductType productType;
 	private LoadingInfo loadingInfo;
 
-	public SubOrder(double estimatedWeight, Trailer trailer,
-			ProductType productType)
+	public SubOrder(double estimatedWeight, Trailer trailer, ProductType productType)
 	{
 		super();
 		this.estimatedWeight = estimatedWeight;
 		this.trailer = trailer;
 		this.productType = productType;
-		this.estimatedLoadingTime = (int)(this.productType
-				.getminuteToKiloRatio() * this.estimatedWeight);
+		this.estimatedLoadingTime = (int)(this.productType.getminuteToKiloRatio() * this.estimatedWeight);
 	}
 
 	public boolean isLoaded()
@@ -108,7 +106,6 @@ public class SubOrder
 	@Override
 	public String toString()
 	{
-		return estimatedWeight + " kg " + productType;
+		return "Suborder of order nr: " + order.getOrderNumber();
 	}
-
 }

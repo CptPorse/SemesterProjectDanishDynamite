@@ -113,7 +113,7 @@ public class LoadingInfo
 		{
 			hp = "<h3 align='center'>HIGH PRIORITY</h3><br>";
 		}
-		return "<html>" + bgColor + hp + "<table><tr><td width='255'>Suborder: " + subOrder + "</td><td width='255' align='right'>State: " + state
+		return "<html>" + bgColor + hp + "<table><tr><td width='255'>" + subOrder + "</td><td width='255' align='right'>State: " + state
 				+ "</td></tr><br><tr><td>Estimated start: " + timeOfLoadingStart + " </td><td align='right'>Estimated loading time: "
 				+ subOrder.getEstimatedLoadingTime() + " min</td></tr></table>" + line;
 	}

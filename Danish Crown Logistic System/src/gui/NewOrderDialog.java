@@ -24,12 +24,14 @@ import service.Service;
 import dateutil.DU;
 
 //Author: Jens Nyberg Porse
-public class NewOrderDialog extends JDialog {
+public class NewOrderDialog extends JDialog
+{
 
 	private static NewOrderDialog orderFrame;
 	private ExternalSystemView externalSystemView;
 
-	public NewOrderDialog(ExternalSystemView owner) {
+	public NewOrderDialog(ExternalSystemView owner)
+	{
 		this.externalSystemView = owner;
 		System.out.println("Created new Window");
 		setTitle("Create Order");
@@ -58,11 +60,13 @@ public class NewOrderDialog extends JDialog {
 	private Controller controller;
 	private ArrayList<SubOrder> subOrders;
 
-	public static NewOrderDialog getInstance() {
+	public static NewOrderDialog getInstance()
+	{
 		return orderFrame;
 	}
 
-	private void InitContent() {
+	private void InitContent()
+	{
 
 		controller = new Controller();
 		subOrders = new ArrayList<SubOrder>();
@@ -148,40 +152,44 @@ public class NewOrderDialog extends JDialog {
 		btnCancel.addActionListener(controller);
 	}
 
-	public void addSubOrder(SubOrder subOrder) {
+	public void addSubOrder(SubOrder subOrder)
+	{
 		subOrders.add(subOrder);
 		System.out.println("Added: " + subOrder);
 		controller.fillList();
 	}
 
-	private class Controller implements ActionListener {
+	private class Controller implements ActionListener
+	{
 
-		private void fillList() {
+		private void fillList()
+		{
 			SubOrder[] arraySubOrder = subOrders.toArray(new SubOrder[0]);
 			lstSubOrders.setListData(arraySubOrder);
 		}
 
 		@Override
-		public void actionPerformed(ActionEvent e) {
+		public void actionPerformed(ActionEvent e)
+		{
 
-			if (e.getSource() == btnAddSuborder) {
-				NewSubOrderDialog createSubOrderDialog = new NewSubOrderDialog(
-						orderFrame);
+			if (e.getSource() == btnAddSuborder)
+			{
+				NewSubOrderDialog createSubOrderDialog = new NewSubOrderDialog(orderFrame);
 				createSubOrderDialog.setVisible(true);
 
 			}
 
-			if (e.getSource() == btnCreate) {
+			if (e.getSource() == btnCreate)
+			{
 
 				Date loadingDate = DU.createDate(txfLoadingDate.getText());
-				Order o = Service.createOrder(
-						Integer.parseInt(txfOrderID.getText()),
-						Double.parseDouble(txfWeightMargin.getText()),
-						loadingDate);
+				Order o = Service.createOrder(Integer.parseInt(txfOrderID.getText()), Double.parseDouble(txfWeightMargin.getText()), loadingDate);
 
-				for (int i = 0; i < lstSubOrders.getModel().getSize(); i++) {
+				for (int i = 0; i < lstSubOrders.getModel().getSize(); i++)
+				{
 					SubOrder subOrder = lstSubOrders.getModel().getElementAt(i);
 					o.addSubOrder(subOrder);
+					subOrder.setOrder(o);
 				}
 
 				externalSystemView.updateLstOrder();
@@ -189,7 +197,8 @@ public class NewOrderDialog extends JDialog {
 				NewOrderDialog.this.setVisible(false);
 			}
 
-			if (e.getSource() == btnCancel) {
+			if (e.getSource() == btnCancel)
+			{
 				NewOrderDialog.this.setVisible(false);
 			}
 
