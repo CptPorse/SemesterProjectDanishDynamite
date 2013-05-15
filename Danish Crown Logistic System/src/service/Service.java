@@ -16,41 +16,36 @@ import dao.Dao;
 public class Service
 {
 
-	public static Driver createDriver(String name, String phoneNumber,
-			String licensePlate)
+	public static Driver createDriver(String name, String phoneNumber, String licensePlate)
 	{
 		Driver driver = new Driver(name, phoneNumber, licensePlate);
 		Dao.addDriver(driver);
 		return driver;
 	}
 
-	public static Trailer createTrailer(String trailerID, double weightMax,
-			Date timeOfArrival)
+	public static Trailer createTrailer(String trailerID, double weightMax, Date timeOfArrival)
 	{
 		Trailer trailer = new Trailer(trailerID, weightMax, timeOfArrival);
 		Dao.addTrailer(trailer);
 		return trailer;
 	}
 
-	public static ProductType createProductType(String description,
-			double minuteToKiloRatio)
+	public static ProductType createProductType(String description, double minuteToKiloRatio)
 	{
-		ProductType productType = new ProductType(description,
-				minuteToKiloRatio);
+		ProductType productType = new ProductType(description, minuteToKiloRatio);
 		Dao.addProductType(productType);
 		return productType;
 	}
 
-	public static Order createOrder(int orderNumber, double weightMargin,
-			Date loadingDate)
+	public static Order createOrder(int orderNumber, double weightMargin, Date loadingDate)
 	{
 		Order order = new Order(orderNumber, weightMargin, loadingDate);
 		Dao.addOrder(order);
 		return order;
 	}
 
-	public static SubOrder createSubOrder(double estimatedWeight,
-			Trailer trailer, ProductType productType)
+	public static SubOrder createSubOrder(double estimatedWeight, Trailer trailer,
+			ProductType productType)
 	{
 		SubOrder subOrder = new SubOrder(estimatedWeight, trailer, productType);
 		trailer.addSubOrder(subOrder);
@@ -59,16 +54,14 @@ public class Service
 		return subOrder;
 	}
 
-	public static LoadingBay createLoadingBay(int loadingBayNumber,
-			ProductType productType)
+	public static LoadingBay createLoadingBay(int loadingBayNumber, ProductType productType)
 	{
 		LoadingBay loadingBay = new LoadingBay(loadingBayNumber, productType);
 		Dao.addLoadingBay(loadingBay);
 		return loadingBay;
 	}
 
-	public static LoadingInfo createLoadingInfo(SubOrder subOrder,
-			LoadingBay loadingBay)
+	public static LoadingInfo createLoadingInfo(SubOrder subOrder, LoadingBay loadingBay)
 	{
 		LoadingInfo loadingInfo = new LoadingInfo(subOrder, loadingBay);
 		Dao.addLoadingInfo(loadingInfo);
@@ -108,11 +101,8 @@ public class Service
 		int position, scan;
 		for (position = subOrders.size() - 1; position >= 0; position--) {
 			for (scan = 0; scan <= position - 1; scan++) {
-				if (subOrders
-						.get(scan)
-						.getEarliestLoadingTime()
-						.after((subOrders.get(scan + 1)
-								.getEarliestLoadingTime())))
+				if (subOrders.get(scan).getEarliestLoadingTime()
+						.after((subOrders.get(scan + 1).getEarliestLoadingTime())))
 					swap(subOrders, scan, scan + 1);
 			}
 		}
@@ -144,13 +134,10 @@ public class Service
 		}
 
 		LoadingBay earliestLoadingBay = loadingBays.get(0);
-		Long shortestWaitTime = earliestLoadingBay.getNextFreeTime(
-				earliestLoadingTime).getTime();
+		Long shortestWaitTime = earliestLoadingBay.getNextFreeTime(earliestLoadingTime).getTime();
 		for (int n = 0; n < loadingBays.size(); n++) {
-			Date bayAvailable = loadingBays.get(n).getNextFreeTime(
-					earliestLoadingTime);
-			Long waitTime = (bayAvailable.getTime() - earliestLoadingTime
-					.getTime());
+			Date bayAvailable = loadingBays.get(n).getNextFreeTime(earliestLoadingTime);
+			Long waitTime = (bayAvailable.getTime() - earliestLoadingTime.getTime());
 			if (waitTime <= shortestWaitTime && waitTime >= 0) {
 				earliestLoadingBay = loadingBays.get(n);
 				shortestWaitTime = waitTime;
@@ -167,5 +154,24 @@ public class Service
 
 		Date endTime = new Date(time + loadingTimeInMS);
 		return endTime;
+	}
+
+	// Author: Jens Porse
+	public String getDateToStringTime(Date date)
+	{
+		String hours = String.valueOf(date.getHours());
+		String minutes = String.valueOf(date.getMinutes());
+
+		return hours + ":" + minutes;
+	}
+
+	//Author: Jens Porse
+	public Date getTimeStringToDate(String time)
+	{
+		int hours = Integer.parseInt(time.substring(0, 1));
+		int minutes = Integer.parseInt(time.substring(3, 4));
+		Date date = new Date(113, 0, 1, hours, minutes);
+
+		return date;
 	}
 }
