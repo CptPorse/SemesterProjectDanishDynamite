@@ -174,13 +174,22 @@ public class Trailer
 			return "<html><table border=1 width=120 >" + "Trailer: " + tempTrailerID.substring(0, 12) + "<br/>" + "ETA: " + timeOfArrival.getHours() + ":" + min + "</table> </html>";
 		}
 		if (trailerState == TrailerState.LOADED) {
-			double weightProcent = 0;
-			if (weightCurrent < 1) {
 
-			} else {
-				weightProcent = (weightCurrent / weightMax) * 100;
+			return "<html><table border=1 width=120 >" + "Trailer: " + tempTrailerID.substring(0, 12) + "<br/>" + "Weight: " + weightCurrent / 1000 + "t" + "</table> </html>";
+		}
+
+		if (trailerState == TrailerState.BEING_LOADED) {
+			String bayNumber = "";
+			for (SubOrder s : getSubOrders()) {
+				if (s.getLoadingInfo().getState() == LoadingInfoState.LOADING) {
+					bayNumber = "" + s.getLoadingInfo().getLoadingBay().getLoadingBayNumber();
+				}
 			}
-			return "<html><table border=1 width=120 >" + "Trailer: " + tempTrailerID.substring(0, 12) + "<br/>" + "Weight: " + weightProcent + "%" + "</table> </html>";
+			return "<html><table border=1 width=120 >" + "Trailer: " + tempTrailerID.substring(0, 12) + "<br/>" + "Located at:" + bayNumber + "<br/>" + "#suborders" + getSubOrders().size() + "</table> </html>";
+		}
+		if (trailerState == TrailerState.ARRIVED) {
+			return "<html><table border=1 width=120 >" + "Trailer: " + tempTrailerID.substring(0, 12) + "<br/>" + "Located at:" + "waiting" + "<br/>" + "#suborders" + getSubOrders().size() + "</table> </html>";
+
 		} else {
 			return "Trailer: " + trailerID;
 		}
