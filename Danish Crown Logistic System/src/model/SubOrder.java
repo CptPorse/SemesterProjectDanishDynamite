@@ -1,5 +1,6 @@
 package model;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 public class SubOrder {
@@ -11,6 +12,7 @@ public class SubOrder {
 	private Order order;
 	private Trailer trailer;
 	private ProductType productType;
+	private ArrayList<LoadingInfo> loadingInfos;
 
 	public SubOrder(double estimatedWeight, Trailer trailer,
 			ProductType productType) {
@@ -76,6 +78,18 @@ public class SubOrder {
 
 	public void setEarliestLoadingTime(Date earliestLoadingTime) {
 		this.earliestLoadingTime = earliestLoadingTime;
+	}
+
+	public ArrayList<LoadingInfo> getLoadingInfos() {
+		return new ArrayList<LoadingInfo>(loadingInfos);
+	}
+
+	public void addLoadingInfo(LoadingInfo loadingInfo) {
+		loadingInfos.add(loadingInfo);
+	}
+
+	public void removeLoadingInfo(LoadingInfo loadingInfo) {
+		loadingInfos.remove(loadingInfo);
 	}
 
 	@Override
