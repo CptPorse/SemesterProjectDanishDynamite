@@ -29,7 +29,7 @@ public class TrailerView extends JFrame
 	{
 		setResizable(false);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		this.setBounds(1000, 100, 604, 347);
+		this.setBounds(630, 30, 604, 347);
 		this.setTitle("Trailer View");
 
 		InitContent();
@@ -69,16 +69,14 @@ public class TrailerView extends JFrame
 
 		lstArrivingTrailersModel = new DefaultListModel<Trailer>();
 		lstArrivingTrailers = new JList<Trailer>(lstArrivingTrailersModel);
-		lstArrivingTrailers
-				.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		lstArrivingTrailers.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		scpArriving = new JScrollPane(lstArrivingTrailers);
 		scpArriving.setBounds(5, 55, 145, 230);
 		contentPane.add(scpArriving);
 
 		lstDeparturingTrailersModel = new DefaultListModel<Trailer>();
 		lstDeparturingTrailers = new JList<Trailer>(lstDeparturingTrailersModel);
-		lstDeparturingTrailers
-				.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		lstDeparturingTrailers.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		scpDeparture = new JScrollPane(lstDeparturingTrailers);
 		contentPane.add(scpDeparture);
 		scpDeparture.setBounds(285, 55, 145, 230);
@@ -122,38 +120,30 @@ public class TrailerView extends JFrame
 			}
 			if (e.getSource() == btnHasArrived) {
 				if (lstArrivingTrailers.isSelectionEmpty() == true) {
-					System.out
-							.println("Tag dig sammen, du mangler at vælge et object fra listen");
+					System.out.println("Tag dig sammen, du mangler at vælge et object fra listen");
 				} else {
 					// Changes the state from being outside the gate to being
 					// inside
-					(lstArrivingTrailers.getSelectedValue())
-							.setTrailerState(TrailerState.ARRIVED);
-					for (SubOrder s : (lstArrivingTrailers.getSelectedValue())
-							.getSubOrders()) {
-						s.getLoadingInfo().setState(
-								LoadingInfoState.READY_TO_LOAD);
+					(lstArrivingTrailers.getSelectedValue()).setTrailerState(TrailerState.ARRIVED);
+					for (SubOrder s : (lstArrivingTrailers.getSelectedValue()).getSubOrders()) {
+						s.getLoadingInfo().setState(LoadingInfoState.READY_TO_LOAD);
 					}
 					// refreshes the list
 					controller.fillArrivingLst();
 
 					//Updates Loadingbayview current view
-					LoadingBayView.fillInfo(LoadingBayView
-							.getSelecetedLoadingBay());
+					LoadingBayView.fillInfo(LoadingBayView.getSelecetedLoadingBay());
 
 				}
 			}
 			if (e.getSource() == btnCheckDeparture) {
 				if (lstDeparturingTrailers.isSelectionEmpty() == true) {
-					System.out
-							.println("Tag dig sammen, du mangler at vælge et object fra listen");
+					System.out.println("Tag dig sammen, du mangler at vælge et object fra listen");
 				} else {
 					// changes selected trailer to being departed
-					(lstDeparturingTrailers.getSelectedValue())
-							.setTrailerState(TrailerState.DEPARTED);
+					(lstDeparturingTrailers.getSelectedValue()).setTrailerState(TrailerState.DEPARTED);
 					// set the departuretime of the trailer
-					(lstDeparturingTrailers.getSelectedValue())
-							.setTimeOfDeparture(DU.createDate());
+					(lstDeparturingTrailers.getSelectedValue()).setTimeOfDeparture(DU.createDate());
 					// refreshes the list
 					controller.fillDepartureLst();
 
@@ -171,8 +161,7 @@ public class TrailerView extends JFrame
 						arraylistTrailer.add(t);
 					}
 				}
-				Trailer[] arrayTrailer = arraylistTrailer
-						.toArray(new Trailer[0]);
+				Trailer[] arrayTrailer = arraylistTrailer.toArray(new Trailer[0]);
 
 				lstArrivingTrailers.setListData(arrayTrailer);
 			}
@@ -188,8 +177,7 @@ public class TrailerView extends JFrame
 						arraylistTrailer.add(t);
 					}
 				}
-				Trailer[] arrayTrailer = arraylistTrailer
-						.toArray(new Trailer[0]);
+				Trailer[] arrayTrailer = arraylistTrailer.toArray(new Trailer[0]);
 
 				lstDeparturingTrailers.setListData(arrayTrailer);
 			}

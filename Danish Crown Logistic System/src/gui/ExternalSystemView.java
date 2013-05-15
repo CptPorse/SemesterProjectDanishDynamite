@@ -26,17 +26,19 @@ import org.eclipse.jdt.annotation.NonNullByDefault;
 import dao.Dao;
 
 //Author: Jens Nyberg Porse
-public class ExternalSystemView extends JFrame {
+public class ExternalSystemView extends JFrame
+{
 
 	private static ExternalSystemView frame;
 
-	public ExternalSystemView() {
+	public ExternalSystemView()
+	{
 
 		frame = this;
 		this.setResizable(false);
 		this.setTitle("External System");
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		this.setBounds(400, 100, 569, 347);
+		this.setBounds(30, 30, 569, 347);
 		InitContent();
 		this.setVisible(true);
 		System.out.println(Dao.getProductTypes());
@@ -45,17 +47,14 @@ public class ExternalSystemView extends JFrame {
 		System.out.println(Dao.getOrders());
 	}
 
-	public static ExternalSystemView getInstance() {
+	public static ExternalSystemView getInstance()
+	{
 		return frame;
 	}
 
 	private JPanel panelExternalSystem;
-	private JTextField txfOrderID, txfWeightMargin, txfSubOrderArrival,
-			txfSubProduct, txfSubWeight, txfSubTrailer, txfLoadingTime;
-	private JLabel lblOrderList, lblOrderId, lblWeightMargin,
-			lblSubOrderArrival, lblSuborders, lblSubProduct, lblSubWeight,
-			lblSubTrailer, lblLoadingTime, lblWeighKilo, lblMinuts,
-			lblMarginKilo;
+	private JTextField txfOrderID, txfWeightMargin, txfSubOrderArrival, txfSubProduct, txfSubWeight, txfSubTrailer, txfLoadingTime;
+	private JLabel lblOrderList, lblOrderId, lblWeightMargin, lblSubOrderArrival, lblSuborders, lblSubProduct, lblSubWeight, lblSubTrailer, lblLoadingTime, lblWeighKilo, lblMinuts, lblMarginKilo;
 	private JButton btnNewTrailer, btnNewDriver, btnNewOrder;
 
 	private Controller controller;
@@ -67,7 +66,8 @@ public class ExternalSystemView extends JFrame {
 	private JScrollPane scpOrders;
 	private JScrollPane scpSubOrders;
 
-	private void InitContent() {
+	private void InitContent()
+	{
 
 		controller = new Controller();
 		lstOrders = new JList<Order>();
@@ -99,8 +99,10 @@ public class ExternalSystemView extends JFrame {
 		scpOrders = new JScrollPane(lstOrders);
 		scpOrders.setBounds(18, 30, 180, 200);
 		lstOrders.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		lstOrders.addListSelectionListener(new ListSelectionListener() {
-			public void valueChanged(ListSelectionEvent evt) {
+		lstOrders.addListSelectionListener(new ListSelectionListener()
+		{
+			public void valueChanged(ListSelectionEvent evt)
+			{
 				if (!evt.getValueIsAdjusting()) {
 					if (lstOrders.getSelectedIndex() != -1) {
 						updateOrderView(lstOrders.getSelectedValue());
@@ -153,8 +155,10 @@ public class ExternalSystemView extends JFrame {
 		lstSubOrders = new JList<SubOrder>(lstSubOrderModel);
 		scpSubOrders = new JScrollPane(lstSubOrders);
 		scpSubOrders.setBounds(388, 30, 146, 110);
-		lstSubOrders.addListSelectionListener(new ListSelectionListener() {
-			public void valueChanged(ListSelectionEvent evt) {
+		lstSubOrders.addListSelectionListener(new ListSelectionListener()
+		{
+			public void valueChanged(ListSelectionEvent evt)
+			{
 				if (!evt.getValueIsAdjusting()) {
 					if (lstSubOrders.getSelectedIndex() != -1) {
 						updateSubOrderView(lstSubOrders.getSelectedValue());
@@ -230,16 +234,19 @@ public class ExternalSystemView extends JFrame {
 		controller.fillLstOrders();
 	}
 
-	public void testing() {
+	public void testing()
+	{
 		System.out.println("I came through");
 	}
 
-	public void updateLstOrder() {
+	public void updateLstOrder()
+	{
 		System.out.println("I updated from " + this.getName());
 		controller.fillLstOrders();
 	}
 
-	public void updateOrderView(Order order) {
+	public void updateOrderView(Order order)
+	{
 		txfOrderID.setText("" + order.getOrderNumber());
 		txfWeightMargin.setText("" + order.getWeightMargin());
 		txfSubOrderArrival.setText("");
@@ -251,34 +258,36 @@ public class ExternalSystemView extends JFrame {
 		controller.fillLstSubOrder(order);
 	}
 
-	public void updateSubOrderView(SubOrder subOrder) {
-		txfSubOrderArrival.setText(""
-				+ subOrder.getTrailer().getTimeOfArrival().toLocaleString());
+	public void updateSubOrderView(SubOrder subOrder)
+	{
+		txfSubOrderArrival.setText("" + subOrder.getTrailer().getTimeOfArrival().toLocaleString());
 		txfLoadingTime.setText("" + subOrder.getEstimatedLoadingTime());
 		txfSubTrailer.setText("" + subOrder.getTrailer());
 		txfSubWeight.setText("" + subOrder.getEstimatedWeight());
 		txfSubProduct.setText("" + subOrder.getProductType());
 	}
 
-	public class Controller implements ActionListener {
+	public class Controller implements ActionListener
+	{
 
-		private void fillLstOrders() {
+		private void fillLstOrders()
+		{
 			Order[] arrayOrder = Dao.getOrders().toArray(new Order[0]);
 			lstOrders.setListData(arrayOrder);
 		}
 
-		private void fillLstSubOrder(Order order) {
-			SubOrder[] arraySubOrder = order.getSubOrders().toArray(
-					new SubOrder[0]);
+		private void fillLstSubOrder(Order order)
+		{
+			SubOrder[] arraySubOrder = order.getSubOrders().toArray(new SubOrder[0]);
 			lstSubOrders.setListData(arraySubOrder);
 		}
 
 		@Override
 		@NonNullByDefault(false)
-		public void actionPerformed(ActionEvent e) {
+		public void actionPerformed(ActionEvent e)
+		{
 			if (e.getSource() == btnNewOrder) {
-				NewOrderDialog createOrderDialog = new NewOrderDialog(
-						ExternalSystemView.getInstance());
+				NewOrderDialog createOrderDialog = new NewOrderDialog(ExternalSystemView.getInstance());
 				createOrderDialog.setVisible(true);
 
 				// waiting for dialog NewOrderDialog to close
@@ -286,8 +295,7 @@ public class ExternalSystemView extends JFrame {
 			}
 
 			if (e.getSource() == btnNewTrailer) {
-				NewTrailerDialog createTrailerDialog = new NewTrailerDialog(
-						ExternalSystemView.getInstance());
+				NewTrailerDialog createTrailerDialog = new NewTrailerDialog(ExternalSystemView.getInstance());
 				createTrailerDialog.setVisible(true);
 
 				// waiting for dialog NewOrderDialog to close
@@ -295,8 +303,7 @@ public class ExternalSystemView extends JFrame {
 			}
 
 			if (e.getSource() == btnNewDriver) {
-				NewDriverDialog createDriverDialog = new NewDriverDialog(
-						ExternalSystemView.getInstance());
+				NewDriverDialog createDriverDialog = new NewDriverDialog(ExternalSystemView.getInstance());
 				createDriverDialog.setVisible(true);
 
 				// waiting for dialog NewOrderDialog to close
