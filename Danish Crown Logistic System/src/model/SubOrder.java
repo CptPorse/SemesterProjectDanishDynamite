@@ -8,6 +8,7 @@ public class SubOrder
 	private double estimatedWeight;
 	private int estimatedLoadingTime;
 	private boolean isLoaded = false;
+	private boolean highPriority = false;
 	private Date earliestLoadingTime;
 	private Order order;
 	private Trailer trailer;
@@ -31,6 +32,16 @@ public class SubOrder
 	public void setLoaded(boolean isLoaded)
 	{
 		this.isLoaded = isLoaded;
+	}
+
+	public boolean isHighPriority()
+	{
+		return highPriority;
+	}
+
+	public void setHighPriority(boolean highPriority)
+	{
+		this.highPriority = highPriority;
 	}
 
 	public double getEstimatedWeight()

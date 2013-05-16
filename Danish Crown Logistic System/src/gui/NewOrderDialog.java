@@ -21,6 +21,7 @@ import javax.swing.border.EmptyBorder;
 import model.LoadingBay;
 import model.Order;
 import model.SubOrder;
+import model.TrailerState;
 import service.Service;
 import service.StartUpService;
 import dao.Dao;
@@ -206,6 +207,8 @@ public class NewOrderDialog extends JDialog
 
 					Service.refreshLoadingBays(subOrder.getProductType());
 					LoadingBayView.fillInfo(null);
+					subOrder.getTrailer().setTrailerState(TrailerState.ENROUTE);
+					TrailerView.fillModel(TrailerState.ENROUTE);
 				}
 
 				externalSystemView.updateLstOrder();

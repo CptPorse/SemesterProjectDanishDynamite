@@ -195,7 +195,8 @@ public class Trailer
 					+ " kg<br>Max: " + weightMax + " kg";
 			break;
 		default:
-			string = trailerID;
+			string = "<html><table>Trailer: " + trailerID + "<br>ETA: "
+					+ Service.getDateToStringTime(timeOfArrival);
 			break;
 
 		}

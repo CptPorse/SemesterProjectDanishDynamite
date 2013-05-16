@@ -29,9 +29,11 @@ import service.Service;
 import dao.Dao;
 
 //Author: Jens Nyberg Porse
-public class NewTrailerDialog extends JDialog {
+public class NewTrailerDialog extends JDialog
+{
 
-	public NewTrailerDialog(JFrame owner) {
+	public NewTrailerDialog(JFrame owner)
+	{
 		super(owner);
 		System.out.println("Created new Window");
 		setTitle("Create New Trailer");
@@ -67,12 +69,13 @@ public class NewTrailerDialog extends JDialog {
 	private ArrayList<Driver> drivers;
 	private JTextField txfHour;
 	private JTextField txfMinuts;
-	String[] months = { "January", "February", "March", "April", "May", "June",
-			"July", "August", "September", "October", "November", "December" };
-	Integer[] dates = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16,
-			17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31 };
+	String[] months = { "January", "February", "March", "April", "May", "June", "July", "August",
+			"September", "October", "November", "December" };
+	Integer[] dates = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21,
+			22, 23, 24, 25, 26, 27, 28, 29, 30, 31 };
 
-	private void InitContent() {
+	private void InitContent()
+	{
 		products = new ArrayList<ProductType>();
 		drivers = new ArrayList<Driver>();
 		controller = new Controller();
@@ -186,15 +189,17 @@ public class NewTrailerDialog extends JDialog {
 		controller.fillProductList();
 	}
 
-	private class Controller implements ActionListener {
+	private class Controller implements ActionListener
+	{
 
-		private void fillProductList() {
-			ProductType[] arrayProducts = Dao.getProductTypes().toArray(
-					new ProductType[0]);
+		private void fillProductList()
+		{
+			ProductType[] arrayProducts = Dao.getProductTypes().toArray(new ProductType[0]);
 			lstProductType.setListData(arrayProducts);
 		}
 
-		private void fillCmbDrivers() {
+		private void fillCmbDrivers()
+		{
 			for (int i = 0; i < Dao.getDrivers().size(); i++) {
 				if (Dao.getDrivers().get(i).getTrailer() == null) {
 					System.out.println("Added " + i);
@@ -207,22 +212,23 @@ public class NewTrailerDialog extends JDialog {
 		}
 
 		@Override
-		public void actionPerformed(ActionEvent e) {
+		public void actionPerformed(ActionEvent e)
+		{
 			if (e.getSource() == btnRegister) {
 
 				@SuppressWarnings("deprecation")
 				Date date1 = new Date(113, cmbMonth.getSelectedIndex(),
-						cmbDate.getSelectedIndex() + 1,
-						Integer.parseInt(txfHour.getText()),
+						cmbDate.getSelectedIndex() + 1, Integer.parseInt(txfHour.getText()),
 						Integer.parseInt(txfMinuts.getText()));
 				Trailer t1 = Service.createTrailer(txfTrailerID.getText(),
 						Integer.parseInt(txfMaxLoad.getText()), date1);
-				Driver d1 = (Driver) cmbDriver.getSelectedItem();
+				Driver d1 = (Driver)cmbDriver.getSelectedItem();
 				products = lstProductType.getSelectedValuesList();
 				for (int i = 0; i < products.size(); i++) {
 					t1.addProductType(products.get(i));
 				}
 				t1.setDriver(d1);
+				Service.sortTrailerArrival();
 				NewTrailerDialog.this.setVisible(false);
 			}
 

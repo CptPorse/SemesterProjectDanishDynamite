@@ -250,6 +250,8 @@ public class LoadingInfoDialog extends JDialog
 				// if all the suborders are done, trailer changes trailerstate to: loaded
 				if (trailerFullyLoaded == true) {
 					loadingInfo.getSubOrder().getTrailer().setTrailerState(TrailerState.LOADED);
+					loadingInfo.getSubOrder().getTrailer()
+							.setTimeOfDeparture(loadingInfo.getTimeOfLoadingEnd());
 					SmsDialog sms = new SmsDialog(loadingInfo);
 				} else {
 					loadingInfo.getSubOrder().getTrailer().setTrailerState(TrailerState.ARRIVED);

@@ -105,6 +105,14 @@ public class Service
 					swap(subOrdersSorted, scan, scan + 1);
 			}
 		}
+		for (int i = subOrdersSorted.size() - 1; i > 0; i--) {
+			System.out.println("High Priority? " + subOrdersSorted.get(i).isHighPriority());
+			if (subOrdersSorted.get(i).isHighPriority() == true) {
+				System.out.println("Found a High Priority: " + subOrdersSorted.get(i));
+				subOrdersSorted.add(0, subOrdersSorted.get(i));
+				subOrdersSorted.remove(i + 1);
+			}
+		}
 		return subOrdersSorted;
 	}
 
