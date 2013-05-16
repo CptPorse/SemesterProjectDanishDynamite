@@ -59,7 +59,7 @@ public class NewSubOrderDialog extends JDialog
 
 		contentPanel = new JPanel();
 		contentPanel.setBackground(Color.LIGHT_GRAY);
-		setBounds(100, 100, 240, 273);
+		setBounds(100, 100, 240, 290);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
@@ -76,7 +76,7 @@ public class NewSubOrderDialog extends JDialog
 		contentPanel.add(lblTrailer);
 
 		cmbTrailer = new JComboBox<Trailer>();
-		cmbTrailer.setBounds(20, 165, 191, 20);
+		cmbTrailer.setBounds(20, 165, 191, 40);
 		contentPanel.add(cmbTrailer);
 		cmbTrailer.addActionListener(controller);
 
@@ -169,7 +169,6 @@ public class NewSubOrderDialog extends JDialog
 
 				t1.setWeightCurrent(t1.getWeightCurrent()
 						+ (Double.parseDouble(txfWeight.getText())));
-				Dao.addSubOrder(s1);
 				orderDialog.addSubOrder(s1);
 				NewSubOrderDialog.this.dispose();
 			}

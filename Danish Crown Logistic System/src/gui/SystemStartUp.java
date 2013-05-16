@@ -1,5 +1,6 @@
 package gui;
 
+import model.Trailer;
 import service.Service;
 import service.StartUpService;
 import dao.Dao;
@@ -17,7 +18,10 @@ public class SystemStartUp
 
 		StartUpService.startUpData();
 		Service.sortTrailerArrival();
-		StartUpService.setSubOrderEarliestLoadingTime();
+		for (Trailer trailer : Dao.getTrailer()) {
+			StartUpService.setSubOrderEarliestLoadingTime(trailer);
+		}
+		StartUpService.sortSubOrdersDao();
 		StartUpService.createLoadingBaySchedule(Dao.getSubOrders());
 		trailerView = new TrailerView();
 		loadingBayView = new LoadingBayView();

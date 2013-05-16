@@ -170,6 +170,11 @@ public class Service
 		ArrayList<SubOrder> subOrdersToSort = new ArrayList<SubOrder>();
 		for (LoadingBay loadingBay : loadingBays) {
 			for (LoadingInfo loadingInfo : loadingBay.getLoadingInfos()) {
+				//Resets the loadingBays next available time to whenever the last subOrder was either started or finished
+				if (loadingInfo.getState() == LoadingInfoState.LOADING
+						|| loadingInfo.getState() == LoadingInfoState.FINISHED) {
+					loadingBay.setNextAvailableTime(loadingInfo.getTimeOfLoadingEnd());
+				}
 				if (loadingInfo.getState() == LoadingInfoState.READY_TO_LOAD
 						|| loadingInfo.getState() == LoadingInfoState.PENDING) {
 					subOrdersToSort.add(loadingInfo.getSubOrder());
@@ -178,7 +183,9 @@ public class Service
 				}
 			}
 		}
+		System.out.println("sortSubOrder() began");
 		subOrdersToSort = sortSubOrders(subOrdersToSort);
+		System.out.println("createLoadingBayschedule() began");
 		StartUpService.createLoadingBaySchedule(subOrdersToSort);
 	}
 

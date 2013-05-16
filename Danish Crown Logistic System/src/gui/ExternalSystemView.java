@@ -265,7 +265,7 @@ public class ExternalSystemView extends JFrame
 	{
 		txfSubOrderArrival.setText("" + subOrder.getTrailer().getTimeOfArrival().toLocaleString());
 		txfLoadingTime.setText("" + subOrder.getEstimatedLoadingTime());
-		txfSubTrailer.setText("" + subOrder.getTrailer());
+		txfSubTrailer.setText("Trailer: " + subOrder.getTrailer().getTrailerID());
 		txfSubWeight.setText("" + subOrder.getEstimatedWeight());
 		txfSubProduct.setText("" + subOrder.getProductType());
 	}

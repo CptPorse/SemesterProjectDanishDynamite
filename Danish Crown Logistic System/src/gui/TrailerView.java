@@ -38,7 +38,8 @@ public class TrailerView extends JFrame
 
 	private JPanel contentPane;
 	private static JList<Trailer> lstEnRoute, lstReady, lstLoading, lstLoaded, lstDeparted;
-	private static DefaultListModel<Trailer> EnRouteModel, ReadyModel, LoadingModel, LoadedModel, DepartedModel;
+	private static DefaultListModel<Trailer> EnRouteModel, ReadyModel, LoadingModel, LoadedModel,
+			DepartedModel;
 	private static JScrollPane scpEnRoute, scpReady, scpLoading, scpLoaded, scpDeparted;
 	private JLabel lblEnRoute, lblReady, lblLoading, lblLoaded, lblDeparted;
 	private JButton btnArrived, btnApprove;
@@ -142,13 +143,10 @@ public class TrailerView extends JFrame
 		default:
 			break;
 		}
-		if (model != null)
-		{
+		if (model != null) {
 			model.clear();
-			for (Trailer trailer : Dao.getTrailer())
-			{
-				if (trailer.getTrailerState() == trailerState)
-				{
+			for (Trailer trailer : Dao.getTrailer()) {
+				if (trailer.getTrailerState() == trailerState) {
 					model.addElement(trailer);
 				}
 			}
@@ -160,13 +158,12 @@ public class TrailerView extends JFrame
 		@Override
 		public void actionPerformed(ActionEvent e)
 		{
-			if (e.getSource() == btnArrived)
-			{
-				if (lstEnRoute.isSelectionEmpty() == false)
-				{
+			if (e.getSource() == btnArrived) {
+				if (lstEnRoute.isSelectionEmpty() == false) {
 					(lstEnRoute.getSelectedValue()).setTrailerState(TrailerState.ARRIVED);
-					for (SubOrder subOrder : (lstEnRoute.getSelectedValue()).getSubOrders())
-					{
+					for (SubOrder subOrder : (lstEnRoute.getSelectedValue()).getSubOrders()) {
+						System.out.println(subOrder);
+						System.out.println(subOrder.getLoadingInfo().getState());
 						subOrder.getLoadingInfo().setState(LoadingInfoState.READY_TO_LOAD);
 					}
 					fillModel(TrailerState.ENROUTE);
@@ -174,10 +171,8 @@ public class TrailerView extends JFrame
 					LoadingBayView.fillInfo(null);
 				}
 			}
-			if (e.getSource() == btnApprove)
-			{
-				if (lstLoaded.isSelectionEmpty() == false)
-				{
+			if (e.getSource() == btnApprove) {
+				if (lstLoaded.isSelectionEmpty() == false) {
 					(lstLoaded.getSelectedValue()).setTrailerState(TrailerState.DEPARTED);
 					(lstLoaded.getSelectedValue()).setTimeOfDeparture(DU.createDate());
 					fillModel(TrailerState.LOADED);

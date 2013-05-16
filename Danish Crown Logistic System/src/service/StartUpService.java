@@ -6,44 +6,44 @@ import java.util.Date;
 import model.Driver;
 import model.LoadingBay;
 import model.LoadingInfo;
+import model.LoadingInfoState;
 import model.Order;
 import model.ProductType;
 import model.SubOrder;
 import model.Trailer;
+import model.TrailerState;
 import dao.Dao;
 import dateutil.DU;
 
 public class StartUpService
 {
 
-	public static void setSubOrderEarliestLoadingTime()
+	public static void setSubOrderEarliestLoadingTime(Trailer trailer)
 	{
 
-		ArrayList<Trailer> trailers = Dao.getTrailer();
-
-		for (int i = 0; i < trailers.size(); i++) {
-			if (trailers.get(i).getSubOrders().size() > 1) {
-				Date time = trailers.get(i).getTimeOfArrival();
-				ArrayList<SubOrder> trailerSubOrders = trailers.get(i).getSubOrders();
-				for (SubOrder subOrder : trailerSubOrders) {
-					subOrder.setEarliestLoadingTime(time);
-					time = Service.getEndTime(time, subOrder.getEstimatedLoadingTime());
-				}
-
-			} else {
-				trailers.get(i).getSubOrders().get(0)
-						.setEarliestLoadingTime(trailers.get(i).getTimeOfArrival());
-
+		if (trailer.getSubOrders().size() > 1) {
+			Date time = trailer.getTimeOfArrival();
+			ArrayList<SubOrder> trailerSubOrders = trailer.getSubOrders();
+			for (SubOrder subOrder : trailerSubOrders) {
+				System.out.println(subOrder + ". EarliestLoadingTime sat to: " + time);
+				subOrder.setEarliestLoadingTime(time);
+				time = Service.getEndTime(time, subOrder.getEstimatedLoadingTime());
 			}
+
+		} else {
+			trailer.getSubOrders().get(0).setEarliestLoadingTime(trailer.getTimeOfArrival());
+
 		}
-		sortSubOrdersDao();
+
 	}
 
 	public static void sortSubOrdersDao()
 	{
 
 		ArrayList<SubOrder> subOrders = new ArrayList<SubOrder>();
+
 		subOrders.addAll(Dao.getSubOrders());
+		System.out.println("List before Sorted: " + subOrders);
 
 		int position, scan;
 		for (position = subOrders.size() - 1; position >= 0; position--) {
@@ -53,6 +53,7 @@ public class StartUpService
 					swap(subOrders, scan, scan + 1);
 			}
 		}
+		System.out.println("List after Sorted: " + subOrders);
 		for (int i = subOrders.size() - 1; i >= 0; i--) {
 			Dao.removeSubOrder(Dao.getSubOrders().get(i));
 		}
@@ -104,6 +105,10 @@ public class StartUpService
 			System.out.println("Its Time of loading end is: "
 					+ Service.getDateToStringTime(loadingInfo.getTimeOfLoadingEnd()));
 			System.out.println();
+
+			if (loadingInfo.getSubOrder().getTrailer().getTrailerState() == TrailerState.ARRIVED) {
+				loadingInfo.setState(LoadingInfoState.READY_TO_LOAD);
+			}
 
 			//Sets the nextAvailableTime for the LoadingBay to the time when the SubOrder is loaded
 			loadingBay.setNextAvailableTime(loadingInfo.getTimeOfLoadingEnd());

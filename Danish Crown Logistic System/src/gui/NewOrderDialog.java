@@ -18,9 +18,11 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
+import model.LoadingBay;
 import model.Order;
 import model.SubOrder;
 import service.Service;
+import service.StartUpService;
 import dao.Dao;
 import dateutil.DU;
 
@@ -183,12 +185,27 @@ public class NewOrderDialog extends JDialog
 
 				Date loadingDate = DU.createDate(txfLoadingDate.getText());
 				Order o = Service.createOrder(Integer.parseInt(txfOrderID.getText()), loadingDate);
-				o.setWeightMarginKilo(Double.parseDouble(txfWeightMargin.getText()));
+				if (!txfWeightMargin.getText().isEmpty() == true) {
+					o.setWeightMarginKilo(Double.parseDouble(txfWeightMargin.getText()));
+				}
 
 				for (int i = 0; i < lstSubOrders.getModel().getSize(); i++) {
 					SubOrder subOrder = lstSubOrders.getModel().getElementAt(i);
 					o.addSubOrder(subOrder);
 					subOrder.setOrder(o);
+					System.out.println(subOrder);
+					StartUpService.setSubOrderEarliestLoadingTime(subOrder.getTrailer());
+					LoadingBay lb = Dao.getLoadingBays().get(0);
+					for (LoadingBay loadingBay : Dao.getLoadingBays()) {
+						if (loadingBay.getProductType() == subOrder.getProductType())
+							lb = loadingBay;
+					}
+					Service.createLoadingInfo(subOrder, lb);
+					System.out.println(lb.getLoadingInfos());
+					subOrder.getLoadingInfo().setLoadingBay(lb);
+
+					Service.refreshLoadingBays(subOrder.getProductType());
+					LoadingBayView.fillInfo(null);
 				}
 
 				externalSystemView.updateLstOrder();
