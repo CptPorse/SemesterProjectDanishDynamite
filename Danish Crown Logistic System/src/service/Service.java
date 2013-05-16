@@ -17,6 +17,8 @@ import dao.Dao;
 public class Service
 {
 
+	//A number of methods that calls the constructor method of each class in the model package to create new objects. Proper linking are made where needed.
+
 	public static Driver createDriver(String name, String phoneNumber, String licensePlate)
 	{
 		Driver driver = new Driver(name, phoneNumber, licensePlate);
@@ -71,6 +73,10 @@ public class Service
 		return loadingInfo;
 	}
 
+	/**
+	 * A method that sorts the ArrayList<Trailers> from the Dao-layer using the booblesort algorithm. Trailers with the earliest timeOfArrival gets placed first in the Daos ArrayList<Trailer>.
+	 * @author Jens Nyberg Porse
+	 */
 	public static void sortTrailerArrival()
 	{
 
@@ -93,6 +99,12 @@ public class Service
 		}
 	}
 
+	/**
+	 * A method that sorts an ArrayList<SubOrders> using the booblesort algorithm
+	 * @param subOrders: Any ArrayList<SubOrder> 
+	 * @return An ArrayList<SubOrder> that is sorted based on the subOrders earlietsLoadingTime parameter. If there is any subOrders with high priority, they get first in line.
+	 * @author Jens Nyberg Porse
+	 */
 	public static ArrayList<SubOrder> sortSubOrders(ArrayList<SubOrder> subOrders)
 	{
 
@@ -105,10 +117,9 @@ public class Service
 					swap(subOrdersSorted, scan, scan + 1);
 			}
 		}
+		//Searches the sorted ArrayList<SubOrder> from end to start, for all subOrders with highPriority and places them in front.
 		for (int i = subOrdersSorted.size() - 1; i > 0; i--) {
-			System.out.println("High Priority? " + subOrdersSorted.get(i).isHighPriority());
 			if (subOrdersSorted.get(i).isHighPriority() == true) {
-				System.out.println("Found a High Priority: " + subOrdersSorted.get(i));
 				subOrdersSorted.add(0, subOrdersSorted.get(i));
 				subOrdersSorted.remove(i + 1);
 			}
@@ -116,6 +127,7 @@ public class Service
 		return subOrdersSorted;
 	}
 
+	//Method used to swap objects in an ArrayList of any type. Used as part of the sortSubOrder and sortTrailerArrival sorting algorithms.
 	private static <T> void swap(ArrayList<T> items, int index1, int index2)
 	{
 		T temp = items.get(index1);
@@ -124,11 +136,35 @@ public class Service
 	}
 
 	/**
+	 * A method used to set all subOrders initial earliestArrivalTime, based on the trailer they are carried by.
+	 * @param trailer: Any trailer
+	 * @author Jens Nyberg Porse 
+	 */
+	public static void setSubOrderEarliestLoadingTime(Trailer trailer)
+	{
+
+		//If the Trailer carries more then 1 subOrder, the first subOrders' earliestLoading time is set to the trailers timeOfArrival, the next subOrders' time is set to when the first is estimated to be done, and do on 
+		if (trailer.getSubOrders().size() > 1) {
+			Date time = trailer.getTimeOfArrival();
+			ArrayList<SubOrder> trailerSubOrders = trailer.getSubOrders();
+			for (SubOrder subOrder : trailerSubOrders) {
+				subOrder.setEarliestLoadingTime(time);
+				time = Service.getEndTime(time, subOrder.getEstimatedLoadingTime());
+			}
+
+			//If the Trailer only carries 1 subOrder, the subOrders earliestLoading time is set to the trailers timeOfArrival.
+		} else {
+			trailer.getSubOrders().get(0).setEarliestLoadingTime(trailer.getTimeOfArrival());
+
+		}
+	}
+
+	/**
 	 * A method that used to find the first avaliable LoadingBay available for the Suborder.
 	 * @param productType: The productType the SubOrder is made of. Used to filter out loadingBays that cannot load this.
 	 * @param earliestLoadingTime: The earliest time the SubOrder can be loaded unto a Truck.
 	 * @return An Object of type LoadingBay, which has the shortest waitingtime, compared to when the SubOrder earliest can be loaded.
-	 * @author Jens Porse
+	 * @author Jens Nyberg Porse
 	 */
 	public static LoadingBay firstAvailableLoadingBay(ProductType productType,
 			Date earliestLoadingTime)
@@ -156,14 +192,62 @@ public class Service
 				shortestWaitTime = waitTime;
 			}
 		}
+		//Before returning the earliest loadingBay, its nextAvailableTime is updated to the time it is ready to handle the LoadingInfo. 
 		Date bayReadyAt = new Date(earliestLoadingTime.getTime() + shortestWaitTime);
 		earliestLoadingBay.setNextAvailableTime(bayReadyAt);
 		return earliestLoadingBay;
 	}
 
 	/**
+	 * A method that creates the Schedule for when and where the SubOrders should be loaded.
+	 * @param subOrders: A list of SubOrders that is either waiting to be loaded, or has yet to arrive at Danish Crown 
+	 */
+	public static void createLoadingBaySchedule(ArrayList<SubOrder> subOrders)
+	{
+
+		for (int i = 0; i < subOrders.size(); i++) {
+			System.out.println("Starting a new Iteration:");
+			System.out.println("Finding the optimal LoadingBay:");
+			//Initiates all needed objects.
+			SubOrder subOrder = subOrders.get(i);
+			ProductType productType = subOrder.getProductType();
+			Date earliestLoadingTime = subOrder.getEarliestLoadingTime();
+
+			//Askes for the loadingbay with the shortest waiting time, compared to when the subOrder itself is ready to be loaded
+			LoadingBay loadingBay = Service.firstAvailableLoadingBay(productType,
+					earliestLoadingTime);
+
+			System.out.println(subOrder + " is earliest ready to be loaded at: "
+					+ Service.getDateToStringTime(earliestLoadingTime));
+			System.out.println("Loadingbay " + loadingBay.getLoadingBayNumber()
+					+ " is the first avaliable to handle " + subOrder);
+
+			LoadingInfo loadingInfo = Service.createLoadingInfo(subOrder, loadingBay);
+			System.out.println("New LoadingInfo created for " + subOrder);
+
+			//Sets the scheduled time for when the LoadingInfo is to start
+			loadingInfo.setTimeOfLoadingStart(loadingBay.getNextAvailableTime());
+			System.out.println("Its Time of loading start is: "
+					+ Service.getDateToStringTime(loadingInfo.getTimeOfLoadingStart()));
+			loadingInfo.setTimeOfLoadingEnd(Service.getEndTime(loadingInfo.getTimeOfLoadingStart(),
+					subOrder.getEstimatedLoadingTime()));
+			System.out.println("Its Time of loading end is: "
+					+ Service.getDateToStringTime(loadingInfo.getTimeOfLoadingEnd()));
+			System.out.println();
+
+			if (loadingInfo.getSubOrder().getTrailer().getTrailerState() == TrailerState.ARRIVED) {
+				loadingInfo.setState(LoadingInfoState.READY_TO_LOAD);
+			}
+
+			//Sets the nextAvailableTime for the LoadingBay to the time when the SubOrder is loaded
+			loadingBay.setNextAvailableTime(loadingInfo.getTimeOfLoadingEnd());
+		}
+	}
+
+	/**
 	 * A method that preps an ArrayList of SubOrders to be resorted in the LoadingBay Schedule
 	 * @param productType: Used to create a local list of all loadingBays, whos SubOrders we are to resort
+	 * @author Jens Nyberg Porse
 	 */
 	public static void refreshLoadingBays(ProductType productType)
 	{
@@ -174,7 +258,7 @@ public class Service
 				loadingBays.add(loadingBay);
 		}
 
-		//Loops through the list of loadingBays and adds all subOrders, that is either Ready to be loaded or pending, to the subOrderToSort list.
+		//Prepares an ArrayList<SubOrder> adnd loops through the list of loadingBays
 		ArrayList<SubOrder> subOrdersToSort = new ArrayList<SubOrder>();
 		for (LoadingBay loadingBay : loadingBays) {
 			for (LoadingInfo loadingInfo : loadingBay.getLoadingInfos()) {
@@ -183,21 +267,31 @@ public class Service
 						|| loadingInfo.getState() == LoadingInfoState.FINISHED) {
 					loadingBay.setNextAvailableTime(loadingInfo.getTimeOfLoadingEnd());
 				}
+				//Adds all subOrders to the ArrayList<SubOrder> who is either idle or waiting to be loaded.
 				if (loadingInfo.getState() == LoadingInfoState.READY_TO_LOAD
 						|| loadingInfo.getState() == LoadingInfoState.PENDING) {
 					subOrdersToSort.add(loadingInfo.getSubOrder());
+					//Removes the loadingInfos from the Dao and from the loadingBay, to copies.
 					loadingBay.removeLoadingInfo(loadingInfo);
 					Dao.removeLoadingInfo(loadingInfo);
 				}
 			}
 		}
 		System.out.println("sortSubOrder() began");
+		//Sorts the Array of SubOrders
 		subOrdersToSort = sortSubOrders(subOrdersToSort);
 		System.out.println("createLoadingBayschedule() began");
-		StartUpService.createLoadingBaySchedule(subOrdersToSort);
+		//Create a new loadingBay schedule
+		Service.createLoadingBaySchedule(subOrdersToSort);
 	}
 
-	// Author: Jens Porse
+	/**
+	 * A small method used to calculate and return the date and time when a subOrder is estimated to be loaded.
+	 * @param startTime: The time when the subOrder either begins, or is estimated to begin loading.
+	 * @param loadingTime The estimated loadingTime for a subOrder.
+	 * @return An estimated date for when the subOrder is loaded.
+	 * @author Jens Nyberg Porse
+	 */
 	public static Date getEndTime(Date startTime, int loadingTime)
 	{
 		Long time = startTime.getTime();
@@ -207,7 +301,12 @@ public class Service
 		return endTime;
 	}
 
-	// Author: Jens Porse
+	/**
+	 * A small method only used in the programs GUI.
+	 * @param date: Any date which time you wish to transform into a string
+	 * @return A String containing the parameter date's time in the format "HH:MM"
+	 * @author Jens Nyberg Porse 
+	 */
 	public static String getDateToStringTime(Date date)
 	{
 		String hours = String.format("%2d", date.getHours()).replace(' ', '0');
@@ -216,7 +315,12 @@ public class Service
 		return hours + ":" + minutes;
 	}
 
-	//Author: Jens Porse
+	/**
+	 * A small method only used in the programs GUI.
+	 * @param time: A string of the format "HH:MM", where HH = hours and MM = minutes
+	 * @return A date object set to January 1, 2013 at HH:MM
+	 * @author Jens Nyberg Porse
+	 */
 	public static Date getTimeStringToDate(String time)
 	{
 		int hours = Integer.parseInt(time.substring(0, 2));

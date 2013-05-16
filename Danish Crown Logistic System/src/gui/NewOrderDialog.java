@@ -23,7 +23,6 @@ import model.Order;
 import model.SubOrder;
 import model.TrailerState;
 import service.Service;
-import service.StartUpService;
 import dao.Dao;
 import dateutil.DU;
 
@@ -195,7 +194,7 @@ public class NewOrderDialog extends JDialog
 					o.addSubOrder(subOrder);
 					subOrder.setOrder(o);
 					System.out.println(subOrder);
-					StartUpService.setSubOrderEarliestLoadingTime(subOrder.getTrailer());
+					Service.setSubOrderEarliestLoadingTime(subOrder.getTrailer());
 					LoadingBay lb = Dao.getLoadingBays().get(0);
 					for (LoadingBay loadingBay : Dao.getLoadingBays()) {
 						if (loadingBay.getProductType() == subOrder.getProductType())

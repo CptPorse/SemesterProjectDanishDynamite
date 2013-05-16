@@ -19,10 +19,10 @@ public class SystemStartUp
 		StartUpService.startUpData();
 		Service.sortTrailerArrival();
 		for (Trailer trailer : Dao.getTrailer()) {
-			StartUpService.setSubOrderEarliestLoadingTime(trailer);
+			Service.setSubOrderEarliestLoadingTime(trailer);
 		}
 		StartUpService.sortSubOrdersDao();
-		StartUpService.createLoadingBaySchedule(Dao.getSubOrders());
+		Service.createLoadingBaySchedule(Dao.getSubOrders());
 		trailerView = new TrailerView();
 		loadingBayView = new LoadingBayView();
 		externalSystemView = new ExternalSystemView();

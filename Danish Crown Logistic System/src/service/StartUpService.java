@@ -5,45 +5,26 @@ import java.util.Date;
 
 import model.Driver;
 import model.LoadingBay;
-import model.LoadingInfo;
-import model.LoadingInfoState;
 import model.Order;
 import model.ProductType;
 import model.SubOrder;
 import model.Trailer;
-import model.TrailerState;
 import dao.Dao;
 import dateutil.DU;
 
 public class StartUpService
 {
 
-	public static void setSubOrderEarliestLoadingTime(Trailer trailer)
-	{
-
-		if (trailer.getSubOrders().size() > 1) {
-			Date time = trailer.getTimeOfArrival();
-			ArrayList<SubOrder> trailerSubOrders = trailer.getSubOrders();
-			for (SubOrder subOrder : trailerSubOrders) {
-				System.out.println(subOrder + ". EarliestLoadingTime sat to: " + time);
-				subOrder.setEarliestLoadingTime(time);
-				time = Service.getEndTime(time, subOrder.getEstimatedLoadingTime());
-			}
-
-		} else {
-			trailer.getSubOrders().get(0).setEarliestLoadingTime(trailer.getTimeOfArrival());
-
-		}
-
-	}
-
+	/**
+	 * A method used only in the Startup face to sort the subOrders stored in the Dao-class. The method uses a booblesorting algorithm, and places subOrder with the earliestArrivalTime first in the list
+	 * @author Jens Nyberg Porse
+	 */
 	public static void sortSubOrdersDao()
 	{
 
 		ArrayList<SubOrder> subOrders = new ArrayList<SubOrder>();
 
 		subOrders.addAll(Dao.getSubOrders());
-		System.out.println("List before Sorted: " + subOrders);
 
 		int position, scan;
 		for (position = subOrders.size() - 1; position >= 0; position--) {
@@ -53,7 +34,6 @@ public class StartUpService
 					swap(subOrders, scan, scan + 1);
 			}
 		}
-		System.out.println("List after Sorted: " + subOrders);
 		for (int i = subOrders.size() - 1; i >= 0; i--) {
 			Dao.removeSubOrder(Dao.getSubOrders().get(i));
 		}
@@ -62,6 +42,7 @@ public class StartUpService
 		}
 	}
 
+	//Method used to swap objects in an ArrayList of any type. Used as part of the sortSubOrdersDao sorting algorithm.
 	private static <T> void swap(ArrayList<T> items, int index1, int index2)
 	{
 		T temp = items.get(index1);
@@ -69,52 +50,7 @@ public class StartUpService
 		items.set(index2, temp);
 	}
 
-	/**
-	 * A method that creates the Schedule for when and where the SubOrders should be loaded.
-	 * @param subOrders: A list of SubOrders that is either waiting to be loaded, or has yet to arrive at Danish Crown 
-	 */
-	public static void createLoadingBaySchedule(ArrayList<SubOrder> subOrders)
-	{
-
-		for (int i = 0; i < subOrders.size(); i++) {
-			System.out.println("Starting a new Iteration:");
-			System.out.println("Finding the optimal LoadingBay:");
-			//Initiates all needed objects.
-			SubOrder subOrder = subOrders.get(i);
-			ProductType productType = subOrder.getProductType();
-			Date earliestLoadingTime = subOrder.getEarliestLoadingTime();
-
-			//Askes for the loadingbay with the shortest waiting time, compared to when the subOrder itself is ready to be loaded
-			LoadingBay loadingBay = Service.firstAvailableLoadingBay(productType,
-					earliestLoadingTime);
-
-			System.out.println(subOrder + " is earliest ready to be loaded at: "
-					+ Service.getDateToStringTime(earliestLoadingTime));
-			System.out.println("Loadingbay " + loadingBay.getLoadingBayNumber()
-					+ " is the first avaliable to handle " + subOrder);
-
-			LoadingInfo loadingInfo = Service.createLoadingInfo(subOrder, loadingBay);
-			System.out.println("New LoadingInfo created for " + subOrder);
-
-			//Sets the scheduled time for when the LoadingInfo is to start
-			loadingInfo.setTimeOfLoadingStart(loadingBay.getNextAvailableTime());
-			System.out.println("Its Time of loading start is: "
-					+ Service.getDateToStringTime(loadingInfo.getTimeOfLoadingStart()));
-			loadingInfo.setTimeOfLoadingEnd(Service.getEndTime(loadingInfo.getTimeOfLoadingStart(),
-					subOrder.getEstimatedLoadingTime()));
-			System.out.println("Its Time of loading end is: "
-					+ Service.getDateToStringTime(loadingInfo.getTimeOfLoadingEnd()));
-			System.out.println();
-
-			if (loadingInfo.getSubOrder().getTrailer().getTrailerState() == TrailerState.ARRIVED) {
-				loadingInfo.setState(LoadingInfoState.READY_TO_LOAD);
-			}
-
-			//Sets the nextAvailableTime for the LoadingBay to the time when the SubOrder is loaded
-			loadingBay.setNextAvailableTime(loadingInfo.getTimeOfLoadingEnd());
-		}
-	}
-
+	//A method that creates lots of objects of all model classes, to fill out the program
 	@SuppressWarnings("deprecation")
 	public static void startUpData()
 	{

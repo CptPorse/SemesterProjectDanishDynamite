@@ -100,7 +100,7 @@ public class NewSubOrderDialog extends JDialog
 		txfWeight.setBounds(20, 65, 75, 20);
 		contentPanel.add(txfWeight);
 
-		JLabel lblTons = new JLabel("Tons");
+		JLabel lblTons = new JLabel("Kilo");
 		lblTons.setBounds(97, 68, 46, 14);
 		contentPanel.add(lblTons);
 
