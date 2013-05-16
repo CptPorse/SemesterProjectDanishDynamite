@@ -236,12 +236,19 @@ public class LoadingInfoDialog extends JDialog
 				// sets the subOrder as loaded
 				loadingInfo.getSubOrder().setLoaded(true);
 
-				// checking, if the trailer is fully loaded
-				boolean trailerFullyLoaded = true;
 				ArrayList<SubOrder> subOrders = loadingInfo.getSubOrder().getTrailer()
 						.getSubOrders();
 
+				// sets the next subOrders loadingInfoSate on the trailer to READY_TO_LOAD
+				for (int i = 0; i < subOrders.size() - 1; i++) {
+					if (subOrders.get(i).isLoaded() && !subOrders.get(i + 1).isLoaded()) {
+						subOrders.get(i + 1).getLoadingInfo()
+								.setState(LoadingInfoState.READY_TO_LOAD);
+					}
+				}
+
 				// searches if any of the attached suborders to the trailer, aren't done loading
+				boolean trailerFullyLoaded = true;
 				for (SubOrder s : subOrders) {
 					if (s.isLoaded() == false) {
 						trailerFullyLoaded = false;
@@ -260,7 +267,6 @@ public class LoadingInfoDialog extends JDialog
 				((Window)btnEndLoading.getTopLevelAncestor()).dispose();
 
 				//Update the trailer view and trailer state - Christian
-//				loadingInfo.getSubOrder().getTrailer().setTrailerState(TrailerState.LOADED);
 				TrailerView.fillModel(TrailerState.ARRIVED);
 				TrailerView.fillModel(TrailerState.BEING_LOADED);
 				TrailerView.fillModel(TrailerState.LOADED);

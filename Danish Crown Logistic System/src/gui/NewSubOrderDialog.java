@@ -20,6 +20,7 @@ import javax.swing.border.EmptyBorder;
 import model.ProductType;
 import model.SubOrder;
 import model.Trailer;
+import model.TrailerState;
 import service.Service;
 import dao.Dao;
 
@@ -141,7 +142,7 @@ public class NewSubOrderDialog extends JDialog
 				Trailer t1 = Dao.getTrailer().get(i);
 				if (t1.getProductTypes().contains(cmbProductType.getSelectedItem()) == true
 						&& t1.getWeightCurrent() + Double.parseDouble(txfWeight.getText()) < t1
-								.getWeightMax()) {
+								.getWeightMax() && t1.getTrailerState() == TrailerState.IDLE) {
 					avalibleTrailers.add(Dao.getTrailer().get(i));
 					System.out.println("Added " + Dao.getTrailer().get(i));
 				}

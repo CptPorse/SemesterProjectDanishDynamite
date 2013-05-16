@@ -179,10 +179,10 @@ public class TrailerView extends JFrame
 				if (lstEnRoute.isSelectionEmpty() == false) {
 					//Set the arrived trailers state to ARRIVED.
 					lstEnRoute.getSelectedValue().setTrailerState(TrailerState.ARRIVED);
-					//Loop through the trailers suborders to change their state to READY_TO_LOAD.
-					for (SubOrder subOrder : (lstEnRoute.getSelectedValue()).getSubOrders()) {
-						subOrder.getLoadingInfo().setState(LoadingInfoState.READY_TO_LOAD);
-					}
+					//Sets the first suborder on the trailers state to READY_TO_LOAD.
+					lstEnRoute.getSelectedValue().getSubOrders().get(0).getLoadingInfo()
+							.setState(LoadingInfoState.READY_TO_LOAD);
+
 					//Update the models in the dialog.
 					fillModel(TrailerState.ENROUTE);
 					fillModel(TrailerState.ARRIVED);
