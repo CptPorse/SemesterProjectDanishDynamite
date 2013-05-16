@@ -61,7 +61,7 @@ public class LoadingBayView extends JFrame
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 
-		lbLoadingBay = new JLabel("Loading Bay view");
+		lbLoadingBay = new JLabel("Loading Bay View");
 		lbLoadingBay.setFont(new Font("Tahoma", Font.BOLD, 16));
 		lbLoadingBay.setBounds(211, 11, 164, 24);
 		contentPane.add(lbLoadingBay);

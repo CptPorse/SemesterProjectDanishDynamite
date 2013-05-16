@@ -1,5 +1,6 @@
 package gui;
 
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -40,7 +41,7 @@ public class TrailerView extends JFrame
 	private static JList<Trailer> lstEnRoute, lstReady, lstLoading, lstLoaded, lstDeparted;
 	private static DefaultListModel<Trailer> EnRouteModel, ReadyModel, LoadingModel, LoadedModel, DepartedModel;
 	private static JScrollPane scpEnRoute, scpReady, scpLoading, scpLoaded, scpDeparted;
-	private JLabel lblEnRoute, lblReady, lblLoading, lblLoaded, lblDeparted;
+	private JLabel lblTrailerView, lblEnRoute, lblReady, lblLoading, lblLoaded, lblDeparted;
 	private JButton btnArrived, btnApprove;
 
 	private void InitContent()
@@ -51,6 +52,11 @@ public class TrailerView extends JFrame
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
+
+		lblTrailerView = new JLabel("Trailer View");
+		lblTrailerView.setFont(new Font("Tahoma", Font.BOLD, 16));
+		lblTrailerView.setBounds(280, 11, 164, 24);
+		contentPane.add(lblTrailerView);
 
 		EnRouteModel = new DefaultListModel<Trailer>();
 		lstEnRoute = new JList<Trailer>(EnRouteModel);
