@@ -3,9 +3,9 @@ package model;
 //Author: Christian Møller Pedersen
 /*
  * PENDING: 		Trailer is on its way to DC.
- * READY_TO_LOAD: 	Trailer has arrived at DC and is waiting to begin loading.
- * LOADING: 		Trailer is currently being loaded.
- * FINISHED: 		Trailer is loaded and leaving DC.
+ * READY_TO_LOAD: 	Trailer has arrived at DC and is ready to begin loading.
+ * LOADING: 		LoadingInfo is currently being loaded.
+ * FINISHED: 		LoadingInfo is loaded and finished.
  */
 public enum LoadingInfoState
 {
