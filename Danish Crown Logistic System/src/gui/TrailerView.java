@@ -21,7 +21,10 @@ import model.TrailerState;
 import dao.Dao;
 import dateutil.DU;
 
-//Author: Christian Møller Pedersen
+/**
+ * @author      Christian M. Pedersen eaachped22@students.akademiaarhus.dk
+ * @version     1.0                         
+ */
 public class TrailerView extends JFrame
 {
 
@@ -126,8 +129,15 @@ public class TrailerView extends JFrame
 		fillModel(TrailerState.ENROUTE);
 	}
 
+	/**
+	 * Fills a model in the TrailerView dialog.
+	 * 
+	 * @param trailerState	 the trailer state that is represented by each model.
+	 * For example, TrailerState.LOADING will fill the LoadingModel.
+	 */
 	public static void fillModel(TrailerState trailerState)
 	{
+		//Through the parameter and switch the correct ListModel will be refreshed.
 		DefaultListModel<Trailer> model = null;
 		switch (trailerState) {
 		case ARRIVED:
@@ -153,6 +163,7 @@ public class TrailerView extends JFrame
 			model.clear();
 			for (Trailer trailer : Dao.getTrailer())
 			{
+				//If the current trailer has the same state as the parameter, it's added to the ListModel.
 				if (trailer.getTrailerState() == trailerState)
 				{
 					model.addElement(trailer);
@@ -170,13 +181,17 @@ public class TrailerView extends JFrame
 			{
 				if (lstEnRoute.isSelectionEmpty() == false)
 				{
-					(lstEnRoute.getSelectedValue()).setTrailerState(TrailerState.ARRIVED);
+					//Set the arrived trailers state to ARRIVED.
+					lstEnRoute.getSelectedValue().setTrailerState(TrailerState.ARRIVED);
+					//Loop through the trailers suborders to change their state to READY_TO_LOAD.
 					for (SubOrder subOrder : (lstEnRoute.getSelectedValue()).getSubOrders())
 					{
 						subOrder.getLoadingInfo().setState(LoadingInfoState.READY_TO_LOAD);
 					}
+					//Update the models in the dialog.
 					fillModel(TrailerState.ENROUTE);
 					fillModel(TrailerState.ARRIVED);
+					//Refresh the LoadingBayView.
 					LoadingBayView.fillInfo(null);
 				}
 			}
@@ -184,8 +199,10 @@ public class TrailerView extends JFrame
 			{
 				if (lstLoaded.isSelectionEmpty() == false)
 				{
-					(lstLoaded.getSelectedValue()).setTrailerState(TrailerState.DEPARTED);
-					(lstLoaded.getSelectedValue()).setTimeOfDeparture(DU.createDate());
+					//Set the finished trailers state to DEPARTED and set it's time of departure.
+					lstLoaded.getSelectedValue().setTrailerState(TrailerState.DEPARTED);
+					lstLoaded.getSelectedValue().setTimeOfDeparture(DU.createDate());
+					//Update the models in the dialog.
 					fillModel(TrailerState.LOADED);
 					fillModel(TrailerState.DEPARTED);
 				}

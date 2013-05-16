@@ -25,7 +25,10 @@ import com.sun.istack.internal.Nullable;
 
 import dao.Dao;
 
-//Author Christian "sexy" Møller Pedersen
+/**
+ * @author      Christian M. Pedersen eaachped22@students.akademiaarhus.dk
+ * @version     1.0                         
+ */
 public class LoadingBayView extends JFrame
 {
 
@@ -83,6 +86,9 @@ public class LoadingBayView extends JFrame
 
 	}
 
+	/**
+	 * Clears the Loading Bays JComboBox and refills it with all existing.
+	 */
 	public static void fillBays()
 	{
 		cmbBays.removeAll();
@@ -92,6 +98,12 @@ public class LoadingBayView extends JFrame
 		}
 	}
 
+	/**
+	 * Clears the Loading Info JList and refills it with Loading Infos from the parameter.
+	 * If the parameter is null, the currently selected loading bay from the JComboBox cmbBays is used.
+	 * 
+	 * @param lb	The loading bay to get Loading Infos from, or if null, refresh the current list.
+	 */
 	public static void fillInfo(@Nullable LoadingBay lb)
 	{
 		if (lb == null)
