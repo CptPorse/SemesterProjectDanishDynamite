@@ -1,5 +1,6 @@
 package gui;
 
+import java.awt.Color;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -13,6 +14,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
+import model.LoadingBay;
 import model.LoadingInfo;
 import model.LoadingInfoState;
 import model.SubOrder;
@@ -29,14 +31,15 @@ public class LoadingInfoDialog extends JDialog
 		System.out.println("Created new Window");
 		setTitle("Loading Info");
 		this.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-		this.setBounds(30, 30, 569, 347);
+		this.setBounds(30, 30, 569, 298);
 		InitContent();
 		this.setVisible(true);
 
 	}
 
 	private JPanel contentPanel = new JPanel();
-	private JLabel lblLoadingBay, lblTrailer, lblProductType, lblBeganLoading, lblEndedLoading;
+	private JLabel lblLoadingBay, lblTrailer, lblProductType, lblBeganLoading, lblEndedLoading,
+			lblWarning;
 	private JTextField txfLoadingBay, txfTrailer, txfProductType, txfBeganLoading, txfEndedLoading;
 	private JButton btnBeginLoading, btnEndLoading, btnCancel;
 
@@ -111,9 +114,14 @@ public class LoadingInfoDialog extends JDialog
 		btnEndLoading.addActionListener(controller);
 
 		btnCancel = new JButton("Cancel");
-		btnCancel.setBounds(274, 218, 89, 23);
+		btnCancel.setBounds(219, 218, 89, 23);
 		contentPanel.add(btnCancel);
 		btnCancel.addActionListener(controller);
+
+		lblWarning = new JLabel("WARNING: ");
+		lblWarning.setBounds(69, 184, 431, 23);
+		contentPanel.add(lblWarning);
+		lblWarning.setVisible(false);
 
 	}
 
@@ -135,12 +143,15 @@ public class LoadingInfoDialog extends JDialog
 			txfEndedLoading.setEditable(false);
 			btnBeginLoading.setEnabled(false);
 			btnEndLoading.setEnabled(false);
+			lblWarning.setVisible(false);
 		}
+
 		if (lInfo.getState() == LoadingInfoState.READY_TO_LOAD) {
 			txfBeganLoading.setEditable(true);
 			btnBeginLoading.setEnabled(true);
 			txfEndedLoading.setEditable(false);
 			btnEndLoading.setEnabled(false);
+			lblWarning.setVisible(false);
 
 		}
 		if (lInfo.getState() == LoadingInfoState.LOADING) {
@@ -148,6 +159,27 @@ public class LoadingInfoDialog extends JDialog
 			btnBeginLoading.setEnabled(false);
 			txfEndedLoading.setEditable(true);
 			btnEndLoading.setEnabled(true);
+			lblWarning.setVisible(false);
+		}
+
+		if (lInfo.getSubOrder().getTrailer().getTrailerState() == TrailerState.BEING_LOADED) {
+
+			LoadingBay lb = null;
+			for (SubOrder s : lInfo.getSubOrder().getTrailer().getSubOrders()) {
+
+				if (s.getLoadingInfo().getState() == LoadingInfoState.LOADING
+						&& s.getLoadingInfo() != lInfo) {
+					lb = s.getLoadingInfo().getLoadingBay();
+					txfBeganLoading.setEditable(false);
+					txfEndedLoading.setEditable(false);
+					btnBeginLoading.setEnabled(false);
+					btnEndLoading.setEnabled(false);
+					lblWarning.setText("Trailer is Already being loaded at LoadingBay" + lb);
+					lblWarning.setForeground(Color.RED);
+					lblWarning.setVisible(true);
+				}
+			}
+
 		}
 
 	}
@@ -219,12 +251,15 @@ public class LoadingInfoDialog extends JDialog
 				if (trailerFullyLoaded == true) {
 					loadingInfo.getSubOrder().getTrailer().setTrailerState(TrailerState.LOADED);
 					SmsDialog sms = new SmsDialog(loadingInfo);
+				} else {
+					loadingInfo.getSubOrder().getTrailer().setTrailerState(TrailerState.ARRIVED);
 				}
 				LoadingBayView.fillInfo(null);
 				((Window)btnEndLoading.getTopLevelAncestor()).dispose();
 
 				//Update the trailer view and trailer state - Christian
-				loadingInfo.getSubOrder().getTrailer().setTrailerState(TrailerState.LOADED);
+//				loadingInfo.getSubOrder().getTrailer().setTrailerState(TrailerState.LOADED);
+				TrailerView.fillModel(TrailerState.ARRIVED);
 				TrailerView.fillModel(TrailerState.BEING_LOADED);
 				TrailerView.fillModel(TrailerState.LOADED);
 			}

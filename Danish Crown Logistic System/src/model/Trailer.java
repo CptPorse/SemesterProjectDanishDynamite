@@ -174,10 +174,9 @@ public class Trailer
 			break;
 		case BEING_LOADED:
 			LoadingBay lb = null;
-			for (LoadingInfo li : Dao.getLoadingInfos())
-			{
-				if (li.getSubOrder().getTrailer() == this)
-				{
+			for (LoadingInfo li : Dao.getLoadingInfos()) {
+				if (li.getSubOrder().getTrailer() == this
+						&& li.getSubOrder().getLoadingInfo().getState() == LoadingInfoState.LOADING) {
 					lb = li.getLoadingBay();
 				}
 			}
@@ -188,11 +187,12 @@ public class Trailer
 					+ Service.getDateToStringTime(timeOfDeparture);
 			break;
 		case ENROUTE:
-			string = "<html><table>Trailer: " + trailerID + "<br>ETA: " + Service.getDateToStringTime(timeOfArrival);
+			string = "<html><table>Trailer: " + trailerID + "<br>ETA: "
+					+ Service.getDateToStringTime(timeOfArrival);
 			break;
 		case LOADED:
-			string = "<html><table>Trailer: " + trailerID + "<br>Weight: " + weightCurrent + " kg<br>Max: " + weightMax
-					+ " kg";
+			string = "<html><table>Trailer: " + trailerID + "<br>Weight: " + weightCurrent
+					+ " kg<br>Max: " + weightMax + " kg";
 			break;
 		default:
 			string = trailerID;
