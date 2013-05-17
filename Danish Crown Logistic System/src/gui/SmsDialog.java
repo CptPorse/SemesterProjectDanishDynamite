@@ -11,7 +11,6 @@ import javax.swing.JTextArea;
 import javax.swing.border.EmptyBorder;
 
 import model.Driver;
-import model.LoadingInfo;
 import model.Trailer;
 
 //Author Christian "sexy" Møller Pedersen
@@ -19,13 +18,13 @@ public class SmsDialog extends JFrame
 {
 	private Controller controller;
 
-	public SmsDialog(LoadingInfo loadingInfo)
+	public SmsDialog(Trailer trailer)
 	{
 		setResizable(false);
 		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		this.setBounds(600, 375, 350, 300);
 		this.setTitle("Sexy SMS 1.0");
-		InitContent(loadingInfo);
+		InitContent(trailer);
 		this.setVisible(true);
 	}
 
@@ -34,7 +33,7 @@ public class SmsDialog extends JFrame
 	private JTextArea txaReceiver, txaMessage;
 	private JButton btnOk;
 
-	private void InitContent(LoadingInfo loadingInfo)
+	private void InitContent(Trailer trailer)
 	{
 		controller = new Controller();
 
@@ -67,17 +66,12 @@ public class SmsDialog extends JFrame
 		contentPane.add(btnOk);
 
 		//Receiver
-		Driver driver = loadingInfo.getSubOrder().getTrailer().getDriver();
+		Driver driver = trailer.getDriver();
 		if (driver != null)
 		{
-			Trailer trailer = driver.getTrailer();
-			if (trailer != null)
-			{
-				txaReceiver.setText(driver.getName() + " (" + driver.getPhoneNumber() + ")");
-				txaMessage.setText("Hi " + driver.getName() + ".\n\rYour trailer (" + trailer.getTrailerID()
-						+ ") is now finished loading.\n\rPlease pick it up at loading bay " + loadingInfo.getLoadingBay().getLoadingBayNumber()
-						+ ".\n\rRegards\n\rDanish Crown");
-			}
+			txaReceiver.setText(driver.getName() + " (" + driver.getPhoneNumber() + ")");
+			txaMessage.setText("Hi " + driver.getName() + ".\n\rYour trailer (" + trailer.getTrailerID()
+					+ ") is now finished loading.\n\rPlease pick it up at loading bay " + trailer.getLoadingBay() + ".\n\rRegards\n\rDanish Crown");
 		}
 
 	}

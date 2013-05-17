@@ -20,6 +20,23 @@ public class Trailer
 	private double weightCurrent;
 	private double weightMax;
 	private TrailerState trailerState;
+	private LoadingBay loadingBay;
+
+	/**
+	 * @return the loadingBay
+	 */
+	public LoadingBay getLoadingBay()
+	{
+		return loadingBay;
+	}
+
+	/**
+	 * @param loadingBay the loadingBay to set
+	 */
+	public void setLoadingBay(LoadingBay loadingBay)
+	{
+		this.loadingBay = loadingBay;
+	}
 
 	//Links
 	private Driver driver;
@@ -174,29 +191,26 @@ public class Trailer
 			break;
 		case BEING_LOADED:
 			LoadingBay lb = null;
-			for (LoadingInfo li : Dao.getLoadingInfos()) {
-				if (li.getSubOrder().getTrailer() == this
-						&& li.getSubOrder().getLoadingInfo().getState() == LoadingInfoState.LOADING) {
+			for (LoadingInfo li : Dao.getLoadingInfos())
+			{
+				if (li.getSubOrder().getTrailer() == this && li.getSubOrder().getLoadingInfo().getState() == LoadingInfoState.LOADING)
+				{
 					lb = li.getLoadingBay();
 				}
 			}
 			string = "<html><table>Trailer: " + trailerID + "<br>" + lb;
 			break;
 		case DEPARTED:
-			string = "<html><table>Trailer: " + trailerID + "<br>Departed: "
-					+ Service.getDateToStringTime(timeOfDeparture);
+			string = "<html><table>Trailer: " + trailerID + "<br>Departed: " + Service.getDateToStringTime(timeOfDeparture);
 			break;
 		case ENROUTE:
-			string = "<html><table>Trailer: " + trailerID + "<br>ETA: "
-					+ Service.getDateToStringTime(timeOfArrival);
+			string = "<html><table>Trailer: " + trailerID + "<br>ETA: " + Service.getDateToStringTime(timeOfArrival);
 			break;
 		case LOADED:
-			string = "<html><table>Trailer: " + trailerID + "<br>Weight: " + weightCurrent
-					+ " kg<br>Max: " + weightMax + " kg";
+			string = "<html><table>Trailer: " + trailerID + "<br>Weight: " + weightCurrent + " kg<br>Max: " + weightMax + " kg";
 			break;
 		default:
-			string = "<html><table>Trailer: " + trailerID + "<br>ETA: "
-					+ Service.getDateToStringTime(timeOfArrival);
+			string = "<html><table>Trailer: " + trailerID + "<br>ETA: " + Service.getDateToStringTime(timeOfArrival);
 			break;
 
 		}

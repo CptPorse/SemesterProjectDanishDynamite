@@ -257,7 +257,8 @@ public class LoadingInfoDialog extends JDialog
 				{
 					loadingInfo.getSubOrder().getTrailer().setTrailerState(TrailerState.LOADED);
 					loadingInfo.getSubOrder().getTrailer().setTimeOfDeparture(loadingInfo.getTimeOfLoadingEnd());
-					SmsDialog sms = new SmsDialog(loadingInfo);
+					loadingInfo.getSubOrder().getTrailer().setLoadingBay(loadingInfo.getLoadingBay());
+					SmsDialog sms = new SmsDialog(loadingInfo.getSubOrder().getTrailer());
 				}
 				else
 				{
