@@ -208,6 +208,10 @@ public class TrailerView extends JFrame
 					{
 						//Set the finished trailers state to DEPARTED and set it's time of departure.
 						lstLoaded.getSelectedValue().setTrailerState(TrailerState.DEPARTED);
+
+						//Set trailers LoadingBay to null, as it is no longer at DC.
+						lstLoaded.getSelectedValue().setLoadingBay(null);
+
 						//Update the models in the dialog.
 						fillModel(TrailerState.LOADED);
 						fillModel(TrailerState.DEPARTED);

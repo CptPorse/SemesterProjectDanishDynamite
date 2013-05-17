@@ -23,7 +23,7 @@ public class Trailer
 	private LoadingBay loadingBay = null;
 
 	/**
-	 * @return the loadingBay
+	 * @return the loadingBay the trailer is currently parked at.
 	 */
 	public LoadingBay getLoadingBay()
 	{
@@ -31,9 +31,9 @@ public class Trailer
 	}
 
 	/**
-	 * @param loadingBay the loadingBay to set
+	 * @param loadingBay the loadingBay the trailer is currently parked at.
 	 */
-	public void setLoadingBay(LoadingBay loadingBay)
+	public void setLoadingBay(@Nullable LoadingBay loadingBay)
 	{
 		this.loadingBay = loadingBay;
 	}
