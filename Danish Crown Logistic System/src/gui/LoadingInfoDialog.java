@@ -38,8 +38,7 @@ public class LoadingInfoDialog extends JDialog
 	}
 
 	private JPanel contentPanel = new JPanel();
-	private JLabel lblLoadingBay, lblTrailer, lblProductType, lblBeganLoading, lblEndedLoading,
-			lblWarning;
+	private JLabel lblLoadingBay, lblTrailer, lblProductType, lblBeganLoading, lblEndedLoading, lblWarning;
 	private JTextField txfLoadingBay, txfTrailer, txfProductType, txfBeganLoading, txfEndedLoading;
 	private JButton btnBeginLoading, btnEndLoading, btnCancel;
 
@@ -137,8 +136,8 @@ public class LoadingInfoDialog extends JDialog
 		txfLoadingBay.setText("" + lInfo.getLoadingBay().getLoadingBayNumber());
 		txfBeganLoading.setText(Service.getDateToStringTime(lInfo.getTimeOfLoadingStart()));
 		txfEndedLoading.setText(Service.getDateToStringTime(lInfo.getTimeOfLoadingEnd()));
-		if (lInfo.getState() == LoadingInfoState.PENDING
-				|| lInfo.getState() == LoadingInfoState.FINISHED) {
+		if (lInfo.getState() == LoadingInfoState.PENDING || lInfo.getState() == LoadingInfoState.FINISHED)
+		{
 			txfBeganLoading.setEditable(false);
 			txfEndedLoading.setEditable(false);
 			btnBeginLoading.setEnabled(false);
@@ -146,7 +145,8 @@ public class LoadingInfoDialog extends JDialog
 			lblWarning.setVisible(false);
 		}
 
-		if (lInfo.getState() == LoadingInfoState.READY_TO_LOAD) {
+		if (lInfo.getState() == LoadingInfoState.READY_TO_LOAD)
+		{
 			txfBeganLoading.setEditable(true);
 			btnBeginLoading.setEnabled(true);
 			txfEndedLoading.setEditable(false);
@@ -154,7 +154,8 @@ public class LoadingInfoDialog extends JDialog
 			lblWarning.setVisible(false);
 
 		}
-		if (lInfo.getState() == LoadingInfoState.LOADING) {
+		if (lInfo.getState() == LoadingInfoState.LOADING)
+		{
 			txfBeganLoading.setEditable(false);
 			btnBeginLoading.setEnabled(false);
 			txfEndedLoading.setEditable(true);
@@ -162,13 +163,15 @@ public class LoadingInfoDialog extends JDialog
 			lblWarning.setVisible(false);
 		}
 
-		if (lInfo.getSubOrder().getTrailer().getTrailerState() == TrailerState.BEING_LOADED) {
+		if (lInfo.getSubOrder().getTrailer().getTrailerState() == TrailerState.BEING_LOADED)
+		{
 
 			LoadingBay lb = null;
-			for (SubOrder s : lInfo.getSubOrder().getTrailer().getSubOrders()) {
+			for (SubOrder s : lInfo.getSubOrder().getTrailer().getSubOrders())
+			{
 
-				if (s.getLoadingInfo().getState() == LoadingInfoState.LOADING
-						&& s.getLoadingInfo() != lInfo) {
+				if (s.getLoadingInfo().getState() == LoadingInfoState.LOADING && s.getLoadingInfo() != lInfo)
+				{
 					lb = s.getLoadingInfo().getLoadingBay();
 					txfBeganLoading.setEditable(false);
 					txfEndedLoading.setEditable(false);
@@ -192,18 +195,15 @@ public class LoadingInfoDialog extends JDialog
 		public void actionPerformed(ActionEvent e)
 		{
 
-			if (e.getSource() == btnBeginLoading) {
+			if (e.getSource() == btnBeginLoading)
+			{
 
-				loadingInfo.setTimeOfLoadingStart(Service.getTimeStringToDate(txfBeganLoading
-						.getText()));
-				loadingInfo.setTimeOfLoadingEnd(Service.getEndTime(loadingInfo
-						.getTimeOfLoadingStart(), loadingInfo.getSubOrder()
-						.getEstimatedLoadingTime()));
+				loadingInfo.setTimeOfLoadingStart(Service.getTimeStringToDate(txfBeganLoading.getText()));
+				loadingInfo.setTimeOfLoadingEnd(Service.getEndTime(loadingInfo.getTimeOfLoadingStart(), loadingInfo.getSubOrder().getEstimatedLoadingTime()));
 				loadingInfo.setState(LoadingInfoState.LOADING);
 
 				//Updating texboxes and buttons
-				txfEndedLoading.setText(Service.getDateToStringTime(loadingInfo
-						.getTimeOfLoadingEnd()));
+				txfEndedLoading.setText(Service.getDateToStringTime(loadingInfo.getTimeOfLoadingEnd()));
 				txfBeganLoading.setEditable(false);
 				btnBeginLoading.setEnabled(false);
 				txfEndedLoading.setEditable(true);
@@ -221,10 +221,10 @@ public class LoadingInfoDialog extends JDialog
 				TrailerView.fillModel(TrailerState.BEING_LOADED);
 			}
 
-			if (e.getSource() == btnEndLoading) {
+			if (e.getSource() == btnEndLoading)
+			{
 
-				loadingInfo.setTimeOfLoadingEnd(Service.getTimeStringToDate(txfEndedLoading
-						.getText()));
+				loadingInfo.setTimeOfLoadingEnd(Service.getTimeStringToDate(txfEndedLoading.getText()));
 
 				//Updating LoadingBays nextAvailabeTime. This is used for re-sorting LoadingInfos
 				loadingInfo.getLoadingBay().setNextAvailableTime(loadingInfo.getTimeOfLoadingEnd());
@@ -236,31 +236,41 @@ public class LoadingInfoDialog extends JDialog
 				// sets the subOrder as loaded
 				loadingInfo.getSubOrder().setLoaded(true);
 
-				ArrayList<SubOrder> subOrders = loadingInfo.getSubOrder().getTrailer()
-						.getSubOrders();
+				ArrayList<SubOrder> subOrders = loadingInfo.getSubOrder().getTrailer().getSubOrders();
 
-				// sets the next subOrders loadingInfoSate on the trailer to READY_TO_LOAD.
-				for (int i = 0; i < subOrders.size() - 1; i++) {
-					if (subOrders.get(i).isLoaded() && !subOrders.get(i + 1).isLoaded()) {
-						subOrders.get(i + 1).getLoadingInfo()
-								.setState(LoadingInfoState.READY_TO_LOAD);
-					}
-				}
+//				// sets the next subOrders loadingInfoSate on the trailer to READY_TO_LOAD.
+//				for (int i = 0; i < subOrders.size() - 1; i++)
+//				{
+//					if (subOrders.get(i).isLoaded() && !subOrders.get(i + 1).isLoaded())
+//					{
+//						subOrders.get(i + 1).getLoadingInfo().setState(LoadingInfoState.READY_TO_LOAD);
+//					}
+//				}
 
 				// searches if any of the attached suborders to the trailer, aren't done loading
 				boolean trailerFullyLoaded = true;
-				for (SubOrder s : subOrders) {
-					if (s.isLoaded() == false) {
+				boolean changed = false;
+				for (SubOrder s : subOrders)
+				{
+					if (s.isLoaded() == false)
+					{
+						if (changed == false)
+						{
+							s.getLoadingInfo().setState(LoadingInfoState.READY_TO_LOAD);
+							changed = true;
+						}
 						trailerFullyLoaded = false;
 					}
 				}
 				// if all the suborders are done, trailer changes trailerstate to: loaded
-				if (trailerFullyLoaded == true) {
+				if (trailerFullyLoaded == true)
+				{
 					loadingInfo.getSubOrder().getTrailer().setTrailerState(TrailerState.LOADED);
-					loadingInfo.getSubOrder().getTrailer()
-							.setTimeOfDeparture(loadingInfo.getTimeOfLoadingEnd());
+					loadingInfo.getSubOrder().getTrailer().setTimeOfDeparture(loadingInfo.getTimeOfLoadingEnd());
 					SmsDialog sms = new SmsDialog(loadingInfo);
-				} else {
+				}
+				else
+				{
 					loadingInfo.getSubOrder().getTrailer().setTrailerState(TrailerState.ARRIVED);
 				}
 				LoadingBayView.fillInfo(null);
@@ -272,7 +282,8 @@ public class LoadingInfoDialog extends JDialog
 				TrailerView.fillModel(TrailerState.LOADED);
 			}
 
-			if (e.getSource() == btnCancel) {
+			if (e.getSource() == btnCancel)
+			{
 				((Window)btnCancel.getTopLevelAncestor()).dispose();
 
 			}
