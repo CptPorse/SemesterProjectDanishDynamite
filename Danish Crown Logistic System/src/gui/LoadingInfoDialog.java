@@ -197,7 +197,6 @@ public class LoadingInfoDialog extends JDialog
 
 			if (e.getSource() == btnBeginLoading)
 			{
-
 				loadingInfo.setTimeOfLoadingStart(Service.getTimeStringToDate(txfBeganLoading.getText()));
 				loadingInfo.setTimeOfLoadingEnd(Service.getEndTime(loadingInfo.getTimeOfLoadingStart(), loadingInfo.getSubOrder().getEstimatedLoadingTime()));
 				loadingInfo.setState(LoadingInfoState.LOADING);
