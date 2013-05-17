@@ -239,7 +239,7 @@ public class LoadingInfoDialog extends JDialog
 				ArrayList<SubOrder> subOrders = loadingInfo.getSubOrder().getTrailer()
 						.getSubOrders();
 
-				// sets the next subOrders loadingInfoSate on the trailer to READY_TO_LOAD
+				// sets the next subOrders loadingInfoSate on the trailer to READY_TO_LOAD.
 				for (int i = 0; i < subOrders.size() - 1; i++) {
 					if (subOrders.get(i).isLoaded() && !subOrders.get(i + 1).isLoaded()) {
 						subOrders.get(i + 1).getLoadingInfo()
