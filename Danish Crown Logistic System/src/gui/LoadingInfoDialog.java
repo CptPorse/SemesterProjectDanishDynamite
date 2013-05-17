@@ -218,6 +218,9 @@ public class LoadingInfoDialog extends JDialog
 				loadingInfo.getSubOrder().getTrailer().setTrailerState(TrailerState.BEING_LOADED);
 				TrailerView.fillModel(TrailerState.ARRIVED);
 				TrailerView.fillModel(TrailerState.BEING_LOADED);
+
+				//Updates the trailer bay.
+				loadingInfo.getSubOrder().getTrailer().setLoadingBay(loadingInfo.getLoadingBay());
 			}
 
 			if (e.getSource() == btnEndLoading)

@@ -20,7 +20,7 @@ public class Trailer
 	private double weightCurrent;
 	private double weightMax;
 	private TrailerState trailerState;
-	private LoadingBay loadingBay;
+	private LoadingBay loadingBay = null;
 
 	/**
 	 * @return the loadingBay
