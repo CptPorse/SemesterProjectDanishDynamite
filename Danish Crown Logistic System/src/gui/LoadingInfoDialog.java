@@ -202,7 +202,7 @@ public class LoadingInfoDialog extends JDialog
 				loadingInfo.setTimeOfLoadingEnd(Service.getEndTime(loadingInfo.getTimeOfLoadingStart(), loadingInfo.getSubOrder().getEstimatedLoadingTime()));
 				loadingInfo.setState(LoadingInfoState.LOADING);
 
-				//Updating texboxes and buttons
+				//Updating textboxes and buttons
 				txfEndedLoading.setText(Service.getDateToStringTime(loadingInfo.getTimeOfLoadingEnd()));
 				txfBeganLoading.setEditable(false);
 				btnBeginLoading.setEnabled(false);
@@ -238,16 +238,7 @@ public class LoadingInfoDialog extends JDialog
 
 				ArrayList<SubOrder> subOrders = loadingInfo.getSubOrder().getTrailer().getSubOrders();
 
-//				// sets the next subOrders loadingInfoSate on the trailer to READY_TO_LOAD.
-//				for (int i = 0; i < subOrders.size() - 1; i++)
-//				{
-//					if (subOrders.get(i).isLoaded() && !subOrders.get(i + 1).isLoaded())
-//					{
-//						subOrders.get(i + 1).getLoadingInfo().setState(LoadingInfoState.READY_TO_LOAD);
-//					}
-//				}
-
-				// searches if any of the attached suborders to the trailer, aren't done loading
+				// searches if any of the attached sub orders to the trailer, aren't done loading, if any, it will set their LoadingInfoStat
 				boolean trailerFullyLoaded = true;
 				boolean changed = false;
 				for (SubOrder s : subOrders)
@@ -262,7 +253,7 @@ public class LoadingInfoDialog extends JDialog
 						trailerFullyLoaded = false;
 					}
 				}
-				// if all the suborders are done, trailer changes trailerstate to: loaded
+				// if all the sub orders are done, trailer changes trailerstate to: loaded
 				if (trailerFullyLoaded == true)
 				{
 					loadingInfo.getSubOrder().getTrailer().setTrailerState(TrailerState.LOADED);
