@@ -11,6 +11,7 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
@@ -18,9 +19,11 @@ import javax.swing.border.EmptyBorder;
 import service.Service;
 
 //Author: Jens Nyberg Porse
-public class NewDriverDialog extends JDialog {
+public class NewDriverDialog extends JDialog
+{
 
-	public NewDriverDialog(JFrame owner) {
+	public NewDriverDialog(JFrame owner)
+	{
 		super(owner);
 		System.out.println("Created new Window");
 		setTitle("Create New Driver");
@@ -43,7 +46,8 @@ public class NewDriverDialog extends JDialog {
 
 	private Controller controller;
 
-	private void InitContent() {
+	private void InitContent()
+	{
 
 		controller = new Controller();
 
@@ -107,17 +111,46 @@ public class NewDriverDialog extends JDialog {
 
 	}
 
-	private class Controller implements ActionListener {
+	private class Controller implements ActionListener
+	{
 
 		@Override
-		public void actionPerformed(ActionEvent e) {
-			if (e.getSource() == btnRegister) {
-				Service.createDriver(txfName.getText(),
-						txfPhoneNumber.getText(), txfLicensPlate.getText());
-				NewDriverDialog.this.setVisible(false);
+		public void actionPerformed(ActionEvent e)
+		{
+			if (e.getSource() == btnRegister)
+			{
+				//Error handling done by Christian M. Pedersen
+				String errName = "", errPhone = "", errLicense = "";
+				Boolean error = false;
+				if (txfName.getText().trim().isEmpty())
+				{
+					errName = "Name\r\n";
+					error = true;
+				}
+				if (txfPhoneNumber.getText().trim().isEmpty())
+				{
+					errPhone = "Phone\r\n";
+					error = true;
+				}
+				if (txfLicensPlate.getText().trim().isEmpty())
+				{
+					errLicense = "License plate";
+					error = true;
+				}
+				if (error = true)
+				{
+					//Error handle, if not all fields have been filled, display an error.
+					JOptionPane.showMessageDialog(null, "One or more fields are missing input:\r\n" + errName
+							+ errPhone + errLicense, "Error", JOptionPane.ERROR_MESSAGE);
+				}
+				else
+				{
+					Service.createDriver(txfName.getText(), txfPhoneNumber.getText(), txfLicensPlate.getText());
+					NewDriverDialog.this.setVisible(false);
+				}
 			}
-
-			if (e.getSource() == btnCancel) {
+			if (e.getSource() == btnCancel)
+			{
 				NewDriverDialog.this.setVisible(false);
 
 			}

@@ -18,6 +18,7 @@ import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
@@ -69,10 +70,10 @@ public class NewTrailerDialog extends JDialog
 	private ArrayList<Driver> drivers;
 	private JTextField txfHour;
 	private JTextField txfMinuts;
-	String[] months = { "January", "February", "March", "April", "May", "June", "July", "August",
-			"September", "October", "November", "December" };
-	Integer[] dates = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21,
-			22, 23, 24, 25, 26, 27, 28, 29, 30, 31 };
+	String[] months = { "January", "February", "March", "April", "May", "June", "July", "August", "September",
+			"October", "November", "December" };
+	Integer[] dates = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26,
+			27, 28, 29, 30, 31 };
 
 	private void InitContent()
 	{
@@ -200,8 +201,10 @@ public class NewTrailerDialog extends JDialog
 
 		private void fillCmbDrivers()
 		{
-			for (int i = 0; i < Dao.getDrivers().size(); i++) {
-				if (Dao.getDrivers().get(i).getTrailer() == null) {
+			for (int i = 0; i < Dao.getDrivers().size(); i++)
+			{
+				if (Dao.getDrivers().get(i).getTrailer() == null)
+				{
 					System.out.println("Added " + i);
 					drivers.add(Dao.getDrivers().get(i));
 				}
@@ -214,30 +217,74 @@ public class NewTrailerDialog extends JDialog
 		@Override
 		public void actionPerformed(ActionEvent e)
 		{
-			if (e.getSource() == btnRegister) {
-
-				@SuppressWarnings("deprecation")
-				Date date1 = new Date(113, cmbMonth.getSelectedIndex(),
-						cmbDate.getSelectedIndex() + 1, Integer.parseInt(txfHour.getText()),
-						Integer.parseInt(txfMinuts.getText()));
-				Trailer t1 = Service.createTrailer(txfTrailerID.getText(),
-						Integer.parseInt(txfMaxLoad.getText()), date1);
-				Driver d1 = (Driver)cmbDriver.getSelectedItem();
-				products = lstProductType.getSelectedValuesList();
-				for (int i = 0; i < products.size(); i++) {
-					t1.addProductType(products.get(i));
+			if (e.getSource() == btnRegister)
+			{
+				//Error handling done by Christian M. Pedersen
+				String errHour = "", errMinute = "", errID = "", errMax = "", errDriver = "", errProduct = "";
+				boolean error = false;
+				if ((txfHour.getText().trim().isEmpty()) || (Integer.parseInt(txfHour.getText()) < 0)
+						|| (Integer.parseInt(txfHour.getText()) > 23))
+				{
+					errHour = "Hour\r\n";
+					error = true;
 				}
-				t1.setDriver(d1);
-				Service.sortTrailerArrival();
-				NewTrailerDialog.this.setVisible(false);
-			}
+				if ((txfMinuts.getText().trim().isEmpty()) || (Integer.parseInt(txfMinuts.getText()) < 0)
+						|| (Integer.parseInt(txfMinuts.getText()) > 59))
+				{
+					errMinute = "Minute\r\n";
+					error = true;
+				}
+				if (txfTrailerID.getText().trim().isEmpty())
+				{
+					errID = "Trailer ID\r\n";
+					error = true;
+				}
+				if (txfMaxLoad.getText().trim().isEmpty())
+				{
+					errMax = "Max Load\r\n";
+					error = true;
+				}
+				if (cmbDriver.getSelectedItem() == null)
+				{
+					errDriver = "Driver\r\n";
+					error = true;
+				}
+				if (lstProductType.isSelectionEmpty())
+				{
+					errProduct = "Product\r\n";
+					error = true;
+				}
+				if (error == true)
+				{
+					//Error handle, if not all fields have been filled, display an error.
+					JOptionPane.showMessageDialog(null, "One or more fields require input or selection:\r\n" + errHour
+							+ errMinute + errID + errMax + errDriver + errProduct, "Error", JOptionPane.ERROR_MESSAGE);
+				}
+				else
+				{
 
-			if (e.getSource() == btnCancel) {
+					@SuppressWarnings("deprecation")
+					Date date1 = new Date(113, cmbMonth.getSelectedIndex(), cmbDate.getSelectedIndex() + 1,
+							Integer.parseInt(txfHour.getText()), Integer.parseInt(txfMinuts.getText()));
+					Trailer t1 = Service.createTrailer(txfTrailerID.getText(), Integer.parseInt(txfMaxLoad.getText()),
+							date1);
+					Driver d1 = (Driver)cmbDriver.getSelectedItem();
+					products = lstProductType.getSelectedValuesList();
+					for (int i = 0; i < products.size(); i++)
+					{
+						t1.addProductType(products.get(i));
+					}
+					t1.setDriver(d1);
+					Service.sortTrailerArrival();
+					NewTrailerDialog.this.setVisible(false);
+				}
+			}
+			if (e.getSource() == btnCancel)
+			{
 
 				NewTrailerDialog.this.setVisible(false);
 			}
 
 		}
-
 	}
 }
