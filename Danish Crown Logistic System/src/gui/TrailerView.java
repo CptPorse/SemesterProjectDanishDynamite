@@ -15,12 +15,8 @@ import javax.swing.JScrollPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.border.EmptyBorder;
 
-import model.LoadingInfo;
-import model.LoadingInfoState;
-import model.SubOrder;
 import model.Trailer;
 import model.TrailerState;
-import service.Service;
 import dao.Dao;
 
 /**
@@ -44,7 +40,8 @@ public class TrailerView extends JFrame
 
 	private JPanel contentPane;
 	private static JList<Trailer> lstEnRoute, lstReady, lstLoading, lstLoaded, lstDeparted;
-	private static DefaultListModel<Trailer> EnRouteModel, ReadyModel, LoadingModel, LoadedModel, DepartedModel;
+	private static DefaultListModel<Trailer> EnRouteModel, ReadyModel, LoadingModel, LoadedModel,
+			DepartedModel;
 	private static JScrollPane scpEnRoute, scpReady, scpLoading, scpLoaded, scpDeparted;
 	private JLabel lblTrailerView, lblEnRoute, lblReady, lblLoading, lblLoaded, lblDeparted;
 	private JButton btnArrived, btnApprove, btnSMS;
@@ -164,13 +161,10 @@ public class TrailerView extends JFrame
 		default:
 			break;
 		}
-		if (model != null)
-		{
+		if (model != null) {
 			model.clear();
-			for (Trailer trailer : Dao.getTrailer())
-			{
-				if (trailer.getTrailerState() == trailerState)
-				{
+			for (Trailer trailer : Dao.getTrailer()) {
+				if (trailer.getTrailerState() == trailerState) {
 					model.addElement(trailer);
 				}
 			}
@@ -182,14 +176,11 @@ public class TrailerView extends JFrame
 		@Override
 		public void actionPerformed(ActionEvent e)
 		{
-			if (e.getSource() == btnArrived)
-			{
-				if (lstEnRoute.isSelectionEmpty() == false)
-				{
-					//Set the arrived trailers state to ARRIVED.
-					lstEnRoute.getSelectedValue().setTrailerState(TrailerState.ARRIVED);
-					//Sets the first suborder on the trailers state to READY_TO_LOAD.
-					lstEnRoute.getSelectedValue().getSubOrders().get(0).getLoadingInfo().setState(LoadingInfoState.READY_TO_LOAD);
+			if (e.getSource() == btnArrived) {
+				if (lstEnRoute.isSelectionEmpty() == false) {
+
+					//register arrival
+					lstEnRoute.getSelectedValue().registerArrival();
 
 					//Update the models in the dialog.
 					fillModel(TrailerState.ENROUTE);
@@ -198,54 +189,32 @@ public class TrailerView extends JFrame
 					LoadingBayView.fillInfo(null);
 				}
 			}
-			if (e.getSource() == btnApprove)
-			{
-				if (lstLoaded.isSelectionEmpty() == false)
-				{
-					int choice = JOptionPane.showConfirmDialog(btnArrived.getParent(), "Do you think this truck meets the weight Requirement?", "Weight Truck",
-							JOptionPane.YES_NO_OPTION);
-					if (choice == JOptionPane.YES_OPTION)
-					{
-						//Set the finished trailers state to DEPARTED and set it's time of departure.
-						lstLoaded.getSelectedValue().setTrailerState(TrailerState.DEPARTED);
-
-						//Set trailers LoadingBay to null, as it is no longer at DC.
-						lstLoaded.getSelectedValue().setLoadingBay(null);
+			if (e.getSource() == btnApprove) {
+				if (lstLoaded.isSelectionEmpty() == false) {
+					int choice = JOptionPane.showConfirmDialog(btnArrived.getParent(),
+							"Do you think this truck meets the weight Requirement?",
+							"Weight Truck", JOptionPane.YES_NO_OPTION);
+					if (choice == JOptionPane.YES_OPTION) {
+						//registers the departure of the trailer.
+						lstLoaded.getSelectedValue().registerDeparture();
 
 						//Update the models in the dialog.
 						fillModel(TrailerState.LOADED);
 						fillModel(TrailerState.DEPARTED);
-					}
-					else
-					{
+
+					} else {
 						System.out.println("This will be repacked... eventually");
-						lstLoaded.getSelectedValue().setTrailerState(TrailerState.ARRIVED);
 						System.out.println("Selected: " + lstLoaded.getSelectedValue());
-
 						System.out.println("Beginning Loop:");
-						for (SubOrder subOrder : lstLoaded.getSelectedValue().getSubOrders())
-						{
-							System.out.println("Looping. Looking at: " + subOrder);
-
-							subOrder.setEarliestLoadingTime(subOrder.getLoadingInfo().getTimeOfLoadingEnd());
-							System.out.println("Setting " + subOrder + " earliestLoadingTime to: " + subOrder.getLoadingInfo().getTimeOfLoadingEnd());
-							LoadingInfo newLoadingInfo = Service.createLoadingInfo(subOrder, subOrder.getLoadingInfo().getLoadingBay());
-							newLoadingInfo.setState(LoadingInfoState.READY_TO_LOAD);
-							subOrder.setHighPriority(true);
-							Service.refreshLoadingBays(subOrder.getProductType());
-						}
-
+						lstLoaded.getSelectedValue().repackTrailer();
 						LoadingBayView.fillInfo(null);
 					}
 					fillModel(TrailerState.ARRIVED);
 					fillModel(TrailerState.LOADED);
 				}
-
 			}
-			if (e.getSource() == btnSMS)
-			{
-				if (lstLoaded.isSelectionEmpty() == false)
-				{
+			if (e.getSource() == btnSMS) {
+				if (lstLoaded.isSelectionEmpty() == false) {
 					SmsDialog sms = new SmsDialog(lstLoaded.getSelectedValue());
 				}
 			}

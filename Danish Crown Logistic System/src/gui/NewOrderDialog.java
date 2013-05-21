@@ -206,7 +206,6 @@ public class NewOrderDialog extends JDialog
 
 					Service.refreshLoadingBays(subOrder.getProductType());
 					LoadingBayView.fillInfo(null);
-					subOrder.getTrailer().setTrailerState(TrailerState.ENROUTE);
 					TrailerView.fillModel(TrailerState.ENROUTE);
 				}
 

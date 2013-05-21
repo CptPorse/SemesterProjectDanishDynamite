@@ -75,6 +75,7 @@ public class Order
 		subOrders.add(subOrder);
 		subOrder.setOrder(this);
 		weightMarginKilo = calculateWeightMargin();
+		subOrder.getTrailer().setTrailerState(TrailerState.ENROUTE);
 	}
 
 	/**
@@ -88,8 +89,7 @@ public class Order
 	private double calculateWeightMargin()
 	{
 		double totalWeight = 0;
-		for (SubOrder subOrder : subOrders)
-		{
+		for (SubOrder subOrder : subOrders) {
 			totalWeight += subOrder.getEstimatedWeight();
 		}
 		return totalWeight * ((weightMarginPercent / 100));

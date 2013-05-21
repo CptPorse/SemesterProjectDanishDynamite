@@ -2,6 +2,8 @@ package model;
 
 import java.util.Date;
 
+import service.Service;
+
 //Author: Jens Nyberg Porse
 public class LoadingInfo
 {
@@ -75,6 +77,34 @@ public class LoadingInfo
 	public void setState(LoadingInfoState state)
 	{
 		this.state = state;
+	}
+
+	/**
+	 * Method used when loading of a suborder is commenced.
+	 * @param timeOfBegunLoading: Time of which loading begun.
+	 * @author Søren Møller Nielsen
+	 */
+	public void beginLoading(Date timeOfBegunLoading)
+	{
+		setTimeOfLoadingStart(timeOfBegunLoading);
+		setTimeOfLoadingStart(Service.getEndTime(timeOfBegunLoading,
+				subOrder.getEstimatedLoadingTime()));
+		setState(LoadingInfoState.LOADING);
+		loadingBay.setNextAvailableTime(timeOfLoadingEnd);
+	}
+
+	/**
+	 * Method used then loading of a suborder is complete.
+	 * @param timeOfEndedLoading: Time of which loading ended.
+	 * @author Søren Møller Nielsen
+	 */
+	public void endLoading(Date timeOfEndedLoading)
+	{
+		setTimeOfLoadingEnd(timeOfEndedLoading);
+		setState(LoadingInfoState.FINISHED);
+		loadingBay.setNextAvailableTime(timeOfLoadingEnd);
+		subOrder.setLoaded(true);
+
 	}
 
 	//Author: Christian Møller Pedersen
