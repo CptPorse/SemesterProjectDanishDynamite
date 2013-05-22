@@ -6,6 +6,8 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.util.ArrayList;
 
 import javax.swing.DefaultComboBoxModel;
@@ -13,6 +15,7 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
@@ -100,6 +103,7 @@ public class NewSubOrderDialog extends JDialog
 		txfWeight.setColumns(10);
 		txfWeight.setBounds(20, 65, 75, 20);
 		contentPanel.add(txfWeight);
+		txfWeight.addFocusListener(controller); // Christian
 
 		JLabel lblTons = new JLabel("Kilo");
 		lblTons.setBounds(97, 68, 46, 14);
@@ -124,13 +128,12 @@ public class NewSubOrderDialog extends JDialog
 		controller.fillCmbProductType();
 	}
 
-	private class Controller implements ActionListener
+	private class Controller implements ActionListener, FocusListener
 	{
 
 		private void fillCmbProductType()
 		{
-			DefaultComboBoxModel<ProductType> cmbProductTypeModel = new DefaultComboBoxModel<ProductType>(
-					Dao.getProductTypes().toArray(new ProductType[0]));
+			DefaultComboBoxModel<ProductType> cmbProductTypeModel = new DefaultComboBoxModel<ProductType>(Dao.getProductTypes().toArray(new ProductType[0]));
 			cmbProductType.setModel(cmbProductTypeModel);
 			cmbProductType.setSelectedItem(null);
 		}
@@ -138,18 +141,18 @@ public class NewSubOrderDialog extends JDialog
 		private void fillCmbTrailer()
 		{
 			ArrayList<Trailer> avalibleTrailers = new ArrayList<Trailer>();
-			for (int i = 0; i < Dao.getTrailer().size(); i++) {
+			for (int i = 0; i < Dao.getTrailer().size(); i++)
+			{
 				Trailer t1 = Dao.getTrailer().get(i);
 				if (t1.getProductTypes().contains(cmbProductType.getSelectedItem()) == true
-						&& t1.getWeightCurrent() + Double.parseDouble(txfWeight.getText()) < t1
-								.getWeightMax() && t1.getTrailerState() == TrailerState.IDLE) {
+						&& t1.getWeightCurrent() + Double.parseDouble(txfWeight.getText()) < t1.getWeightMax() && t1.getTrailerState() == TrailerState.IDLE)
+				{
 					avalibleTrailers.add(Dao.getTrailer().get(i));
 					System.out.println("Added " + Dao.getTrailer().get(i));
 				}
 			}
 
-			DefaultComboBoxModel<Trailer> cmbTrailerModel = new DefaultComboBoxModel<Trailer>(
-					avalibleTrailers.toArray(new Trailer[0]));
+			DefaultComboBoxModel<Trailer> cmbTrailerModel = new DefaultComboBoxModel<Trailer>(avalibleTrailers.toArray(new Trailer[0]));
 			cmbTrailer.setModel(cmbTrailerModel);
 			System.out.println(avalibleTrailers);
 		}
@@ -158,30 +161,96 @@ public class NewSubOrderDialog extends JDialog
 		public void actionPerformed(ActionEvent e)
 		{
 
-			if (e.getSource() == btnCreate) {
+			if (e.getSource() == btnCreate)
+			{
+				//Error handling done by Christian M. Pedersen
+				String errTrailer = "", errProduct = "", errWeight = "";
+				Boolean error = false;
+				if (cmbTrailer.getSelectedItem() == null)
+				{
+					errTrailer = "Trailer\r\n";
+					error = true;
+				}
+				if (cmbProductType.getSelectedItem() == null)
+				{
+					errProduct = "Product\r\n";
+					error = true;
+				}
+				if (txfWeight.getText().trim().isEmpty())
+				{
+					errWeight = "Weight\r\n";
+					error = true;
+				}
 
-				Trailer t1 = cmbTrailer.getItemAt(cmbTrailer.getSelectedIndex());
+				if (Integer.parseInt(txfWeight.getText()) == 0)
+				{
+					errWeight = "Weight (Enter a number [1-25000])\r\n";
+					error = true;
+				}
+				if (error == true)
+				{
+					//Error handle, if not all fields have been filled, display an error.
+					JOptionPane.showMessageDialog(null, "One or more fields require input or selection:\r\n" + errWeight + errProduct + errTrailer, "Error",
+							JOptionPane.ERROR_MESSAGE);
+				}
+				else
+				{
+					Trailer t1 = cmbTrailer.getItemAt(cmbTrailer.getSelectedIndex());
 
-				ProductType p1 = cmbProductType.getItemAt(cmbProductType.getSelectedIndex());
+					ProductType p1 = cmbProductType.getItemAt(cmbProductType.getSelectedIndex());
 
-				double weight = Double.parseDouble(txfWeight.getText());
+					double weight = Double.parseDouble(txfWeight.getText());
 
-				SubOrder s1 = Service.createSubOrder(weight, t1, p1);
+					SubOrder s1 = Service.createSubOrder(weight, t1, p1);
 
-				t1.setWeightCurrent(t1.getWeightCurrent()
-						+ (Double.parseDouble(txfWeight.getText())));
-				orderDialog.addSubOrder(s1);
+					t1.setWeightCurrent(t1.getWeightCurrent() + (Double.parseDouble(txfWeight.getText())));
+					orderDialog.addSubOrder(s1);
+					NewSubOrderDialog.this.dispose();
+				}
+			}
+
+			if (e.getSource() == btnCancel)
+			{
 				NewSubOrderDialog.this.dispose();
 			}
 
-			if (e.getSource() == btnCancel) {
-				NewSubOrderDialog.this.dispose();
-			}
-
-			if (e.getSource() == cmbProductType) {
-				if (!txfWeight.getText().equals("0")) {
+			if (e.getSource() == cmbProductType)
+			{
+				if (!txfWeight.getText().equals("0"))
+				{
 					fillCmbTrailer();
 					System.out.println("Clicked the combobox");
+				}
+			}
+
+		}
+
+// Author: Christian M. Pedersen
+		@Override
+		public void focusGained(FocusEvent e)
+		{
+			// Unused
+		}
+
+		@Override
+		public void focusLost(FocusEvent e)
+		{
+			if (e.getSource() == txfWeight)
+			{
+				try
+				{
+					int weight = Integer.parseInt(txfWeight.getText());
+					if (weight < 0)
+					{
+						txfWeight.setText("0");
+						//Error handle, if weight is a negative number, display an error.
+						JOptionPane.showMessageDialog(null, "Weight must be a positive number", "Error", JOptionPane.ERROR_MESSAGE);
+					}
+				} catch (NumberFormatException nfe)
+				{
+					txfWeight.setText("0");
+					//Error handle, if weight is not a number, display an error.
+					JOptionPane.showMessageDialog(null, "Weight must be a number", "Error", JOptionPane.ERROR_MESSAGE);
 				}
 			}
 

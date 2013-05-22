@@ -14,6 +14,7 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
@@ -175,47 +176,81 @@ public class NewOrderDialog extends JDialog
 		public void actionPerformed(ActionEvent e)
 		{
 
-			if (e.getSource() == btnAddSuborder) {
+			if (e.getSource() == btnAddSuborder)
+			{
 				NewSubOrderDialog createSubOrderDialog = new NewSubOrderDialog(orderFrame);
 				createSubOrderDialog.setVisible(true);
 
 			}
 
-			if (e.getSource() == btnCreate) {
+			if (e.getSource() == btnCreate)
+			{
 
-				Date loadingDate = DU.createDate(txfLoadingDate.getText());
-				Order o = Service.createOrder(Integer.parseInt(txfOrderID.getText()), loadingDate);
-				if (!txfWeightMargin.getText().isEmpty() == true) {
-					o.setWeightMarginKilo(Double.parseDouble(txfWeightMargin.getText()));
+				//Error handling done by Christian M. Pedersen
+				String errDate = "", errID = "", errSubOrders = "";
+				Boolean error = false;
+				if (txfLoadingDate.getText().trim().isEmpty())
+				{
+					errDate = "Date\r\n";
+					error = true;
 				}
+				if (lstSubOrders.isSelectionEmpty())
+				{
+					errSubOrders = "SubOrder\r\n";
+					error = true;
+				}
+				if (txfOrderID.getText().trim().isEmpty())
+				{
+					errID = "Trailer ID\r\n";
+					error = true;
+				}
+				if (error == true)
+				{
+					//Error handle, if not all fields have been filled, display an error.
+					JOptionPane.showMessageDialog(null, "One or more fields require input or selection:\r\n" + errDate + errID + errSubOrders, "Error",
+							JOptionPane.ERROR_MESSAGE);
+				}
+				else
+				{
 
-				for (int i = 0; i < lstSubOrders.getModel().getSize(); i++) {
-					SubOrder subOrder = lstSubOrders.getModel().getElementAt(i);
-					o.addSubOrder(subOrder);
-					subOrder.setOrder(o);
-					System.out.println(subOrder);
-					Service.setSubOrderEarliestLoadingTime(subOrder.getTrailer());
-					LoadingBay lb = Dao.getLoadingBays().get(0);
-					for (LoadingBay loadingBay : Dao.getLoadingBays()) {
-						if (loadingBay.getProductType() == subOrder.getProductType())
-							lb = loadingBay;
+					Date loadingDate = DU.createDate(txfLoadingDate.getText());
+					Order o = Service.createOrder(Integer.parseInt(txfOrderID.getText()), loadingDate);
+					if (!txfWeightMargin.getText().isEmpty() == true)
+					{
+						o.setWeightMarginKilo(Double.parseDouble(txfWeightMargin.getText()));
 					}
-					Service.createLoadingInfo(subOrder, lb);
-					System.out.println(lb.getLoadingInfos());
-					subOrder.getLoadingInfo().setLoadingBay(lb);
 
-					Service.refreshLoadingBays(subOrder.getProductType());
-					LoadingBayView.fillInfo(null);
-					TrailerView.fillModel(TrailerState.ENROUTE);
+					for (int i = 0; i < lstSubOrders.getModel().getSize(); i++)
+					{
+						SubOrder subOrder = lstSubOrders.getModel().getElementAt(i);
+						o.addSubOrder(subOrder);
+						subOrder.setOrder(o);
+						System.out.println(subOrder);
+						Service.setSubOrderEarliestLoadingTime(subOrder.getTrailer());
+						LoadingBay lb = Dao.getLoadingBays().get(0);
+						for (LoadingBay loadingBay : Dao.getLoadingBays())
+						{
+							if (loadingBay.getProductType() == subOrder.getProductType())
+								lb = loadingBay;
+						}
+						Service.createLoadingInfo(subOrder, lb);
+						System.out.println(lb.getLoadingInfos());
+						subOrder.getLoadingInfo().setLoadingBay(lb);
+
+						Service.refreshLoadingBays(subOrder.getProductType());
+						LoadingBayView.fillInfo(null);
+						TrailerView.fillModel(TrailerState.ENROUTE);
+					}
+
+					externalSystemView.updateLstOrder();
+					System.out.println("I send this Update");
+					NewOrderDialog.this.dispose();
 				}
-
-				externalSystemView.updateLstOrder();
-				System.out.println("I send this Update");
-				NewOrderDialog.this.dispose();
 			}
-
-			if (e.getSource() == btnCancel) {
-				for (SubOrder subOrder : subOrders) {
+			if (e.getSource() == btnCancel)
+			{
+				for (SubOrder subOrder : subOrders)
+				{
 					Dao.removeSubOrder(subOrder);
 				}
 				NewOrderDialog.this.dispose();
