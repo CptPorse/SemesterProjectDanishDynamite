@@ -87,7 +87,7 @@ public class LoadingInfo
 	public void beginLoading(Date timeOfBegunLoading)
 	{
 		setTimeOfLoadingStart(timeOfBegunLoading);
-		setTimeOfLoadingStart(Service.getEndTime(timeOfBegunLoading,
+		setTimeOfLoadingEnd(Service.getEndTime(timeOfBegunLoading,
 				subOrder.getEstimatedLoadingTime()));
 		setState(LoadingInfoState.LOADING);
 		loadingBay.setNextAvailableTime(timeOfLoadingEnd);
