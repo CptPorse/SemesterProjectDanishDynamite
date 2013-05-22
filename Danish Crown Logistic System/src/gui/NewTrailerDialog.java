@@ -57,7 +57,7 @@ public class NewTrailerDialog extends JDialog
 	private JLabel lblProduct;
 	private JLabel lblArrivalTime;
 	private JLabel lblAt;
-	private JLabel lblHourMinuts;
+	private JLabel lblHourMinutes;
 	private JTextField txfTrailerID;
 	private JTextField txfMaxLoad;
 	private JComboBox<Driver> cmbDriver;
@@ -71,7 +71,7 @@ public class NewTrailerDialog extends JDialog
 	private List<ProductType> products;
 	private ArrayList<Driver> drivers;
 	private JTextField txfHour;
-	private JTextField txfMinuts;
+	private JTextField txfMinutes;
 	String[] months = { "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" };
 	Integer[] dates = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31 };
 
@@ -163,16 +163,16 @@ public class NewTrailerDialog extends JDialog
 		lblAt.setBounds(180, 219, 46, 14);
 		contentPanel.add(lblAt);
 
-		txfMinuts = new JTextField();
-		txfMinuts.setBounds(246, 216, 32, 20);
-		contentPanel.add(txfMinuts);
-		txfMinuts.setColumns(10);
-		txfMinuts.addFocusListener(controller); // Christian M. Pedersen
+		txfMinutes = new JTextField();
+		txfMinutes.setBounds(246, 216, 32, 20);
+		contentPanel.add(txfMinutes);
+		txfMinutes.setColumns(10);
+		txfMinutes.addFocusListener(controller); // Christian M. Pedersen
 
-		lblHourMinuts = new JLabel(":");
-		lblHourMinuts.setFont(new Font("Tahoma", Font.BOLD, 11));
-		lblHourMinuts.setBounds(239, 219, 5, 14);
-		contentPanel.add(lblHourMinuts);
+		lblHourMinutes = new JLabel(":");
+		lblHourMinutes.setFont(new Font("Tahoma", Font.BOLD, 11));
+		lblHourMinutes.setBounds(239, 219, 5, 14);
+		contentPanel.add(lblHourMinutes);
 
 		buttonPane = new JPanel();
 		buttonPane.setBackground(Color.GRAY);
@@ -229,7 +229,7 @@ public class NewTrailerDialog extends JDialog
 					errHour = "Hour\r\n";
 					error = true;
 				}
-				if ((txfMinuts.getText().trim().isEmpty()) || (Integer.parseInt(txfMinuts.getText()) < 0) || (Integer.parseInt(txfMinuts.getText()) > 59))
+				if ((txfMinutes.getText().trim().isEmpty()) || (Integer.parseInt(txfMinutes.getText()) < 0) || (Integer.parseInt(txfMinutes.getText()) > 59))
 				{
 					errMinute = "Minute\r\n";
 					error = true;
@@ -265,7 +265,7 @@ public class NewTrailerDialog extends JDialog
 
 					@SuppressWarnings("deprecation")
 					Date date1 = new Date(113, cmbMonth.getSelectedIndex(), cmbDate.getSelectedIndex() + 1, Integer.parseInt(txfHour.getText()),
-							Integer.parseInt(txfMinuts.getText()));
+							Integer.parseInt(txfMinutes.getText()));
 					Trailer t1 = Service.createTrailer(txfTrailerID.getText(), Integer.parseInt(txfMaxLoad.getText()), date1);
 					Driver d1 = (Driver)cmbDriver.getSelectedItem();
 					products = lstProductType.getSelectedValuesList();
@@ -334,20 +334,20 @@ public class NewTrailerDialog extends JDialog
 				}
 			}
 
-			if ((e.getSource() == txfMinuts) && (!txfMinuts.getText().trim().isEmpty()))
+			if ((e.getSource() == txfMinutes) && (!txfMinutes.getText().trim().isEmpty()))
 			{
 				try
 				{
-					int Minute = Integer.parseInt(txfMinuts.getText());
-					if ((Minute < 0) || (Minute > 59))
+					int minute = Integer.parseInt(txfMinutes.getText());
+					if ((minute < 0) || (minute > 59))
 					{
-						txfMinuts.setText("");
+						txfMinutes.setText("");
 						//Error handle, if weight is a negative number, display an error.
 						JOptionPane.showMessageDialog(null, "Minute must be between 00-59", "Error", JOptionPane.ERROR_MESSAGE);
 					}
 				} catch (NumberFormatException nfe)
 				{
-					txfMinuts.setText("");
+					txfMinutes.setText("");
 					//Error handle, if weight is not a number, display an error.
 					JOptionPane.showMessageDialog(null, "Minute must be a number between 00-59", "Error", JOptionPane.ERROR_MESSAGE);
 				}
