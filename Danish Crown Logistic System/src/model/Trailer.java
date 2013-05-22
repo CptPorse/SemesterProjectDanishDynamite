@@ -210,7 +210,6 @@ public class Trailer
 	 */
 	public void endLoading(LoadingInfo loadingInfo)
 	{
-		loadingInfo.getSubOrder().setLoaded(true);
 		ArrayList<SubOrder> subOrders = loadingInfo.getSubOrder().getTrailer().getSubOrders();
 		// searches if any of the attached sub orders to the trailer, aren't done loading, if any, it will set their LoadingInfoStat
 		boolean trailerFullyLoaded = true;
