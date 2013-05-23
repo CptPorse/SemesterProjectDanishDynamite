@@ -13,7 +13,7 @@ import javax.swing.border.EmptyBorder;
 import model.Driver;
 import model.Trailer;
 
-//Author Christian "sexy" Møller Pedersen
+//Author Christian "Fishface" Møller Pedersen
 public class SmsDialog extends JFrame
 {
 	private Controller controller;
@@ -67,11 +67,9 @@ public class SmsDialog extends JFrame
 
 		//Receiver
 		Driver driver = trailer.getDriver();
-		if (driver != null)
-		{
+		if (driver != null) {
 			txaReceiver.setText(driver.getName() + " (" + driver.getPhoneNumber() + ")");
-			txaMessage.setText("Hi " + driver.getName() + ".\n\rYour trailer (" + trailer.getTrailerID()
-					+ ") is now finished loading.\n\rPlease pick it up at loading bay " + trailer.getLoadingBay() + ".\n\rRegards\n\rDanish Crown");
+			txaMessage.setText("Hi " + driver.getName() + ".\n\rYour trailer (" + trailer.getTrailerID() + ") is now finished loading.\n\rPlease pick it up at loading bay " + trailer.getLoadingBay() + ".\n\rRegards\n\rDanish Crown");
 		}
 
 	}
@@ -82,8 +80,7 @@ public class SmsDialog extends JFrame
 		@Override
 		public void actionPerformed(ActionEvent arg0)
 		{
-			if (arg0.getSource() == btnOk)
-			{
+			if (arg0.getSource() == btnOk) {
 				((JFrame)btnOk.getTopLevelAncestor()).dispose();
 			}
 		}

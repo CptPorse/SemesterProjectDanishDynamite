@@ -195,19 +195,18 @@ public class NewTrailerDialog extends JDialog
 
 	private class Controller implements ActionListener, FocusListener
 	{
-
+		//fills the  Jlist of producttypes
 		private void fillProductList()
 		{
 			ProductType[] arrayProducts = Dao.getProductTypes().toArray(new ProductType[0]);
 			lstProductType.setListData(arrayProducts);
 		}
 
+		//fills the combobox
 		private void fillCmbDrivers()
 		{
-			for (int i = 0; i < Dao.getDrivers().size(); i++)
-			{
-				if (Dao.getDrivers().get(i).getTrailer() == null)
-				{
+			for (int i = 0; i < Dao.getDrivers().size(); i++) {
+				if (Dao.getDrivers().get(i).getTrailer() == null) {
 					System.out.println("Added " + i);
 					drivers.add(Dao.getDrivers().get(i));
 				}
@@ -219,58 +218,46 @@ public class NewTrailerDialog extends JDialog
 		@Override
 		public void actionPerformed(ActionEvent e)
 		{
-			if (e.getSource() == btnRegister)
-			{
+			//Registers new trailer
+			if (e.getSource() == btnRegister) {
 				//Error handling done by Christian M. Pedersen
 				String errHour = "", errMinute = "", errID = "", errMax = "", errDriver = "", errProduct = "";
 				boolean error = false;
-				if ((txfHour.getText().trim().isEmpty()) || (Integer.parseInt(txfHour.getText()) < 0) || (Integer.parseInt(txfHour.getText()) > 23))
-				{
+				if ((txfHour.getText().trim().isEmpty()) || (Integer.parseInt(txfHour.getText()) < 0) || (Integer.parseInt(txfHour.getText()) > 23)) {
 					errHour = "Hour\r\n";
 					error = true;
 				}
-				if ((txfMinutes.getText().trim().isEmpty()) || (Integer.parseInt(txfMinutes.getText()) < 0) || (Integer.parseInt(txfMinutes.getText()) > 59))
-				{
+				if ((txfMinutes.getText().trim().isEmpty()) || (Integer.parseInt(txfMinutes.getText()) < 0) || (Integer.parseInt(txfMinutes.getText()) > 59)) {
 					errMinute = "Minute\r\n";
 					error = true;
 				}
-				if (txfTrailerID.getText().trim().isEmpty())
-				{
+				if (txfTrailerID.getText().trim().isEmpty()) {
 					errID = "Trailer ID\r\n";
 					error = true;
 				}
-				if (txfMaxLoad.getText().trim().isEmpty())
-				{
+				if (txfMaxLoad.getText().trim().isEmpty()) {
 					errMax = "Max Load\r\n";
 					error = true;
 				}
-				if (cmbDriver.getSelectedItem() == null)
-				{
+				if (cmbDriver.getSelectedItem() == null) {
 					errDriver = "Driver\r\n";
 					error = true;
 				}
-				if (lstProductType.isSelectionEmpty())
-				{
+				if (lstProductType.isSelectionEmpty()) {
 					errProduct = "Product\r\n";
 					error = true;
 				}
-				if (error == true)
-				{
+				if (error == true) {
 					//Error handle, if not all fields have been filled, display an error.
-					JOptionPane.showMessageDialog(null, "One or more fields require input or selection:\r\n" + errHour + errMinute + errID + errMax + errDriver
-							+ errProduct, "Error", JOptionPane.ERROR_MESSAGE);
-				}
-				else
-				{
+					JOptionPane.showMessageDialog(null, "One or more fields require input or selection:\r\n" + errHour + errMinute + errID + errMax + errDriver + errProduct, "Error", JOptionPane.ERROR_MESSAGE);
+				} else {
 
 					@SuppressWarnings("deprecation")
-					Date date1 = new Date(113, cmbMonth.getSelectedIndex(), cmbDate.getSelectedIndex() + 1, Integer.parseInt(txfHour.getText()),
-							Integer.parseInt(txfMinutes.getText()));
+					Date date1 = new Date(113, cmbMonth.getSelectedIndex(), cmbDate.getSelectedIndex() + 1, Integer.parseInt(txfHour.getText()), Integer.parseInt(txfMinutes.getText()));
 					Trailer t1 = Service.createTrailer(txfTrailerID.getText(), Integer.parseInt(txfMaxLoad.getText()), date1);
 					Driver d1 = (Driver)cmbDriver.getSelectedItem();
 					products = lstProductType.getSelectedValuesList();
-					for (int i = 0; i < products.size(); i++)
-					{
+					for (int i = 0; i < products.size(); i++) {
 						t1.addProductType(products.get(i));
 					}
 					t1.setDriver(d1);
@@ -278,8 +265,7 @@ public class NewTrailerDialog extends JDialog
 					NewTrailerDialog.this.setVisible(false);
 				}
 			}
-			if (e.getSource() == btnCancel)
-			{
+			if (e.getSource() == btnCancel) {
 
 				NewTrailerDialog.this.setVisible(false);
 			}
@@ -296,57 +282,45 @@ public class NewTrailerDialog extends JDialog
 		@Override
 		public void focusLost(FocusEvent e)
 		{
-			if ((e.getSource() == txfMaxLoad) && (!txfMaxLoad.getText().trim().isEmpty()))
-			{
-				try
-				{
+			if ((e.getSource() == txfMaxLoad) && (!txfMaxLoad.getText().trim().isEmpty())) {
+				try {
 					int weight = Integer.parseInt(txfMaxLoad.getText());
-					if (weight < 0)
-					{
+					if (weight < 0) {
 						txfMaxLoad.setText("0");
 						//Error handle, if weight is a negative number, display an error.
 						JOptionPane.showMessageDialog(null, "Maximum load must be a positive number", "Error", JOptionPane.ERROR_MESSAGE);
 					}
-				} catch (NumberFormatException nfe)
-				{
+				} catch (NumberFormatException nfe) {
 					txfMaxLoad.setText("0");
 					//Error handle, if weight is not a number, display an error.
 					JOptionPane.showMessageDialog(null, "Maximum load must be a number", "Error", JOptionPane.ERROR_MESSAGE);
 				}
 			}
 
-			if ((e.getSource() == txfHour) && (!txfHour.getText().trim().isEmpty()))
-			{
-				try
-				{
+			if ((e.getSource() == txfHour) && (!txfHour.getText().trim().isEmpty())) {
+				try {
 					int hour = Integer.parseInt(txfHour.getText());
-					if ((hour < 0) || (hour > 24))
-					{
+					if ((hour < 0) || (hour > 24)) {
 						txfHour.setText("");
 						//Error handle, if weight is a negative number, display an error.
 						JOptionPane.showMessageDialog(null, "Hour must be between 00-23", "Error", JOptionPane.ERROR_MESSAGE);
 					}
-				} catch (NumberFormatException nfe)
-				{
+				} catch (NumberFormatException nfe) {
 					txfHour.setText("");
 					//Error handle, if weight is not a number, display an error.
 					JOptionPane.showMessageDialog(null, "Hour must be a number between 00-23", "Error", JOptionPane.ERROR_MESSAGE);
 				}
 			}
 
-			if ((e.getSource() == txfMinutes) && (!txfMinutes.getText().trim().isEmpty()))
-			{
-				try
-				{
+			if ((e.getSource() == txfMinutes) && (!txfMinutes.getText().trim().isEmpty())) {
+				try {
 					int minute = Integer.parseInt(txfMinutes.getText());
-					if ((minute < 0) || (minute > 59))
-					{
+					if ((minute < 0) || (minute > 59)) {
 						txfMinutes.setText("");
 						//Error handle, if weight is a negative number, display an error.
 						JOptionPane.showMessageDialog(null, "Minute must be between 00-59", "Error", JOptionPane.ERROR_MESSAGE);
 					}
-				} catch (NumberFormatException nfe)
-				{
+				} catch (NumberFormatException nfe) {
 					txfMinutes.setText("");
 					//Error handle, if weight is not a number, display an error.
 					JOptionPane.showMessageDialog(null, "Minute must be a number between 00-59", "Error", JOptionPane.ERROR_MESSAGE);

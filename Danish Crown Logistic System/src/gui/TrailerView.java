@@ -160,13 +160,10 @@ public class TrailerView extends JFrame
 		default:
 			break;
 		}
-		if (model != null)
-		{
+		if (model != null) {
 			model.clear();
-			for (Trailer trailer : Dao.getTrailer())
-			{
-				if (trailer.getTrailerState() == trailerState)
-				{
+			for (Trailer trailer : Dao.getTrailer()) {
+				if (trailer.getTrailerState() == trailerState) {
 					model.addElement(trailer);
 				}
 			}
@@ -178,15 +175,11 @@ public class TrailerView extends JFrame
 		@Override
 		public void actionPerformed(ActionEvent e)
 		{
-			if (e.getSource() == btnArrived)
-			{
-				if (lstEnRoute.isSelectionEmpty() == true)
-				{
+			if (e.getSource() == btnArrived) {
+				if (lstEnRoute.isSelectionEmpty() == true) {
 					//Error handle, if no truck is selected, display an error.
 					JOptionPane.showMessageDialog(null, "You must select a truck", "Error", JOptionPane.ERROR_MESSAGE);
-				}
-				else
-				{
+				} else {
 					//register arrival
 					lstEnRoute.getSelectedValue().registerArrival();
 
@@ -197,21 +190,13 @@ public class TrailerView extends JFrame
 					LoadingBayView.fillInfo(null);
 				}
 			}
-			if (e.getSource() == btnApprove)
-			{
-				if (lstLoaded.isSelectionEmpty() == true)
-				{
+			if (e.getSource() == btnApprove) {
+				if (lstLoaded.isSelectionEmpty() == true) {
 					//Error handle, if no truck is selected, display an error.
-					JOptionPane.showMessageDialog(null, "You must select a truck to approve", "Error",
-							JOptionPane.ERROR_MESSAGE);
-				}
-				else
-				{
-					int choice = JOptionPane.showConfirmDialog(btnArrived.getParent(),
-							"Do you think this truck meets the weight Requirement?", "Weight Truck",
-							JOptionPane.YES_NO_OPTION);
-					if (choice == JOptionPane.YES_OPTION)
-					{
+					JOptionPane.showMessageDialog(null, "You must select a truck to approve", "Error", JOptionPane.ERROR_MESSAGE);
+				} else {
+					int choice = JOptionPane.showConfirmDialog(btnArrived.getParent(), "Do you think this truck meets the weight Requirement?", "Weight Truck", JOptionPane.YES_NO_OPTION);
+					if (choice == JOptionPane.YES_OPTION) {
 						//registers the departure of the trailer.
 						lstLoaded.getSelectedValue().registerDeparture();
 
@@ -219,9 +204,7 @@ public class TrailerView extends JFrame
 						fillModel(TrailerState.LOADED);
 						fillModel(TrailerState.DEPARTED);
 
-					}
-					else
-					{
+					} else {
 						System.out.println("This will be repacked... eventually");
 						System.out.println("Selected: " + lstLoaded.getSelectedValue());
 						System.out.println("Beginning Loop:");
@@ -232,16 +215,12 @@ public class TrailerView extends JFrame
 					fillModel(TrailerState.LOADED);
 				}
 			}
-			if (e.getSource() == btnSMS)
-			{
-				if (lstLoaded.isSelectionEmpty() == true)
-				{
+			if (e.getSource() == btnSMS) {
+				//checks if all suborders are done loading, if true, then it send a sms
+				if (lstLoaded.isSelectionEmpty() == true) {
 					//Error handle, if no truck is selected, display an error.
-					JOptionPane.showMessageDialog(null, "You must select a truck to notify its driver", "Error",
-							JOptionPane.ERROR_MESSAGE);
-				}
-				else
-				{
+					JOptionPane.showMessageDialog(null, "You must select a truck to notify its driver", "Error", JOptionPane.ERROR_MESSAGE);
+				} else {
 					SmsDialog sms = new SmsDialog(lstLoaded.getSelectedValue());
 				}
 			}
