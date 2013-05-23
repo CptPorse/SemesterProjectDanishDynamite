@@ -38,78 +38,123 @@ public class Trailer
 
 	}
 
-	public TrailerState getTrailerState()
-	{
-		return trailerState;
-	}
-
-	public void setTrailerState(TrailerState trailerState)
-	{
-		this.trailerState = trailerState;
-	}
-
+	/**
+	 * @return the trailerID
+	 */
 	public String getTrailerID()
 	{
 		return trailerID;
 	}
 
+	/**
+	 * @param trailerID: The trailerID to set
+	 */
 	public void setTrailerID(String trailerID)
 	{
 		this.trailerID = trailerID;
 	}
 
+	/**
+	 * @return the timeOfArrival
+	 */
 	public Date getTimeOfArrival()
 	{
 		return timeOfArrival;
 	}
 
+	/**
+	 * @param timeOfArrival: The timeOfArrival to set
+	 */
 	public void setTimeOfArrival(Date timeOfArrival)
 	{
 		this.timeOfArrival = timeOfArrival;
 	}
 
+	/**
+	 * @return the timeOfDeparture
+	 */
 	@Nullable
 	public Date getTimeOfDeparture()
 	{
 		return timeOfDeparture;
 	}
 
+	/**
+	 * @param timeOfDeparture: The timeOfDeparture to set
+	 */
 	public void setTimeOfDeparture(Date timeOfDeparture)
 	{
 		this.timeOfDeparture = timeOfDeparture;
 	}
 
+	/**
+	 * @return the weightCurrent
+	 */
 	public double getWeightCurrent()
 	{
 		return weightCurrent;
 	}
 
+	/**
+	 * @param weightCurrent: The weightCurrent to set
+	 */
 	public void setWeightCurrent(double weightCurrent)
 	{
 		this.weightCurrent = weightCurrent;
 	}
 
+	/**
+	 * @return the weightMax
+	 */
 	public double getWeightMax()
 	{
 		return weightMax;
 	}
 
+	/**
+	 * @param weightMax: The weightMax to set
+	 */
 	public void setWeightMax(double weightMax)
 	{
 		this.weightMax = weightMax;
 	}
 
+	/**
+	 * @return the trailerState
+	 */
+	public TrailerState getTrailerState()
+	{
+		return trailerState;
+	}
+
+	/**
+	 * @param trailerState: The trailerState to set
+	 */
+	public void setTrailerState(TrailerState trailerState)
+	{
+		this.trailerState = trailerState;
+	}
+
+	/**
+	 * @return the driver
+	 */
 	@Nullable
 	public Driver getDriver()
 	{
 		return driver;
 	}
 
+	/**
+	 * @param driver: The driver to set
+	 */
 	public void setDriver(Driver driver)
 	{
 		this.driver = driver;
 	}
 
+	/**
+	 * Clears the link between this trailer and the its driver
+	 */
 	public void clearDriver()
 	{
 		this.driver = null;
@@ -124,13 +169,16 @@ public class Trailer
 	}
 
 	/**
-	 * @param loadingBay the loadingBay the trailer is currently parked at.
+	 * @param loadingBay: sets the loadingBay the trailer is currently parked at.
 	 */
 	public void setLoadingBay(@Nullable LoadingBay loadingBay)
 	{
 		this.loadingBay = loadingBay;
 	}
 
+	/**
+	 * Clears the loadingbay
+	 */
 	public void clearLoadingBay()
 	{
 		this.loadingBay = null;
@@ -186,6 +234,10 @@ public class Trailer
 		subOrders.remove(subOrder);
 	}
 
+	/**
+	 * Method used to register a trailers arrival at Danish Crown .
+	 * @author Søren Møller Nielsen
+	 */
 	public void registerArrival()
 	{
 		setTrailerState(TrailerState.ARRIVED);
@@ -234,12 +286,20 @@ public class Trailer
 		}
 	}
 
+	/**
+	 * A method used to register when a trailer leaves Danish Crown
+	 * @author Søren Møller Nielsen
+	 */
 	public void registerDeparture()
 	{
 		setTrailerState(TrailerState.DEPARTED);
 		setLoadingBay(null);
 	}
 
+	/**
+	 * A method used when a trailer needs to be repacked
+	 * @author Jens Nyberg Porse
+	 */
 	public void repackTrailer()
 	{
 		setTrailerState(TrailerState.ARRIVED);

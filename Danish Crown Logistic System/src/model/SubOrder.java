@@ -2,6 +2,7 @@ package model;
 
 import java.util.Date;
 
+// Author: Jens Nyberg Porse
 public class SubOrder
 {
 
@@ -21,94 +22,148 @@ public class SubOrder
 		this.estimatedWeight = estimatedWeight;
 		this.trailer = trailer;
 		this.productType = productType;
-		this.estimatedLoadingTime = (int)(this.productType.getminuteToKiloRatio() * this.estimatedWeight);
+		this.estimatedLoadingTime = (int)(this.productType.getMinuteToKiloRatio() * this.estimatedWeight);
 	}
 
-	public boolean isLoaded()
-	{
-		return isLoaded;
-	}
-
-	public void setLoaded(boolean isLoaded)
-	{
-		this.isLoaded = isLoaded;
-	}
-
-	public boolean isHighPriority()
-	{
-		return highPriority;
-	}
-
-	public void setHighPriority(boolean highPriority)
-	{
-		this.highPriority = highPriority;
-	}
-
+	/**
+	 * @return the estimatedWeight
+	 */
 	public double getEstimatedWeight()
 	{
 		return estimatedWeight;
 	}
 
+	/**
+	 * @param estimatedWeight: The estimatedWeight to set
+	 */
 	public void setEstimatedWeight(double estimatedWeight)
 	{
 		this.estimatedWeight = estimatedWeight;
 	}
 
+	/**
+	 * @return the estimatedLoadingTime
+	 */
 	public int getEstimatedLoadingTime()
 	{
 		return estimatedLoadingTime;
 	}
 
+	/**
+	 * @param estimatedLoadingTime: The estimatedLoadingTime to set
+	 */
 	public void setEstimatedLoadingTime(int estimatedLoadingTime)
 	{
 		this.estimatedLoadingTime = estimatedLoadingTime;
 	}
 
-	public Order getOrder()
+	/**
+	 * @return the isLoaded
+	 */
+	public boolean isLoaded()
 	{
-		return order;
+		return isLoaded;
 	}
 
-	public void setOrder(Order order)
+	/**
+	 * @param isLoaded: The isLoaded to set
+	 */
+	public void setLoaded(boolean isLoaded)
 	{
-		this.order = order;
+		this.isLoaded = isLoaded;
 	}
 
-	public Trailer getTrailer()
+	/**
+	 * @return the highPriority
+	 */
+	public boolean isHighPriority()
 	{
-		return trailer;
+		return highPriority;
 	}
 
-	public void setTrailer(Trailer trailer)
+	/**
+	 * @param highPriority: The highPriority to set
+	 */
+	public void setHighPriority(boolean highPriority)
 	{
-		this.trailer = trailer;
+		this.highPriority = highPriority;
 	}
 
-	public ProductType getProductType()
-	{
-		return productType;
-	}
-
-	public void setProductType(ProductType productType)
-	{
-		this.productType = productType;
-	}
-
+	/**
+	 * @return the earliestLoadingTime
+	 */
 	public Date getEarliestLoadingTime()
 	{
 		return earliestLoadingTime;
 	}
 
+	/**
+	 * @param earliestLoadingTime: The earliestLoadingTime to set
+	 */
 	public void setEarliestLoadingTime(Date earliestLoadingTime)
 	{
 		this.earliestLoadingTime = earliestLoadingTime;
 	}
 
+	/**
+	 * @return the order
+	 */
+	public Order getOrder()
+	{
+		return order;
+	}
+
+	/**
+	 * @param order: The order to set
+	 */
+	public void setOrder(Order order)
+	{
+		this.order = order;
+	}
+
+	/**
+	 * @return the trailer
+	 */
+	public Trailer getTrailer()
+	{
+		return trailer;
+	}
+
+	/**
+	 * @param trailer: The trailer to set
+	 */
+	public void setTrailer(Trailer trailer)
+	{
+		this.trailer = trailer;
+	}
+
+	/**
+	 * @return the productType
+	 */
+	public ProductType getProductType()
+	{
+		return productType;
+	}
+
+	/**
+	 * @param productType: The productType to set
+	 */
+	public void setProductType(ProductType productType)
+	{
+		this.productType = productType;
+	}
+
+	/**
+	 * @return the loadingInfo
+	 */
 	public LoadingInfo getLoadingInfo()
 	{
 		return loadingInfo;
 	}
 
+	/**
+	 * @param loadingInfo: The loadingInfo to set
+	 */
 	public void setLoadingInfo(LoadingInfo loadingInfo)
 	{
 		this.loadingInfo = loadingInfo;

@@ -1,8 +1,6 @@
 package gui;
 
 import java.awt.Font;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.MouseEvent;
@@ -92,8 +90,7 @@ public class LoadingBayView extends JFrame
 	public static void fillBays()
 	{
 		cmbBays.removeAll();
-		for (LoadingBay lb : Dao.getLoadingBays())
-		{
+		for (LoadingBay lb : Dao.getLoadingBays()) {
 			cmbBays.addItem(lb);
 		}
 	}
@@ -102,77 +99,61 @@ public class LoadingBayView extends JFrame
 	 * Clears the Loading Info JList and refills it with Loading Infos from the parameter.
 	 * If the parameter is null, the currently selected loading bay from the JComboBox cmbBays is used.
 	 * 
-	 * @param lb	The loading bay to get Loading Infos from, or if null, refresh the current list.
+	 * @param lb: The loading bay to get Loading Infos from, or if null, refresh the current list.
 	 */
 	public static void fillInfo(@Nullable LoadingBay lb)
 	{
-		if (lb == null)
-		{
+		if (lb == null) {
 			lb = (LoadingBay)cmbBays.getSelectedItem();
 		}
 		infoModel.clear();
-		for (LoadingInfo li : lb.getLoadingInfos())
-		{
+		for (LoadingInfo li : lb.getLoadingInfos()) {
 			infoModel.addElement(li);
 		}
 	}
 
-	private class Controller implements ActionListener, MouseListener, ItemListener
+	private class Controller implements MouseListener, ItemListener
 	{
 
-		@Override
-		public void actionPerformed(ActionEvent e)
-		{
-
-		}
-
-		// author Soren Moller Nielsen
+		// Author Soren Moller Nielsen
 		@Override
 		public void mouseClicked(MouseEvent e)
 		{
-			if (e.getSource() == (lstBayList.getSelectedValue()) && e.getClickCount() == 3 || e.getClickCount() == 2)
-			{
+			if (e.getSource() == (lstBayList.getSelectedValue()) && e.getClickCount() == 3
+					|| e.getClickCount() == 2) {
 
 				System.out.println((lstBayList.getSelectedValue()));
 				loadingInfoDialog.fillModel((lstBayList.getSelectedValue()));
 				loadingInfoDialog.setVisible(true);
-
 			}
-
 		}
 
 		@Override
 		public void mouseEntered(MouseEvent e)
-		{
-
+		{//Unsused
 		}
 
 		@Override
 		public void mouseExited(MouseEvent e)
-		{
-
+		{ //Unsused
 		}
 
 		@Override
 		public void mousePressed(MouseEvent e)
-		{
-
+		{ //Unsused
 		}
 
 		@Override
 		public void mouseReleased(MouseEvent e)
-		{
-
+		{ //Unsused
 		}
 
 		@Override
 		public void itemStateChanged(ItemEvent arg0)
 		{
-			if (arg0.getSource() == cmbBays)
-			{
+			if (arg0.getSource() == cmbBays) {
 				fillInfo((LoadingBay)cmbBays.getSelectedItem());
 			}
 		}
-
 	}
 }

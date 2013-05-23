@@ -22,41 +22,65 @@ public class LoadingInfo
 		state = LoadingInfoState.PENDING;
 	}
 
+	/**
+	 * @return the timeOfLoadingStart
+	 */
 	public Date getTimeOfLoadingStart()
 	{
 		return timeOfLoadingStart;
 	}
 
+	/**
+	 * @param timeOfLoadingStart: The timeOfLoadingStart to set
+	 */
 	public void setTimeOfLoadingStart(Date timeOfLoadingStart)
 	{
 		this.timeOfLoadingStart = timeOfLoadingStart;
 	}
 
+	/**
+	 * @return the timeOfLoadingEnd
+	 */
 	public Date getTimeOfLoadingEnd()
 	{
 		return timeOfLoadingEnd;
 	}
 
+	/**
+	 * @param timeOfLoadingEnd: The timeOfLoadingEnd to set
+	 */
 	public void setTimeOfLoadingEnd(Date timeOfLoadingEnd)
 	{
 		this.timeOfLoadingEnd = timeOfLoadingEnd;
 	}
 
+	/**
+	 * @return the subOrder
+	 */
 	public SubOrder getSubOrder()
 	{
 		return subOrder;
 	}
 
+	/**
+	 * @param subOrder: The subOrder to set
+	 */
 	public void setSubOrder(SubOrder subOrder)
 	{
 		this.subOrder = subOrder;
 	}
 
+	/**
+	 * @return the loadingBay
+	 */
 	public LoadingBay getLoadingBay()
 	{
 		return loadingBay;
 	}
 
+	/**
+	 * @param loadingBay: The loadingBay to set
+	 */
 	public void setLoadingBay(LoadingBay loadingBay)
 	{
 		this.loadingBay = loadingBay;
@@ -71,8 +95,7 @@ public class LoadingInfo
 	}
 
 	/**
-	 * @param state
-	 *            the state to set
+	 * @param state: The state to set
 	 */
 	public void setState(LoadingInfoState state)
 	{

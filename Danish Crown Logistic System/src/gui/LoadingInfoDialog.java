@@ -21,7 +21,7 @@ import model.Trailer;
 import model.TrailerState;
 import service.Service;
 
-//Author: Jens "Il duce" Nyberg Porse
+//Author: Søren Møller Nielsen
 public class LoadingInfoDialog extends JDialog
 {
 
@@ -125,7 +125,7 @@ public class LoadingInfoDialog extends JDialog
 
 	}
 
-	// Author: Soren Moller Nielsen
+	// Author: Søren Møller Nielsen
 
 	private LoadingInfo loadingInfo;
 	private Trailer trailer;

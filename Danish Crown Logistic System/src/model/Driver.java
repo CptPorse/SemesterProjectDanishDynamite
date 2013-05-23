@@ -3,7 +3,7 @@ package model;
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 
-//Author: Jens Prose Nyberg
+//Author: Jens Porse Nyberg
 @NonNullByDefault
 public class Driver
 {
@@ -21,38 +21,56 @@ public class Driver
 		this.licensePlate = licensePlate;
 	}
 
+	/**
+	 * @return the name
+	 */
 	public String getName()
 	{
 		return name;
 	}
 
+	/**
+	 * @param name: The name to set
+	 */
 	public void setName(String name)
 	{
 		this.name = name;
 	}
 
+	/**
+	 * @return the phoneNumber
+	 */
 	public String getPhoneNumber()
 	{
 		return phoneNumber;
 	}
 
+	/**
+	 * @param phoneNumber: The phoneNumber to set
+	 */
 	public void setPhoneNumber(String phoneNumber)
 	{
 		this.phoneNumber = phoneNumber;
 	}
 
+	/**
+	 * @return the licensePlate
+	 */
 	public String getLicensePlate()
 	{
 		return licensePlate;
 	}
 
+	/**
+	 * @param licensePlate: The licensePlate to set
+	 */
 	public void setLicensePlate(String licensePlate)
 	{
 		this.licensePlate = licensePlate;
 	}
 
 	/**
-	 * Returns a list of Trailers carrying this productType.
+	 * @return a list of Trailers carrying this productType.
 	 */
 	@Nullable
 	public Trailer getTrailer()

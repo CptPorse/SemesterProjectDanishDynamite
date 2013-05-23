@@ -17,8 +17,14 @@ import dao.Dao;
 public class Service
 {
 
-	//A number of methods that calls the constructor method of each class in the model package to create new objects. Proper linking are made where needed.
-
+	/**
+	 * A method that creates a new driver, and adds it to the Dao's memory.
+	 * @param name: Name of the Driver.
+	 * @param phoneNumber: Drivers Phone number.
+	 * @param licensePlate: Licensplate of the drivers truck.
+	 * @return a driver.
+	 * @author Søren Møller Nielsen.
+	 */
 	public static Driver createDriver(String name, String phoneNumber, String licensePlate)
 	{
 		Driver driver = new Driver(name, phoneNumber, licensePlate);
@@ -26,6 +32,14 @@ public class Service
 		return driver;
 	}
 
+	/**
+	 * A method that creates a new trailer, and adds it to the Dao's memory.
+	 * @param trailerID: A variable used to easy distinguish between all the known trailers.
+	 * @param weightMax: How much the trailer can carry in kilo total.
+	 * @param timeOfArrival: When the trailer will arrive at Danish Crown.
+	 * @return a trailer.
+	 * @author Søren Møller Nielsen.
+	 */
 	public static Trailer createTrailer(String trailerID, double weightMax, Date timeOfArrival)
 	{
 		Trailer trailer = new Trailer(trailerID, weightMax, timeOfArrival);
@@ -33,6 +47,14 @@ public class Service
 		return trailer;
 	}
 
+	/**
+	 * A method that creates a new productType, and adds it to the Dao's memory.
+	 * All these are hardcoded into the program at the startup phase, and cannot be added during runtime.
+	 * @param description: A variable used to describe the productType.
+	 * @param minuteToKiloRatio: A number that tells how many minuts it takes to pack 1 kilo of this productType.
+	 * @return a productType.
+	 * @author Søren Møller Nielsen.
+	 */
 	public static ProductType createProductType(String description, double minuteToKiloRatio)
 	{
 		ProductType productType = new ProductType(description, minuteToKiloRatio);
@@ -40,6 +62,13 @@ public class Service
 		return productType;
 	}
 
+	/**
+	 * A method that creates a new order, and adds it to the Dao's memory.
+	 * @param orderNumber: A number used to distinguise between all orders.
+	 * @param loadingDate: The Date on which it's supposed to be loaded. By default this is hardcoded to 1. January 2013.
+	 * @return an order
+	 * @author Søren Møller Nielsen.
+	 */
 	public static Order createOrder(int orderNumber, Date loadingDate)
 	{
 		Order order = new Order(orderNumber, loadingDate);
@@ -47,6 +76,14 @@ public class Service
 		return order;
 	}
 
+	/**
+	 * A method that creates a new subOrder, and adds it to the Dao's memory.
+	 * @param estimatedWeight: How much the subOrder will weight when packed.
+	 * @param trailer: What trailer that is supposed to transport it.
+	 * @param productType: What productType the subOrder consists of. 
+	 * @return a subOrder
+	 * @author Søren Møller Nielsen.
+	 */
 	public static SubOrder createSubOrder(double estimatedWeight, Trailer trailer,
 			ProductType productType)
 	{
@@ -57,6 +94,14 @@ public class Service
 		return subOrder;
 	}
 
+	/**
+	 * A method that creates a new LoadingBay, and adds it to the Dao's memory.
+	 * All these are hardcoded into the program at the startup phase, and cannot be added during runtime.
+	 * @param loadingBayNumber: A number used to distinguise between all loadingBays.
+	 * @param productType: What productType this loadingBay is equiped to load.
+	 * @return a loadingBay
+	 * @author Søren Møller Nielsen.
+	 */
 	public static LoadingBay createLoadingBay(int loadingBayNumber, ProductType productType)
 	{
 		LoadingBay loadingBay = new LoadingBay(loadingBayNumber, productType);
@@ -64,6 +109,13 @@ public class Service
 		return loadingBay;
 	}
 
+	/**
+	 * A method that creates a new LoadingInfo, and adds it to the Dao's memory.
+	 * @param subOrder: The subOrder that is scheduled to be loaded. 
+	 * @param loadingBay: The loadingBay that is scheduled to load this loadingInfo.
+	 * @return a loadingInfo
+	 * @author Søren Møller Nielsen.
+	 */
 	public static LoadingInfo createLoadingInfo(SubOrder subOrder, LoadingBay loadingBay)
 	{
 		LoadingInfo loadingInfo = new LoadingInfo(subOrder, loadingBay);

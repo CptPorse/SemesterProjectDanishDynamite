@@ -156,6 +156,10 @@ public class NewOrderDialog extends JDialog
 		btnCancel.addActionListener(controller);
 	}
 
+	/**
+	 * Method used to add the tempoarily stored subOrder to the order.
+	 * @param subOrder: A suborder gained from a list that are to be added to the order
+	 */
 	public void addSubOrder(SubOrder subOrder)
 	{
 		subOrders.add(subOrder);
@@ -166,6 +170,7 @@ public class NewOrderDialog extends JDialog
 	private class Controller implements ActionListener
 	{
 
+		//fills an array of all suborders stored in the this dialogs local memory
 		private void fillList()
 		{
 			SubOrder[] arraySubOrder = subOrders.toArray(new SubOrder[0]);
@@ -176,60 +181,51 @@ public class NewOrderDialog extends JDialog
 		public void actionPerformed(ActionEvent e)
 		{
 
-			if (e.getSource() == btnAddSuborder)
-			{
+			if (e.getSource() == btnAddSuborder) {
 				NewSubOrderDialog createSubOrderDialog = new NewSubOrderDialog(orderFrame);
 				createSubOrderDialog.setVisible(true);
 
 			}
 
-			if (e.getSource() == btnCreate)
-			{
+			if (e.getSource() == btnCreate) {
 
 				//Error handling done by Christian M. Pedersen
 				String errDate = "", errID = "", errSubOrders = "";
 				Boolean error = false;
-				if (txfLoadingDate.getText().trim().isEmpty())
-				{
+				if (txfLoadingDate.getText().trim().isEmpty()) {
 					errDate = "Date\r\n";
 					error = true;
 				}
-				if (lstSubOrders.isSelectionEmpty())
-				{
+				if (lstSubOrders.isSelectionEmpty()) {
 					errSubOrders = "SubOrder\r\n";
 					error = true;
 				}
-				if (txfOrderID.getText().trim().isEmpty())
-				{
+				if (txfOrderID.getText().trim().isEmpty()) {
 					errID = "Trailer ID\r\n";
 					error = true;
 				}
-				if (error == true)
-				{
+				if (error == true) {
 					//Error handle, if not all fields have been filled, display an error.
-					JOptionPane.showMessageDialog(null, "One or more fields require input or selection:\r\n" + errDate + errID + errSubOrders, "Error",
-							JOptionPane.ERROR_MESSAGE);
-				}
-				else
-				{
+					JOptionPane.showMessageDialog(null,
+							"One or more fields require input or selection:\r\n" + errDate + errID
+									+ errSubOrders, "Error", JOptionPane.ERROR_MESSAGE);
+				} else {
 
 					Date loadingDate = DU.createDate(txfLoadingDate.getText());
-					Order o = Service.createOrder(Integer.parseInt(txfOrderID.getText()), loadingDate);
-					if (!txfWeightMargin.getText().isEmpty() == true)
-					{
+					Order o = Service.createOrder(Integer.parseInt(txfOrderID.getText()),
+							loadingDate);
+					if (!txfWeightMargin.getText().isEmpty() == true) {
 						o.setWeightMarginKilo(Double.parseDouble(txfWeightMargin.getText()));
 					}
 
-					for (int i = 0; i < lstSubOrders.getModel().getSize(); i++)
-					{
+					for (int i = 0; i < lstSubOrders.getModel().getSize(); i++) {
 						SubOrder subOrder = lstSubOrders.getModel().getElementAt(i);
 						o.addSubOrder(subOrder);
 						subOrder.setOrder(o);
 						System.out.println(subOrder);
 						Service.setSubOrderEarliestLoadingTime(subOrder.getTrailer());
 						LoadingBay lb = Dao.getLoadingBays().get(0);
-						for (LoadingBay loadingBay : Dao.getLoadingBays())
-						{
+						for (LoadingBay loadingBay : Dao.getLoadingBays()) {
 							if (loadingBay.getProductType() == subOrder.getProductType())
 								lb = loadingBay;
 						}
@@ -247,10 +243,8 @@ public class NewOrderDialog extends JDialog
 					NewOrderDialog.this.dispose();
 				}
 			}
-			if (e.getSource() == btnCancel)
-			{
-				for (SubOrder subOrder : subOrders)
-				{
+			if (e.getSource() == btnCancel) {
+				for (SubOrder subOrder : subOrders) {
 					Dao.removeSubOrder(subOrder);
 				}
 				NewOrderDialog.this.dispose();

@@ -3,6 +3,7 @@ package model;
 import java.util.ArrayList;
 import java.util.Date;
 
+// Author: Jens Nyberg Porse
 public class Order
 {
 
@@ -19,48 +20,72 @@ public class Order
 		this.loadingDate = loadingDate;
 	}
 
+	/**
+	 * @return the orderNumber
+	 */
 	public int getOrderNumber()
 	{
 		return orderNumber;
 	}
 
+	/**
+	 * @param orderNumber: The orderNumber to set
+	 */
 	public void setOrderNumber(int orderNumber)
 	{
 		this.orderNumber = orderNumber;
 	}
 
+	/**
+	 * @return the weightMarginPercent
+	 */
 	public double getWeightMarginPercent()
 	{
 		return weightMarginPercent;
 	}
 
+	/**
+	 * @param weightMarginPercent: The weightMarginPercent to set
+	 */
 	public void setWeightMarginPercent(double weightMarginPercent)
 	{
 		this.weightMarginPercent = weightMarginPercent;
 	}
 
+	/**
+	 * @return the weightMarginKilo
+	 */
 	public double getWeightMarginKilo()
 	{
 		return weightMarginKilo;
 	}
 
+	/**
+	 * @param weightMarginKilo: The weightMarginKilo to set
+	 */
 	public void setWeightMarginKilo(double weightMarginKilo)
 	{
 		this.weightMarginKilo = weightMarginKilo;
 	}
 
+	/**
+	 * @return the loadingDate
+	 */
 	public Date getLoadingDate()
 	{
 		return loadingDate;
 	}
 
+	/**
+	 * @param loadingDate the loadingDate to set
+	 */
 	public void setLoadingDate(Date loadingDate)
 	{
 		this.loadingDate = loadingDate;
 	}
 
 	/**
-	 * Returns a list of sub-orders in this Order.
+	 * @return a list of sub-orders in this Order.
 	 */
 	public ArrayList<SubOrder> getSubOrders()
 	{
@@ -68,7 +93,7 @@ public class Order
 	}
 
 	/**
-	 * Adds the sub-order to this Order.
+	 * @param subOrder: Adds this suborder to this Order.
 	 */
 	public void addSubOrder(SubOrder subOrder)
 	{
@@ -79,13 +104,17 @@ public class Order
 	}
 
 	/**
-	 * Removes the sub-order from this Order.
+	 * @param SubOrder: Removes this subOrder from this Order.
 	 */
 	public void removeSubOrder(SubOrder subOrder)
 	{
 		subOrders.remove(subOrder);
 	}
 
+	/**
+	 * Calculated the weight margin in kilo based on a default weight margin in percent, and the total weight of the order.
+	 * @return The weight Margin in Kilo.
+	 */
 	private double calculateWeightMargin()
 	{
 		double totalWeight = 0;

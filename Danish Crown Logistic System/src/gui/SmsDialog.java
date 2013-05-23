@@ -13,7 +13,7 @@ import javax.swing.border.EmptyBorder;
 import model.Driver;
 import model.Trailer;
 
-//Author Christian "Fishface" Møller Pedersen
+//Author Christian Møller Pedersen
 public class SmsDialog extends JFrame
 {
 	private Controller controller;
@@ -69,7 +69,10 @@ public class SmsDialog extends JFrame
 		Driver driver = trailer.getDriver();
 		if (driver != null) {
 			txaReceiver.setText(driver.getName() + " (" + driver.getPhoneNumber() + ")");
-			txaMessage.setText("Hi " + driver.getName() + ".\n\rYour trailer (" + trailer.getTrailerID() + ") is now finished loading.\n\rPlease pick it up at loading bay " + trailer.getLoadingBay() + ".\n\rRegards\n\rDanish Crown");
+			txaMessage.setText("Hi " + driver.getName() + ".\n\rYour trailer ("
+					+ trailer.getTrailerID()
+					+ ") is now finished loading.\n\rPlease pick it up at loading bay "
+					+ trailer.getLoadingBay() + ".\n\rRegards\n\rDanish Crown");
 		}
 
 	}

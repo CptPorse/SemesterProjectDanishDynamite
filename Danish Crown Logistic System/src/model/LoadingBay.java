@@ -23,48 +23,72 @@ public class LoadingBay
 		loadingInfos = new ArrayList<>();
 	}
 
+	/**
+	 * @return the loadingBayNumber
+	 */
 	public int getLoadingBayNumber()
 	{
 		return loadingBayNumber;
 	}
 
+	/**
+	 * @param loadingBayNumber: The loadingBayNumber to set
+	 */
 	public void setLoadingBayNumber(int loadingBayNumber)
 	{
 		this.loadingBayNumber = loadingBayNumber;
 	}
 
+	/**
+	 * @return the isloading
+	 */
 	public boolean isIsloading()
 	{
 		return isloading;
 	}
 
+	/**
+	 * @param isloading: The isloading to set
+	 */
 	public void setIsloading(boolean isloading)
 	{
 		this.isloading = isloading;
 	}
 
+	/**
+	 * @return the productType
+	 */
 	public ProductType getProductType()
 	{
 		return productType;
 	}
 
+	/**
+	 * @param productType the productType to set
+	 */
 	public void setProductType(ProductType productType)
 	{
 		this.productType = productType;
 	}
 
+	/**
+	 * @return the nextAvailableTime
+	 */
 	public Date getNextAvailableTime()
 	{
 		return nextAvailableTime;
 	}
 
+	/**
+	 * @param nextAvailableTime: The nextAvailableTime to set
+	 */
 	public void setNextAvailableTime(Date nextAvailableTime)
 	{
 		this.nextAvailableTime = nextAvailableTime;
 	}
 
 	/**
-	 * Returns a list of LoadingInfo.
+	 * @return a list of LoadingInfo.
 	 */
 	public ArrayList<LoadingInfo> getLoadingInfos()
 	{
@@ -73,6 +97,7 @@ public class LoadingBay
 
 	/**
 	 * Adds the LoadingInfo to the list.
+	 * @param the loadinginfo to add
 	 */
 	public void addLoadingInfo(LoadingInfo loadingInfo)
 	{
@@ -81,6 +106,7 @@ public class LoadingBay
 
 	/**
 	 * Removes the LoadingInfo from the list.
+	 * @param the loadinginfo to remove
 	 */
 	public void removeLoadingInfo(LoadingInfo loadingInfo)
 	{

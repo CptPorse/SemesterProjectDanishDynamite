@@ -1,54 +1,57 @@
 package model;
 
-import java.util.ArrayList;
-
 import org.eclipse.jdt.annotation.NonNullByDefault;
-import org.eclipse.jdt.annotation.Nullable;
 
+//Author: Jens Nyberg Porse
 @NonNullByDefault
-public class ProductType {
+public class ProductType
+{
 
 	private String description;
 	private double minuteToKiloRatio;
-	private ArrayList<Trailer> trailers = new ArrayList<Trailer>();
 
-	public ProductType(String description, double minuteToKiloRatio) {
+	public ProductType(String description, double minuteToKiloRatio)
+	{
 		super();
 		this.description = description;
 		this.minuteToKiloRatio = minuteToKiloRatio;
 	}
 
-	public double getminuteToKiloRatio() {
-		return minuteToKiloRatio;
-	}
-
-	public void setminuteToKiloRatio(double minuteToKiloRatio) {
-		this.minuteToKiloRatio = minuteToKiloRatio;
-	}
-
-	public String getDescription() {
+	/**
+	 * @return the description
+	 */
+	public String getDescription()
+	{
 		return description;
 	}
 
-	public void setDescription(String description) {
+	/**
+	 * @param description: The description to set
+	 */
+	public void setDescription(String description)
+	{
 		this.description = description;
 	}
 
-	@Nullable
-	public ArrayList<Trailer> getTrailer() {
-		return new ArrayList<Trailer>(trailers);
+	/**
+	 * @return the minuteToKiloRatio
+	 */
+	public double getMinuteToKiloRatio()
+	{
+		return minuteToKiloRatio;
 	}
 
-	public void addTrailer(Trailer trailer) {
-		trailers.add(trailer);
-	}
-
-	public void removeTrailer(Trailer trailer) {
-		trailers.remove(trailer);
+	/**
+	 * @param minuteToKiloRatio: The minuteToKiloRatio to set
+	 */
+	public void setMinuteToKiloRatio(double minuteToKiloRatio)
+	{
+		this.minuteToKiloRatio = minuteToKiloRatio;
 	}
 
 	@Override
-	public String toString() {
+	public String toString()
+	{
 		return "" + description;
 	}
 

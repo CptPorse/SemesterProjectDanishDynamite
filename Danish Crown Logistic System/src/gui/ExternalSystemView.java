@@ -237,17 +237,19 @@ public class ExternalSystemView extends JFrame
 		controller.fillLstOrders();
 	}
 
-	public void testing()
-	{
-		System.out.println("I came through");
-	}
-
+	/**
+	 * Updates the list of Orders in the ExternalSystemView Gui
+	 */
 	public void updateLstOrder()
 	{
 		System.out.println("I updated from " + this.getName());
 		controller.fillLstOrders();
 	}
 
+	/**
+	 * Updates the textfields displaying informations about the order. Updates whenever a order is selected from the list
+	 * @param order: The order returned when selecting an object in the list of orders. 
+	 */
 	public void updateOrderView(Order order)
 	{
 		txfOrderID.setText("" + order.getOrderNumber());
@@ -261,6 +263,10 @@ public class ExternalSystemView extends JFrame
 		controller.fillLstSubOrder(order);
 	}
 
+	/**
+	 * Updates the textfields displaying informations about the suborder. Updates whenever a suborder is selected from the list
+	 * @param subOrder: The suborder returned when selecting an object in the list of suborders
+	 */
 	public void updateSubOrderView(SubOrder subOrder)
 	{
 		txfSubOrderArrival.setText("" + subOrder.getTrailer().getTimeOfArrival().toLocaleString());
@@ -273,12 +279,14 @@ public class ExternalSystemView extends JFrame
 	public class Controller implements ActionListener
 	{
 
+		//fills an array of all orders stored in the Dao and sets the listData for the list.
 		private void fillLstOrders()
 		{
 			Order[] arrayOrder = Dao.getOrders().toArray(new Order[0]);
 			lstOrders.setListData(arrayOrder);
 		}
 
+		//fills an array of all suborders stored in the Dao and sets the listData for the list.
 		private void fillLstSubOrder(Order order)
 		{
 			SubOrder[] arraySubOrder = order.getSubOrders().toArray(new SubOrder[0]);
@@ -294,8 +302,6 @@ public class ExternalSystemView extends JFrame
 						ExternalSystemView.getInstance());
 				createOrderDialog.setVisible(true);
 
-				// waiting for dialog NewOrderDialog to close
-
 			}
 
 			if (e.getSource() == btnNewTrailer) {
@@ -303,16 +309,12 @@ public class ExternalSystemView extends JFrame
 						ExternalSystemView.getInstance());
 				createTrailerDialog.setVisible(true);
 
-				// waiting for dialog NewOrderDialog to close
-
 			}
 
 			if (e.getSource() == btnNewDriver) {
 				NewDriverDialog createDriverDialog = new NewDriverDialog(
 						ExternalSystemView.getInstance());
 				createDriverDialog.setVisible(true);
-
-				// waiting for dialog NewOrderDialog to close
 
 			}
 		}
